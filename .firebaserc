@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "covdp-interactives",
+    "dev": "covdp-interactives-dev"
+  }
+}
