@@ -12,7 +12,7 @@ import { initialState } from './reducer';
 const getGlobal = state => state.global || initialState;
 
 // get data / content
-const getData = createSelector(
+export const getData = createSelector(
   getGlobal,
   global => global.data,
 );
@@ -101,4 +101,9 @@ export const getDependenciesReady = createSelector(
   (state, dependencies) => dependencies,
   getDataReady,
   (dependencies, data) => dependencies.reduce((m, d) => !!data[d] && m, true),
+);
+
+export const getCountries = createSelector(
+  state => getDataByKey(state, 'countries'),
+  data => data,
 );
