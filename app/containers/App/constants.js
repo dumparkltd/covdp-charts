@@ -85,11 +85,15 @@ export const DATA_RESOURCES = [
     key: 'uhc-coverage',
     file: 'uhc-coverage.csv',
     country_fk: 'iso',
+    type: 'scatter',
     metrics: {
       uhc: 'uhc_sci',
       one_dose_2021: 'cov_total_a1d_2021',
       one_dose_2022: 'cov_total_a1d_2022',
     },
+    xDefault: 'uhc',
+    yDefault: 'one_dose_2021',
+    metricOptions: ['one_dose_2021', 'one_dose_2022'],
     meta: {
       uhc: {
         updated: '01/05/2023',
@@ -156,4 +160,11 @@ export const CATEGORIES = {
   CSC: {
     CSC: 'Concerted Support Country',
   },
+};
+
+export const DATACOLORS = {
+  HIC: '#D67732',
+  UMIC: '#9B3436',
+  LMIC: '#2F739B',
+  LIC: '#3C5223',
 };
