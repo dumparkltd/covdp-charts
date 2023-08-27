@@ -21,7 +21,11 @@ const InputWraper = styled(p => (
   />
 ))`
   border: 1px solid #041733;
-  min-width: 400px;
+  width: 100%;
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    min-width: 400px;
+    width: auto;
+  }
 `;
 // prettier-ignore
 const ButtonOption = styled(p => <Button plain {...p} />)`
@@ -66,10 +70,12 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
   const targetRef = useRef(null);
   const [showOptions, setShowOptions] = useState(false);
   const [search, setSearch] = useState('');
-  const optionsFiltered =
+  let optionsFiltered =
     search !== '' ? options.filter(o => filterCountry(o, search)) : options;
   const hasSearch = search.length > 0;
-
+  optionsFiltered =
+    optionsFiltered &&
+    optionsFiltered.sort((a, b) => (a.label > b.label ? 1 : -1));
   return (
     <Box ref={targetRef}>
       {selected && (
@@ -106,6 +112,7 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
           align={{ top: 'bottom', left: 'left' }}
           target={targetRef.current}
           onClickOutside={() => setShowOptions(false)}
+          onEsc={() => setShowOptions(false)}
         >
           <Box>
             {optionsFiltered &&
@@ -119,7 +126,7 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
                     setShowOptions(false);
                   }}
                 >
-                  <Box pad={{ vertical: 'small', horizontal: 'xsmall' }}>
+                  <Box pad={{ vertical: 'xsmall', horizontal: 'xsmall' }}>
                     <Text size="small">{o.label}</Text>
                   </Box>
                 </ButtonOption>

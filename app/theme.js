@@ -1,8 +1,8 @@
 export const SIZES = {
   maxContainerWidth: 1000,
   scatterChartHeight: {
-    xsmall: 400,
-    small: 420,
+    xsmall: 250,
+    small: 350,
     medium: 440,
     large: 460,
     xlarge: 480,
