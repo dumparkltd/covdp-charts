@@ -14,6 +14,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 // import FontFaceObserver from 'fontfaceobserver';
+import { Grommet } from 'grommet';
+import theme from 'theme';
+
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 
@@ -49,11 +52,13 @@ const MOUNT_NODE = document.getElementById('app');
 const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
-      <LanguageProvider messages={messages}>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </LanguageProvider>
+      <Grommet theme={theme}>
+        <LanguageProvider messages={messages}>
+          <ConnectedRouter history={history}>
+            <App />
+          </ConnectedRouter>
+        </LanguageProvider>
+      </Grommet>
     </Provider>,
     MOUNT_NODE,
   );

@@ -86,6 +86,8 @@ export const DATA_RESOURCES = [
     file: 'uhc-coverage.csv',
     country_fk: 'iso',
     type: 'scatter',
+    chartTitle:
+      'Impact of health system capacities on vaccine administration progress',
     metrics: {
       uhc: 'uhc_sci',
       one_dose_2021: 'cov_total_a1d_2021',
@@ -94,17 +96,23 @@ export const DATA_RESOURCES = [
     xDefault: 'uhc',
     yDefault: 'one_dose_2021',
     metricOptions: ['one_dose_2021', 'one_dose_2022'],
+    metricOptionLabel: 'Select time',
+    hintMetricOptionLabel: 'At least 1 dose (% of population)',
+    keyCategories: 'INCOME',
     meta: {
       uhc: {
         updated: '01/05/2023',
         sourceURL: 'https://data.who.int/indicators/i/9A706FD',
         source: 'UHC service coverage index',
+        label: 'UHC service coverage (score)',
       },
       one_dose_2021: {
         date: '06/2021',
+        label: 'June 2021',
       },
       one_dose_2022: {
         date: '06/2022',
+        label: 'June 2022',
       },
     },
   },
@@ -146,11 +154,10 @@ export const CATEGORIES = {
     WPR: 'Western Pacific Region',
   },
   INCOME: {
-    HIC: 'High Income Group',
-    UMIC: 'Upper Middle Income Group',
-    LMIC: 'Lower Middle Income Group',
     LIC: 'Low Income Group',
-    Other: 'Other Income Group',
+    LMIC: 'Lower Middle Income Group',
+    UMIC: 'Upper Middle Income Group',
+    HIC: 'High Income Group',
   },
   COVAX: {
     AMC: 'AMC (Advance Market Commitment)',
@@ -163,8 +170,8 @@ export const CATEGORIES = {
 };
 
 export const DATACOLORS = {
-  HIC: '#D67732',
-  UMIC: '#9B3436',
-  LMIC: '#2F739B',
   LIC: '#3C5223',
+  LMIC: '#2F739B',
+  UMIC: '#9B3436',
+  HIC: '#D67732',
 };

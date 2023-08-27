@@ -2,7 +2,7 @@
 // import { cloneDeep } from 'lodash/lang';
 
 import { DATACOLORS } from 'containers/App/constants';
-
+import { SIZES } from 'theme';
 export const mapNodes = (data, { mouseOver, highlight }) =>
   // prettier-ignore
   data
@@ -20,3 +20,5 @@ export const mapNodes = (data, { mouseOver, highlight }) =>
         opacity,
       })
     });
+
+export const getChartHeight = size => SIZES.scatterChartHeight[size];

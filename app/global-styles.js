@@ -69,6 +69,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'ABCMonument', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #041733;
   }
 
   // body.fontLoaded {
@@ -76,7 +77,7 @@ const GlobalStyle = createGlobalStyle`
   // }
 
   #app {
-    background-color: #fafafa;
+    background-color: #F6F7FC;
     min-height: 100%;
     min-width: 100%;
   }

@@ -47,9 +47,19 @@ const getChartData = ({ countries, data, yColumn, xColumn, colorByColumn }) => {
             id: country.iso,
             hide,
             color: country[colorByColumn],
-            xValue: parseFloat(countryMetricData[xColumn]), // x-axis
+            xValue:
+              Math.round(parseFloat(countryMetricData[xColumn]) * 100) / 100, // x-axis
             yValue: parseFloat(countryMetricData[yColumn]), // y-axis
             label: country.name_short,
+            hint: {
+              metrics: {
+                uhc:
+                  Math.round(parseFloat(countryMetricData[xColumn]) * 100) /
+                  100,
+                one_dose_2021: countryMetricData.cov_total_a1d_2021,
+                one_dose_2022: countryMetricData.cov_total_a1d_2022,
+              },
+            },
           },
         ];
       }
@@ -96,8 +106,10 @@ export function PathUHC({ onLoadData, countries, dataReady, data }) {
           setHighlight={setHighlight}
           highlight={highlight}
           config={config}
-          xRange={[-5, 105]}
-          yRange={[-5, 105]}
+          xRange={[0, 100]}
+          yRange={[0, 100]}
+          yAxisLabel="UHC service coverage (score)"
+          xAxisLabel="At least 1 dose (% of population)"
         />
       </div>
     </article>
