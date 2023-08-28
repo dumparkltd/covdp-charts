@@ -20,30 +20,58 @@ import Title from 'components/Title';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import Options from 'components/Options';
 
+import { isMinSize } from 'utils/responsive';
+
 import { mapNodes, getChartHeight } from './utils';
+
+const chartMargins = {
+  bottom: 30,
+  top: 10,
+  right: 20,
+  left: 50,
+};
+const chartMarginsSmall = {
+  bottom: 20,
+  top: 5,
+  right: 12,
+  left: 40,
+};
 
 const Styled = styled.div`
   padding-bottom: 10px;
 `;
 const XAxisLabelWrap = styled.div`
-  margin-bottom: 20px;
-  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-right: 2px;
   text-align: right;
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
 `;
 const YAxisLabelWrap = styled.div`
-  margin-top: 20px;
-  margin-left: 50px;
+  margin-top: 5px;
+  margin-left: 40px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    margin-left: 50px;
+  }
 `;
 const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
   text-transform: uppercase;
   font-family: 'ABCMonumentBold';
   color: white;
   background-color: #041733;
-  padding: 1px 5px;
+  padding: 1px 2px;
+  line-height: 11px;
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    padding: 1px 5px;
+    line-height: ${({ theme }) => theme.text.xxsmall.height};
+  }
 `;
 
 const tickValuesY = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-const tickValuesXValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+const tickValuesYSmall = [20, 40, 60, 80, 100];
+const tickValuesX = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const axisNodes = [{ x: 0, y: 100 }, { x: 0, y: 0 }, { x: 100, y: 0 }];
 // const tickValuesX = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 // d3.max(data, d => d.value)
@@ -94,12 +122,7 @@ export function ChartScatter({
       </YAxisLabelWrap>
       <FlexibleWidthXYPlot
         height={getChartHeight(size)}
-        margin={{
-          bottom: 30,
-          top: 10,
-          right: 20,
-          left: 50,
-        }}
+        margin={isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall}
         style={{
           fill: 'transparent',
           cursor: 'pointer',
@@ -122,9 +145,9 @@ export function ChartScatter({
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
             text: { stroke: 'none' },
           }}
-          tickValues={tickValuesXValues}
-          tickPadding={5}
-          tickSizeOuter={10}
+          tickValues={tickValuesX}
+          tickPadding={isMinSize(size, 'medium') ? 5 : 3}
+          tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
           tickSizeInner={0}
         />
         <YAxis
@@ -133,9 +156,11 @@ export function ChartScatter({
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
             text: { stroke: 'none' },
           }}
-          tickValues={tickValuesY}
-          tickPadding={5}
-          tickSizeOuter={10}
+          tickValues={
+            isMinSize(size, 'medium') ? tickValuesY : tickValuesYSmall
+          }
+          tickPadding={isMinSize(size, 'medium') ? 5 : 3}
+          tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
           tickSizeInner={0}
         />
         <LineMarkSeries
@@ -154,7 +179,9 @@ export function ChartScatter({
             key="id"
             onNearestXY={node => {
               // console.log(node);
-              setMouseOver(node.id);
+              if (isMinSize(size, 'small')) {
+                setMouseOver(node.id);
+              }
             }}
           />
         )}

@@ -8,21 +8,46 @@ import CountrySearchSelect from 'components/CountrySearchSelect';
 
 import { isMinSize } from 'utils/responsive';
 
-const LabelChartOption = styled(p => <Text size="xsmall" {...p} />)`
+const LabelChartOption = styled(p => <Text {...p} />)`
+  font-size: ${({ theme }) => theme.text.xxsmall.size};
+  line-height: ${({ theme }) => theme.text.xxsmall.height};
   color: ${({ theme }) => theme.global.colors.textSecondary};
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    font-size: ${({ theme }) => theme.text.xsmall.size};
+    line-height: ${({ theme }) => theme.text.xsmall.height};
+  }
 `;
 
+const ButtonSelectMetricText = styled(p => <Text {...p} />)`
+  font-size: ${({ theme }) => theme.text.xsmall.size};
+  line-height: ${({ theme }) => theme.text.xsmall.height};
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    font-size: ${({ theme }) => theme.text.small.size};
+    line-height: ${({ theme }) => theme.text.small.height};
+  }
+  @media (min-width: ${({ theme }) => theme.breakpoints.medium}) {
+    font-size: ${({ theme }) => theme.text.medium.size};
+    line-height: ${({ theme }) => theme.text.medium.height};
+  }
+  @media (min-width: ${({ theme }) => theme.breakpoints.large}) {
+    font-size: ${({ theme }) => theme.text.large.size};
+    line-height: ${({ theme }) => theme.text.large.height};
+  }
+`;
 // prettier-ignore
 const ButtonSelectMetric = styled(p => <Button plain {...p} />)`
   fill: transparent;
   cursor: pointer;
   font-family: 'ABCMonumentBold';
-  padding: 3px 15px;
+  padding: 3px 8px;
   background-color: ${({ theme, active }) =>
     active ? theme.global.colors.buttonActiveBG : 'transparent'};
   &:hover {
     background-color: ${({ theme }) =>
     theme.global.colors.buttonHoverBG} !important;
+  }
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    padding: 3px 15px;
   }
 `;
 
@@ -40,21 +65,29 @@ export function Options({
   const size = useContext(ResponsiveContext);
   return (
     <Box
-      margin={{ top: 'small' }}
-      direction={isMinSize(size, 'medium') ? 'row' : 'column'}
-      gap="medium"
+      margin={{ top: isMinSize(size, 'medium') ? 'small' : 'xsmall' }}
+      direction="row"
+      gap={isMinSize(size, 'medium') ? 'medium' : 'small'}
     >
       {config.metricOptions && (
         <Box gap="hair">
           <LabelChartOption>{config.metricOptionLabel}</LabelChartOption>
-          <Box direction="row" gap="xsmall">
+          <Box
+            direction="row"
+            gap={isMinSize(size, 'medium') ? 'xsmall' : 'xxsmall'}
+          >
             {config.metricOptions.map(option => (
               <ButtonSelectMetric
                 key={option}
-                label={config.meta[option].label}
                 onClick={() => setMetric(option)}
                 active={option === metric}
-              />
+              >
+                <Box>
+                  <ButtonSelectMetricText>
+                    {config.meta[option].label}
+                  </ButtonSelectMetricText>
+                </Box>
+              </ButtonSelectMetric>
             ))}
           </Box>
         </Box>

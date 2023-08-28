@@ -6,15 +6,26 @@ import { Box, Text, ResponsiveContext } from 'grommet';
 import { CATEGORIES, DATACOLORS } from 'containers/App/constants';
 import { isMinSize } from 'utils/responsive';
 
-const Label = styled(p => <Text size="small" {...p} />)``;
+const Label = styled(p => <Text {...p} />)`
+  font-size: ${({ theme }) => theme.text.xxsmall.size};
+  line-height: ${({ theme }) => theme.text.xxsmall.height};
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    font-size: ${({ theme }) => theme.text.small.size};
+    line-height: ${({ theme }) => theme.text.small.height};
+  }
+`;
 
 const Dot = styled.div`
   display: block;
   border-radius: 999px;
   background-color: ${({ categoryColor }) => categoryColor};
-  width: 10px;
-  height: 10px;
-  opacity: 1;
+  width: 6px;
+  height: 6px;
+  opacity: 0.9;
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    width: 10px;
+    height: 10px;
+  }
 `;
 
 export function KeyCategoryMarkers({ categories }) {
@@ -22,9 +33,10 @@ export function KeyCategoryMarkers({ categories }) {
   return (
     <Box
       direction={isMinSize(size, 'medium') ? 'row' : 'column'}
-      gap="small"
+      gap={isMinSize(size, 'medium') ? 'small' : 'xsmall'}
+      align={isMinSize(size, 'medium') ? 'center' : 'start'}
+      margin={{ left: isMinSize(size, 'medium') ? 'hair' : '36px' }}
       justify="center"
-      align="center"
     >
       {CATEGORIES[categories] &&
         Object.keys(CATEGORIES[categories]).map(catId => (
