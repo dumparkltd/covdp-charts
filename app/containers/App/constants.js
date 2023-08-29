@@ -141,6 +141,8 @@ export const DATA_RESOURCES = [
     metrics: {
       delivered: 'del_dose_add_pc',
     },
+    keyCategories: 'INCOME',
+    chartTitle: 'Vaccine supply by income group',
   },
 ];
 

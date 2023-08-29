@@ -106,10 +106,8 @@ export function PathUHC({ onLoadData, countries, dataReady, data }) {
           setHighlight={setHighlight}
           highlight={highlight}
           config={config}
-          xRange={[0, 100]}
-          yRange={[0, 100]}
-          yAxisLabel="UHC service coverage (score)"
-          xAxisLabel="At least 1 dose (% of population)"
+          xAxisLabel="UHC service coverage (score)"
+          yAxisLabel="At least 1 dose (% of population)"
         />
       </div>
     </article>

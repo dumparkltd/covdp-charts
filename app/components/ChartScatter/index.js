@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Text, ResponsiveContext } from 'grommet';
 import {
   FlexibleWidthXYPlot,
-  AreaSeries,
   MarkSeries,
   LineMarkSeries,
   Hint,
@@ -78,8 +77,6 @@ const axisNodes = [{ x: 0, y: 100 }, { x: 0, y: 0 }, { x: 100, y: 0 }];
 // d3.extent(data, d => d.size)
 export function ChartScatter({
   data,
-  xRange,
-  yRange,
   config,
   setMetric,
   metric,
@@ -94,10 +91,10 @@ export function ChartScatter({
   const nodes = data && mapNodes(data, { mouseOver, highlight });
   // console.log('nodes', nodes)
   // console.log('config', config)
-  const forceRange = [
-    { x: xRange[0], y: yRange[0] },
-    { x: xRange[1], y: yRange[1] },
-  ];
+  // const forceRange = [
+  //   { x: xRange[0], y: yRange[0] },
+  //   { x: xRange[1], y: yRange[1] },
+  // ];
   // const coverRange = [
   //   { x: 0, y: yRange[1], y0: 0 },
   //   { x: xRange[1], y: yRange[1], y0: 0 },
@@ -107,7 +104,7 @@ export function ChartScatter({
   const highlightNode = highlight && nodes.find(n => n.id === highlight);
   // console.log(coverRange)
   return (
-    <Styled style={{ border: '1px solid white' }}>
+    <Styled>
       <Title>{config.chartTitle}</Title>
       <Options
         metric={metric}
@@ -118,7 +115,7 @@ export function ChartScatter({
         config={config}
       />
       <YAxisLabelWrap>
-        <AxisLabel>{xAxisLabel}</AxisLabel>
+        <AxisLabel>{yAxisLabel}</AxisLabel>
       </YAxisLabelWrap>
       <FlexibleWidthXYPlot
         height={getChartHeight(size)}
@@ -139,7 +136,6 @@ export function ChartScatter({
           }
         }}
       >
-        {data && <AreaSeries data={forceRange} style={{ opacity: 0 }} />}
         <XAxis
           style={{
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
@@ -202,7 +198,7 @@ export function ChartScatter({
         )}
       </FlexibleWidthXYPlot>
       <XAxisLabelWrap>
-        <AxisLabel>{yAxisLabel}</AxisLabel>
+        <AxisLabel>{xAxisLabel}</AxisLabel>
       </XAxisLabelWrap>
       <KeyCategoryMarkers categories={config.keyCategories} />
     </Styled>
@@ -230,8 +226,6 @@ export function ChartScatter({
 
 ChartScatter.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  xRange: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  yRange: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   config: PropTypes.object,
   metric: PropTypes.string,
   mouseOver: PropTypes.string,

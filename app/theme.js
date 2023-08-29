@@ -8,6 +8,14 @@ export const SIZES = {
     xlarge: 480,
     xxlarge: 480,
   },
+  timelineSimpleChartHeight: {
+    xsmall: 350,
+    small: 420,
+    medium: 440,
+    large: 460,
+    xlarge: 480,
+    xxlarge: 480,
+  },
 };
 
 // theme defining breakpoints, colors, sizes, grid gutters
