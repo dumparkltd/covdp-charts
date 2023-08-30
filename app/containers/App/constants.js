@@ -118,11 +118,28 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-administered',
-    file: 'doses-administered.csv',
+    file: 'doses-administered-weekly.csv',
     country_fk: 'iso',
     metrics: {
       doses: 'dvr_4wk_td_per',
     },
+    keyCategories: 'INCOME',
+    chartTitle: 'Vaccination rates over time',
+    hint: [
+      {
+        label: 'Peak daily vaccination rate (% of population)',
+        column: 'dvr_4wk_td_per',
+        unit: '%',
+        roundDigits: 2,
+      },
+      {
+        label: 'Peak daily vaccines administered',
+        column: 'dvr_4wk_td',
+        roundDigits: 0,
+      },
+    ],
+    dateLabel: 'Peak date',
+    includePopulation: true,
   },
   {
     key: 'population-groups',
@@ -172,8 +189,8 @@ export const CATEGORIES = {
 };
 
 export const DATACOLORS = {
-  LIC: '#3C5223',
-  LMIC: '#2F739B',
-  UMIC: '#9B3436',
-  HIC: '#D67732',
+  LIC: '#2F739B',
+  LMIC: '#7E9F6E',
+  UMIC: '#D67732',
+  HIC: '#9B3436',
 };

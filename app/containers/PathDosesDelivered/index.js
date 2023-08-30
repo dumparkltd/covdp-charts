@@ -4,7 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 // import { FormattedMessage } from 'react-intl';
@@ -38,7 +38,7 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
   }, []);
 
   const config = DATA_RESOURCES.find(r => r.key === 'doses-delivered');
-  const [mouseOver, setMouseOver] = useState(null);
+  // const [mouseOver, setMouseOver] = useState(null);
   const { metrics } = config;
   const chartData =
     dataReady &&
@@ -57,8 +57,6 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
       <div>
         <ChartTimelineSimple
           data={chartData}
-          setMouseOver={setMouseOver}
-          mouseOver={mouseOver}
           config={config}
           target={{
             value: 1.4,
@@ -72,6 +70,8 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
     </article>
   );
 }
+// setMouseOver={setMouseOver}
+// mouseOver={mouseOver}
 
 PathDosesDelivered.propTypes = {
   onLoadData: PropTypes.func,
@@ -80,9 +80,7 @@ PathDosesDelivered.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
-  countries: state => getDataByKey(state, 'countries'),
   data: state => getDataByKey(state, 'doses-delivered'),
-  // data: state => getData(state),
   dataReady: state => getDependenciesReady(state, DEPENDENCIES),
 });
 

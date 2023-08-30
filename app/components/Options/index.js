@@ -68,6 +68,7 @@ export function Options({
       margin={{ top: isMinSize(size, 'medium') ? 'small' : 'xsmall' }}
       direction="row"
       gap={isMinSize(size, 'medium') ? 'medium' : 'small'}
+      style={{ minHeight: '50px' }}
     >
       {config.metricOptions && (
         <Box gap="hair">

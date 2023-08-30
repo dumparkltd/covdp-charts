@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Text, ResponsiveContext } from 'grommet';
@@ -71,28 +71,12 @@ const monthInMS = 1000 * 60 * 60 * 24 * 45;
 export function ChartTimelineSimple({
   data,
   config,
-  setMouseOver,
   yAxisLabel,
   seriesColumn,
   seriesLabels,
   target,
 }) {
   const size = useContext(ResponsiveContext);
-  const targetRef = useRef();
-
-  const handleClickOutside = event => {
-    if (targetRef.current && !targetRef.current.contains(event.target)) {
-      // setHint(null);
-      console.log('click outside');
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, []);
 
   const nodes = data && mapNodes({ data, seriesColumn });
   const seriesNodes = data && groupNodes({ nodes, seriesColumn });
@@ -121,14 +105,13 @@ export function ChartTimelineSimple({
       { x: xMax, y: 0 },
     ]
     : [
-      { x: 100, y: 100 },
-      { x: 100, y: 0 },
+      { x: 0, y: 100 },
+      { x: 0, y: 0 },
       { x: 100, y: 0 },
     ];
   const tickValuesX = getTickValuesX({ range: xRange, size });
-
   return (
-    <Styled ref={targetRef}>
+    <Styled>
       <Title>{config.chartTitle}</Title>
       <YAxisLabelWrap>
         <AxisLabel>{yAxisLabel}</AxisLabel>
@@ -142,7 +125,6 @@ export function ChartTimelineSimple({
           // cursor: 'pointer',
           fontFamily: 'ABCMonumentMonoBold',
         }}
-        onMouseLeave={() => setMouseOver(null)}
       >
         {data && (
           <XAxis
@@ -250,7 +232,6 @@ ChartTimelineSimple.propTypes = {
   config: PropTypes.object,
   seriesColumn: PropTypes.string,
   yAxisLabel: PropTypes.string,
-  setMouseOver: PropTypes.func,
   seriesLabels: PropTypes.object,
   target: PropTypes.object,
 };

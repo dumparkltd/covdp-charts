@@ -1,13 +1,16 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Box, Text, ResponsiveContext } from 'grommet';
+import { Box, Text, Button, ResponsiveContext } from 'grommet';
+import { Close } from 'grommet-icons';
 
 import { isMinSize } from 'utils/responsive';
 
+// prettier-ignore
 const Styled = styled(p => (
   <Box pad={{ vertical: 'xsmall', horizontal: 'small' }} {...p} />
 ))`
+  z-index: 999;
   background-color: #041733;
   color: white;
   position: relative;
@@ -15,19 +18,25 @@ const Styled = styled(p => (
     position: absolute;
     content: '';
     top: 100%;
-    right: 0;
+    right: ${({ alignHint }) => (alignHint === 'left' ? 0 : 'auto')};
+    left: ${({ alignHint }) => (alignHint === 'right' ? 0 : 'auto')};
     width: 0;
     height: 7px;
-    border-left: 4px solid transparent;
+    border-left: 4px solid
+      ${({ alignHint }) => (alignHint === 'right' ? '#041733' : 'transparent')};
     border-bottom: 4px solid transparent;
-    border-right: 4px solid black;
-    border-top: 4px solid black;
+    border-right: 4px solid
+      ${({ alignHint }) => (alignHint === 'left' ? '#041733' : 'transparent')};
+    border-top: 4px solid #041733;
     @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
       height: 10px;
-      border-left: 6px solid transparent;
+      border-left: 6px solid
+        ${({ alignHint }) =>
+    alignHint === 'right' ? '#041733' : 'transparent'};
       border-bottom: 6px solid transparent;
-      border-right: 6px solid black;
-      border-top: 6px solid black;
+      border-right: 6px solid
+        ${({ alignHint }) => (alignHint === 'left' ? '#041733' : 'transparent')};
+      border-top: 6px solid #041733;
     }
   }
 `;
@@ -50,16 +59,60 @@ const Title = styled(p => <Text {...p} />)`
   }
 `;
 
-export function CountryHint({ country, config }) {
+const ButtonClose = styled(p => <Button plain {...p} />)`
+  fill: transparent;
+  cursor: pointer;
+  height: ${({ theme }) => theme.text.small.height};
+  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    height: ${({ theme }) => theme.text.medium.height};
+  }
+`;
+
+export function CountryHint({
+  country,
+  config,
+  values,
+  date,
+  align = 'left',
+  population,
+  onClose,
+  hasClose,
+}) {
   const size = useContext(ResponsiveContext);
   return (
-    <Styled>
-      <Box>
-        <Title>{country.label}</Title>
+    <Styled alignHint={align}>
+      <Box direction="row" justify="between" align="center">
+        <Box>
+          <Title>{country.label}</Title>
+        </Box>
+        {hasClose && (
+          <ButtonClose plain onClick={() => onClose()}>
+            <Close color="white" />
+          </ButtonClose>
+        )}
       </Box>
       {isMinSize(size, 'medium') && (
         <Box gap="xsmall" margin={{ top: 'xsmall' }}>
-          {config.xDefault && (
+          {date && (
+            <Box direction="row" gap="xsmall">
+              <MetricLabel>{`${date.label}:`}</MetricLabel>
+              <MetricValue>{date.value}</MetricValue>
+            </Box>
+          )}
+          {values &&
+            values.map(value => (
+              <Box key={value.label} direction="row" gap="xsmall">
+                <MetricLabel>{`${value.label}:`}</MetricLabel>
+                <MetricValue>{value.value}</MetricValue>
+              </Box>
+            ))}
+          {population && (
+            <Box direction="row" gap="xsmall">
+              <MetricLabel>Population:</MetricLabel>
+              <MetricValue>{population}</MetricValue>
+            </Box>
+          )}
+          {config && config.xDefault && (
             <Box direction="row" gap="xsmall">
               <MetricLabel>{`${
                 config.meta[config.xDefault].label
@@ -67,7 +120,7 @@ export function CountryHint({ country, config }) {
               <MetricValue>{country.hint.metrics[config.xDefault]}</MetricValue>
             </Box>
           )}
-          {config.metricOptions && (
+          {config && config.metricOptions && (
             <Box>
               <MetricLabel>{`${config.hintMetricOptionLabel}:`}</MetricLabel>
               <Box margin={{ top: 'xxsmall' }} gap="hair">
@@ -93,6 +146,12 @@ export function CountryHint({ country, config }) {
 CountryHint.propTypes = {
   country: PropTypes.object,
   config: PropTypes.object,
+  align: PropTypes.string,
+  date: PropTypes.object,
+  values: PropTypes.array,
+  population: PropTypes.string,
+  onClose: PropTypes.func,
+  hasClose: PropTypes.bool,
 };
 
 export default CountryHint;

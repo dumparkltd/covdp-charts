@@ -105,6 +105,7 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
   optionsFiltered =
     optionsFiltered &&
     optionsFiltered.sort((a, b) => (a.label > b.label ? 1 : -1));
+
   return (
     <Box ref={targetRef}>
       {selected && (
