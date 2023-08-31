@@ -102,6 +102,13 @@ const myXAxisLabelFormatter = (v, size, scaleX) => {
 //   return <MyLabel>{value}</MyLabel>;
 // }
 
+const getTickValuesY = ({ maxValue, scaleY }) => {
+  if (maxValue >= 100) {
+    return [0, scaleY(20), scaleY(40), scaleY(60), scaleY(80), scaleY(100)];
+  }
+  return [0, scaleY(2), scaleY(4), scaleY(6), scaleY(8), scaleY(10)];
+};
+
 export function ChartBeeswarm({
   data,
   config,
@@ -136,7 +143,7 @@ export function ChartBeeswarm({
     config.maxValue || (data && Math.ceil(d3.max(data, d => d.value)));
   const maxX = data && d3.max(data, d => d.groupIndex);
   const minSize = data && d3.min(data, d => d.sizeRaw);
-  const maxSize = data && d3.max(data, d => d.sizeRaw);
+  const maxSize = config.maxSize || (data && d3.max(data, d => d.sizeRaw));
   const chartHeight = getChartHeight(size);
   const maxHeight = chartHeight - margins.top - margins.bottom;
   const maxWidth = chartWidth - margins.left - margins.right;
@@ -180,6 +187,10 @@ export function ChartBeeswarm({
       xMin: 0,
       xMax: maxWidth * (maxX / (maxX + 0.75)),
     });
+  const tickValuesY = getTickValuesY({
+    maxValue,
+    scaleY,
+  });
   return (
     <Styled ref={chartRef}>
       <Title>{config.chartTitle}</Title>
@@ -229,15 +240,10 @@ export function ChartBeeswarm({
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
             text: { stroke: 'none' },
           }}
-          tickFormat={v => scaleY.invert(v)}
-          tickValues={[
-            0,
-            scaleY(2),
-            scaleY(4),
-            scaleY(6),
-            scaleY(8),
-            scaleY(10),
-          ]}
+          tickFormat={v =>
+            config.isPercentage ? `${scaleY.invert(v)}%` : scaleY.invert(v)
+          }
+          tickValues={tickValuesY}
           tickPadding={isMinSize(size, 'medium') ? 5 : 3}
           tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
           tickSizeInner={0}
