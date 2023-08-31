@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { cloneDeep } from 'lodash/lang';
-
+import forceBoundary from 'd3-force-boundary';
 import { DATACOLORS } from 'containers/App/constants';
 import { SIZES } from 'theme';
 
@@ -40,27 +40,38 @@ export const mapNodes = (
     maxValue,
     maxWidth,
     maxX,
+    highlight,
+    mouseOver,
   },
 ) =>
   // prettier-ignore
   data
     .filter((d, i) => i % 1 === 0)
-    .map(d => ({
-      ...d,
-      size: scaleSize({ minSize, maxSize, minDiameter, maxDiameter })(d.sizeRaw),
-      size0: d.sizeRaw, // scaleSize({ minSize, maxSize, minDiameter, maxDiameter })(d.sizeRaw),
-      color: DATACOLORS[d.group],
-      y0: d.value,
-      x0: parseInt(d.groupIndex, 10),
-      y: scaleValue({ maxHeight, maxValue })(d.value),
-      x: scaleGroup({ maxWidth, maxX })(d.groupIndex),
-    }))
-    .sort((a, b) => a.size > b.size ? -1 : 1);
+    .map(d => {
+      let opacity = highlight ? 0.3 : 0.7;
+      if (highlight === d.id || mouseOver === d.id) {
+        opacity = 1;
+      }
+      const stroke = (mouseOver === d.id || highlight === d.id)
+        ? 'black'
+        : 'transparent';
+      return ({
+        ...d,
+        size: scaleSize({ minSize, maxSize, minDiameter, maxDiameter })(d.sizeRaw),
+        y: scaleValue({ maxHeight, maxValue })(d.value),
+        x: scaleGroup({ maxWidth, maxX })(d.groupIndex),
+        fill: DATACOLORS[d.group],
+        stroke,
+        opacity,
+      });
+    });
+// .sort((a, b) => a.size > b.size ? -1 : 1);
 
-export const getNodePosition = nodes => {
+export const getNodePosition = (nodes, { maxWidth, maxHeight }) => {
   const nodesC = cloneDeep(nodes);
   const simulation = d3
     .forceSimulation(nodesC)
+    .force('boundary', forceBoundary(0, 0, maxWidth, maxHeight).border(1))
     .force(
       'x',
       d3
@@ -79,13 +90,20 @@ export const getNodePosition = nodes => {
       'collide',
       d3
         .forceCollide()
-        .radius(d => d.size + 0.8)
+        .radius(d => d.size + 0.5)
         .strength(0.1),
     );
 
   /* eslint-disable no-plusplus */
-  for (let i = 0; i < 1000; ++i) {
-    // console.log('tick', i, n, (i/n)*100)
+  for (
+    let i = 0,
+      n = Math.ceil(
+        Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay()),
+      );
+    i < n;
+    ++i
+  ) {
+    // console.log(i + '/' + n + '(' + (i / n) * 100 + ')');
     simulation.tick();
   }
   return nodesC;

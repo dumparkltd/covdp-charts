@@ -63,10 +63,18 @@ export function Options({
   setHighlight,
 }) {
   const size = useContext(ResponsiveContext);
+  let wrap = false;
+  if (
+    config.metricOptions &&
+    !isMinSize(size, 'medium') &&
+    config.metricOptions.length > 2
+  ) {
+    wrap = true;
+  }
   return (
     <Box
       margin={{ top: isMinSize(size, 'medium') ? 'small' : 'xsmall' }}
-      direction="row"
+      direction={wrap ? 'column' : 'row'}
       gap={isMinSize(size, 'medium') ? 'medium' : 'small'}
       style={{ minHeight: '50px' }}
     >

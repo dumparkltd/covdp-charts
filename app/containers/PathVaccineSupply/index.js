@@ -26,7 +26,14 @@ import ChartBeeswarm from 'components/ChartBeeswarm';
 
 const DEPENDENCIES = ['countries', 'vaccine-supply'];
 
-const getChartData = ({ countries, data, metricColumn, groupByColumn }) => {
+const getChartData = ({
+  countries,
+  data,
+  metricColumn,
+  groupByColumn,
+  config,
+  metric,
+}) => {
   const countriesData = countries.reduce((m, c) => {
     const countryData = data.find(d => d.iso === c.iso);
     if (
@@ -35,17 +42,24 @@ const getChartData = ({ countries, data, metricColumn, groupByColumn }) => {
       countryData[metricColumn].trim !== ''
     ) {
       const index = Object.keys(CATEGORIES.INCOME).indexOf(c[groupByColumn]);
-      return [
-        ...m,
-        {
-          id: c.iso,
-          title: c.name_short,
-          sizeRaw: parseInt(c.pop, 10),
-          group: c[groupByColumn],
-          value: parseFloat(countryData[metricColumn]),
-          groupIndex: Object.keys(CATEGORIES.INCOME).length - index - 0.5,
-        },
-      ];
+      if (index >= 0) {
+        return [
+          ...m,
+          {
+            id: c.iso,
+            label: c.name_short,
+            sizeRaw: parseInt(c.pop, 10),
+            group: c[groupByColumn],
+            value: parseFloat(countryData[metricColumn]),
+            groupIndex: Object.keys(CATEGORIES.INCOME).length - index - 0.5,
+            hint: {
+              label: config.meta[metric].axisLabel,
+              value: countryData[metricColumn],
+            },
+          },
+        ];
+      }
+      return m;
     }
     return m;
   }, []);
@@ -59,21 +73,21 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
     // kick off loading of data
     onLoadData();
   }, []);
-  const [metric, setMetric] = useState('secured');
   const config = DATA_RESOURCES.find(r => r.key === 'vaccine-supply');
   const { metrics } = config;
+  const [metric, setMetric] = useState(config.yDefault);
+  const [highlight, setHighlight] = useState(null);
+  const [mouseOver, setMouseOver] = useState(null);
   const chartData =
     dataReady &&
     getChartData({
       countries,
       data,
+      metric,
+      config,
       metricColumn: metrics[metric],
       groupByColumn: 'income_group',
     });
-  // console.log('data', data)
-  // console.log('metric', metric)
-  // console.log('metricColumn', metrics[metric])
-  console.log('chartData', chartData)
   return (
     <article>
       <Helmet>
@@ -85,7 +99,16 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
           data={chartData}
           setMetric={setMetric}
           metric={metric}
+          setMouseOver={setMouseOver}
+          mouseOver={mouseOver}
+          setHighlight={setHighlight}
+          highlight={highlight}
           config={config}
+          target={{
+            value: 1.4,
+            label: 'WHO target:',
+            label2: '1.4 doses per capita',
+          }}
         />
       </div>
     </article>

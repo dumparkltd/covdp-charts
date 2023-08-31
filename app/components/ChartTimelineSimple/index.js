@@ -198,7 +198,7 @@ export function ChartTimelineSimple({
             allowOffsetToBeReversed={false}
           />
         )}
-        {seriesNodes && (
+        {target && (
           <LabelSeries
             data={[
               {

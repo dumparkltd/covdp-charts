@@ -16,11 +16,11 @@ export const mapNodes = (data, { mouseOver, highlight }) =>
         : 'transparent';
       return ({
         ...d,
+        x: Math.min(d.xValue, 100),
+        y: Math.min(d.yValue, 100),
         // color: DATACOLORS[d.color],
         fill: DATACOLORS[d.color],
         stroke,
-        x: Math.min(d.xValue, 100),
-        y: Math.min(d.yValue, 100),
         opacity,
       })
     });

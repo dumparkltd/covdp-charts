@@ -13,18 +13,22 @@ import {
   FlexibleWidthXYPlot,
   LineMarkSeries,
   MarkSeries,
-  Hint,
+  LineSeries,
   YAxis,
   XAxis,
+  LabelSeries,
+  Hint,
 } from 'react-vis';
 
 import CountryHint from 'components/CountryHint';
 import Title from 'components/Title';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
+import KeyTarget from 'components/KeyTarget';
 import Options from 'components/Options';
 import { CATEGORIES } from 'containers/App/constants';
 
 import { isMinSize } from 'utils/responsive';
+import { getHintAlign } from 'utils/charts';
 
 import {
   mapNodes,
@@ -80,7 +84,7 @@ const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
   }
 `;
 const myXAxisLabelFormatter = (v, size, scaleX) => {
-  const index = scaleX.invert(v) + 0.5;
+  const index = Math.round(scaleX.invert(v) + 0.5);
   // prettier-ignore
   return (
     <tspan style={{ fontFamily: 'ABCMonumentBold' }}>
@@ -104,7 +108,10 @@ export function ChartBeeswarm({
   metric,
   setMetric,
   setHighlight,
-  highlightNode,
+  highlight,
+  target,
+  setMouseOver,
+  mouseOver,
 }) {
   const size = useContext(ResponsiveContext);
   const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
@@ -125,14 +132,15 @@ export function ChartBeeswarm({
     handleResize();
   }, []);
 
-  const maxValue = config.maxValue || (data && d3.max(data, d => d.value));
+  const maxValue =
+    config.maxValue || (data && Math.ceil(d3.max(data, d => d.value)));
   const maxX = data && d3.max(data, d => d.groupIndex);
   const minSize = data && d3.min(data, d => d.sizeRaw);
   const maxSize = data && d3.max(data, d => d.sizeRaw);
   const chartHeight = getChartHeight(size);
   const maxHeight = chartHeight - margins.top - margins.bottom;
   const maxWidth = chartWidth - margins.left - margins.right;
-  const minDiameter = isMinSize(size, 'small') ? 3 : 2; // px
+  const minDiameter = isMinSize(size, 'small') ? 2 : 2; // px
   const maxDiameter = Math.min(maxHeight * 0.05, maxWidth * 0.04); // px
 
   const nodes =
@@ -143,11 +151,13 @@ export function ChartBeeswarm({
       minDiameter,
       maxDiameter,
       maxValue,
-      maxHeight: maxHeight * 0.9,
-      maxWidth: maxWidth * (maxX / (maxX + 0.5)),
+      maxHeight,
+      maxWidth: maxWidth * (maxX / (maxX + 0.75)),
       maxX,
+      mouseOver,
+      highlight,
     });
-  const positions = nodes && getNodePosition(nodes);
+  const positions = nodes && getNodePosition(nodes, { maxWidth, maxHeight });
 
   // prettier-ignore
   const axisNodes = [
@@ -155,13 +165,21 @@ export function ChartBeeswarm({
     { x: 0, y: 0 },
     { x: maxWidth, y: 0 },
   ];
-  console.log('data', data)
-  console.log('config', config)
-  const scaleY = scaleValue({ maxHeight: maxHeight * 0.9, maxValue });
+  const scaleY = scaleValue({ maxHeight, maxValue });
   const scaleX = scaleGroup({
-    maxWidth: maxWidth * (maxX / (maxX + 0.5)),
+    maxWidth: maxWidth * (maxX / (maxX + 0.75)),
     maxX,
   });
+  const mouseOverNode = mouseOver && positions.find(n => n.id === mouseOver);
+  const highlightNode = highlight && positions.find(n => n.id === highlight);
+  const hintNode = highlightNode || mouseOverNode;
+  const hintAlign =
+    hintNode &&
+    getHintAlign({
+      xPosition: hintNode.x,
+      xMin: 0,
+      xMax: maxWidth * (maxX / (maxX + 0.75)),
+    });
   return (
     <Styled ref={chartRef}>
       <Title>{config.chartTitle}</Title>
@@ -183,6 +201,16 @@ export function ChartBeeswarm({
           fill: 'transparent',
           cursor: 'pointer',
           fontFamily: 'ABCMonumentMonoBold',
+        }}
+        onMouseLeave={() => setMouseOver(null)}
+        onClick={() => {
+          if (mouseOver) {
+            if (highlightNode && mouseOver === highlightNode.id) {
+              setHighlight(null);
+            } else {
+              setHighlight(mouseOver);
+            }
+          }
         }}
       >
         <XAxis
@@ -214,12 +242,78 @@ export function ChartBeeswarm({
           tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
           tickSizeInner={0}
         />
+        {target && (
+          <LineSeries
+            data={[
+              {
+                x: 0,
+                y: scaleY(target.value),
+              },
+              {
+                x: maxWidth,
+                y: scaleY(target.value),
+              },
+            ]}
+            style={{ stroke: '#041733', strokeWidth: 0.5, opacity: 0.6 }}
+            strokeDasharray={[8, 4]}
+          />
+        )}
+        {isMinSize(size, 'medium') && target && (
+          <LabelSeries
+            data={[
+              {
+                x: maxWidth,
+                y: scaleY(target.value),
+                yOffset: target.label2 ? -20 : -8,
+                label: target.label,
+              },
+            ]}
+            style={{
+              fontFamily: 'ABCMonument',
+              fill: '#041733',
+              fontSize: 12,
+              opacity: 0.8,
+              maxWidth: '30px',
+            }}
+            labelAnchorX="end"
+            labelAnchorY="text-bottom"
+            allowOffsetToBeReversed={false}
+          />
+        )}
+        {isMinSize(size, 'medium') && target && target.label2 && (
+          <LabelSeries
+            data={[
+              {
+                x: maxWidth,
+                y: scaleY(target.value),
+                yOffset: -8,
+                label: target.label2,
+              },
+            ]}
+            style={{
+              fontFamily: 'ABCMonument',
+              fill: '#041733',
+              fontSize: 12,
+              opacity: 0.8,
+              maxWidth: '30px',
+            }}
+            labelAnchorX="end"
+            labelAnchorY="text-bottom"
+            allowOffsetToBeReversed={false}
+          />
+        )}
         {positions && (
           <MarkSeries
             data={positions}
             sizeType="literal"
-            colorType="literal"
-            style={{ opacity: 0.8 }}
+            fillType="literal"
+            strokeType="literal"
+            onNearestXY={node => {
+              // console.log(node);
+              if (isMinSize(size, 'small')) {
+                setMouseOver(node.id);
+              }
+            }}
           />
         )}
         <LineMarkSeries
@@ -228,6 +322,26 @@ export function ChartBeeswarm({
           lineStyle={{ stroke: '#041733', strokeWidth: 0.5 }}
           markStyle={{ fill: '#041733', stroke: '#041733' }}
         />
+        {hintNode && (
+          <Hint
+            align={{
+              vertical: 'top',
+              horizontal: hintAlign,
+            }}
+            value={hintNode}
+            style={{
+              pointerEvents: 'all',
+              margin: '15px 0',
+            }}
+          >
+            <CountryHint
+              onClose={() => setHighlight(null)}
+              hasClose={!!highlight}
+              country={hintNode}
+              align={hintAlign}
+            />
+          </Hint>
+        )}
       </FlexibleWidthXYPlot>
       {!isMinSize(size, 'medium') && (
         <XAxisLabelWrap>
@@ -237,6 +351,7 @@ export function ChartBeeswarm({
       {!isMinSize(size, 'medium') && (
         <KeyCategoryMarkers categories={config.keyCategories} includeKeys />
       )}
+      {!isMinSize(size, 'medium') && target && <KeyTarget target={target} />}
     </Styled>
   );
 }
@@ -244,6 +359,13 @@ export function ChartBeeswarm({
 ChartBeeswarm.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   config: PropTypes.object,
+  target: PropTypes.object,
+  metric: PropTypes.string,
+  mouseOver: PropTypes.string,
+  highlight: PropTypes.string,
+  setMetric: PropTypes.func,
+  setMouseOver: PropTypes.func,
+  setHighlight: PropTypes.func,
 };
 
 export default ChartBeeswarm;

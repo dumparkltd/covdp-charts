@@ -81,14 +81,15 @@ export function CountryHint({
   const size = useContext(ResponsiveContext);
   return (
     <Styled alignHint={align}>
-      <Box direction="row" justify="between" align="center">
+      <Box direction="row" justify="between" align="center" gap="xsmall">
         <Box>
           <Title>{country.label}</Title>
         </Box>
         {hasClose && (
-          <ButtonClose plain onClick={() => onClose()}>
-            <Close color="white" />
-          </ButtonClose>
+          <ButtonClose
+            onClick={() => onClose()}
+            icon={<Close color="white" size="small" />}
+          />
         )}
       </Box>
       {isMinSize(size, 'medium') && (
@@ -135,6 +136,12 @@ export function CountryHint({
                   </Box>
                 ))}
               </Box>
+            </Box>
+          )}
+          {country.hint && country.hint.label && country.hint.value && (
+            <Box direction="row" gap="xsmall">
+              <MetricLabel>{`${country.hint.label}:`}</MetricLabel>
+              <MetricValue>{country.hint.value}</MetricValue>
             </Box>
           )}
         </Box>

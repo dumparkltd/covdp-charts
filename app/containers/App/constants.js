@@ -66,6 +66,7 @@ export const DATA_RESOURCES = [
   {
     key: 'vaccine-supply',
     file: 'vaccine-supply.csv',
+    chartTitle: 'Vaccine supply by income group',
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
@@ -73,10 +74,14 @@ export const DATA_RESOURCES = [
       administered: 'adm_td_add_pc',
     },
     maxValue: 10,
+    yDefault: 'secured',
     keyCategories: 'INCOME',
+    metricOptions: ['secured', 'delivered', 'administered'],
+    metricOptionLabel: 'Select indicator',
     meta: {
       secured: {
         axisLabel: 'Doses secured (per capita)',
+        label: 'Doses secured',
         updated: '08/31/2022',
         sourceURL:
           'https://docs.google.com/spreadsheets/d/1aR4L0VStsBrY37aRKTjlUwjQuPS3hDwdRyTwGInkRyE/edit?usp=sharing',
@@ -84,9 +89,11 @@ export const DATA_RESOURCES = [
       },
       delivered: {
         axisLabel: 'Doses delivered (per capita)',
+        label: 'Doses delivered',
       },
       administered: {
         axisLabel: 'Doses administered (per capita)',
+        label: 'Doses administered',
       },
     },
     xAxisLabel: 'Income Groups',

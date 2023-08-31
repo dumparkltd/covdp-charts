@@ -23,6 +23,7 @@ import Options from 'components/Options';
 import CountryHint from 'components/CountryHint';
 
 import { isMinSize } from 'utils/responsive';
+import { getHintAlign } from 'utils/charts';
 
 import { mapNodes, groupNodes, getChartHeight, getTickValuesX } from './utils';
 
@@ -78,11 +79,6 @@ const formatXLabels = v => {
   return <tspan style={{ opacity: 0.5 }}>{timeFormat('%m')(v)}</tspan>;
 };
 
-const getHintAlign = ({ hintNode, xMin, xMax }) => {
-  const { x } = hintNode;
-  const xRatio = (x - xMin) / (xMax - xMin);
-  return xRatio < 0.4 ? 'right' : 'left';
-};
 const getYAxisLabels = yMax => {
   const labels = [];
   /* eslint-disable no-plusplus */
@@ -154,7 +150,8 @@ export function ChartTimelinePeaks({
 
   const hintSeries = highlightSeries || mouseOverSeries;
   const hintNode = highlightNode || mouseOverNode;
-  const hintAlign = hintNode && getHintAlign({ hintNode, xMin, xMax });
+  const hintAlign =
+    hintNode && getHintAlign({ xPosition: hintNode.x, xMin, xMax });
 
   return (
     <Styled>
