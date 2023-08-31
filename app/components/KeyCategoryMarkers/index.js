@@ -28,7 +28,7 @@ const Dot = styled.div`
   }
 `;
 
-export function KeyCategoryMarkers({ categories }) {
+export function KeyCategoryMarkers({ categories, includeKeys }) {
   const size = useContext(ResponsiveContext);
   return (
     <Box
@@ -43,6 +43,7 @@ export function KeyCategoryMarkers({ categories }) {
           <Box key={catId} direction="row" gap="xsmall" align="center">
             <Dot categoryColor={DATACOLORS[catId]} />
             <Label>{CATEGORIES[categories][catId]}</Label>
+            {includeKeys && <Label>{`(${catId})`}</Label>}
           </Box>
         ))}
     </Box>
@@ -51,6 +52,7 @@ export function KeyCategoryMarkers({ categories }) {
 
 KeyCategoryMarkers.propTypes = {
   categories: PropTypes.string,
+  includeKeys: PropTypes.bool,
 };
 
 export default KeyCategoryMarkers;

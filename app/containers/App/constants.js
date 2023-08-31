@@ -72,14 +72,24 @@ export const DATA_RESOURCES = [
       delivered: 'del_dose_add_pc',
       administered: 'adm_td_add_pc',
     },
+    maxValue: 10,
+    keyCategories: 'INCOME',
     meta: {
       secured: {
+        axisLabel: 'Doses secured (per capita)',
         updated: '08/31/2022',
         sourceURL:
           'https://docs.google.com/spreadsheets/d/1aR4L0VStsBrY37aRKTjlUwjQuPS3hDwdRyTwGInkRyE/edit?usp=sharing',
         source: 'IMF/WHO vaccine supply tracker',
       },
+      delivered: {
+        axisLabel: 'Doses delivered (per capita)',
+      },
+      administered: {
+        axisLabel: 'Doses administered (per capita)',
+      },
     },
+    xAxisLabel: 'Income Groups',
   },
   {
     key: 'uhc-coverage',

@@ -242,7 +242,7 @@ export function ChartTimelinePeaks({
             style={{
               opacity: 1,
               stroke: mouseOverSeries.color,
-              strokeWidth: 1,
+              strokeWidth: 2,
             }}
           />
         )}

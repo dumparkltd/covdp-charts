@@ -1,7 +1,9 @@
+import * as d3 from 'd3';
+
+import { isMinSize } from 'utils/responsive';
+
 import { DATACOLORS } from 'containers/App/constants';
 import { SIZES } from 'theme';
-import { isMinSize } from 'utils/responsive';
-import * as d3 from 'd3';
 
 export const getXTime = date => new Date(`${date}`).getTime();
 
@@ -39,7 +41,7 @@ export const groupNodes = ({ nodes, countries }) => {
   return countriesData;
 };
 
-export const getChartHeight = size => SIZES.timelineSimpleChartHeight[size];
+export const getChartHeight = size => SIZES.timelinePeakChartHeight[size];
 
 const getMonths = (fromDate, toDate, timestep) => {
   const fromYear = fromDate.getFullYear();

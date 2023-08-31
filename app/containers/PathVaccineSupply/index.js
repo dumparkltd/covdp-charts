@@ -14,7 +14,7 @@ import { createStructuredSelector } from 'reselect';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import saga from 'containers/App/saga';
-import { DATA_RESOURCES } from 'containers/App/constants';
+import { DATA_RESOURCES, CATEGORIES } from 'containers/App/constants';
 import { loadDataIfNeeded } from 'containers/App/actions';
 import {
   // getData,
@@ -34,14 +34,16 @@ const getChartData = ({ countries, data, metricColumn, groupByColumn }) => {
       countryData[metricColumn] &&
       countryData[metricColumn].trim !== ''
     ) {
+      const index = Object.keys(CATEGORIES.INCOME).indexOf(c[groupByColumn]);
       return [
         ...m,
         {
           id: c.iso,
           title: c.name_short,
-          size: parseInt(c.pop, 10),
+          sizeRaw: parseInt(c.pop, 10),
           group: c[groupByColumn],
           value: parseFloat(countryData[metricColumn]),
+          groupIndex: Object.keys(CATEGORIES.INCOME).length - index - 0.5,
         },
       ];
     }
@@ -71,7 +73,7 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
   // console.log('data', data)
   // console.log('metric', metric)
   // console.log('metricColumn', metrics[metric])
-  // console.log('chartData', chartData)
+  console.log('chartData', chartData)
   return (
     <article>
       <Helmet>
