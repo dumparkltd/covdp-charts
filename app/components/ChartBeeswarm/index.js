@@ -465,10 +465,10 @@ ChartBeeswarm.propTypes = {
   target: PropTypes.object,
   groups: PropTypes.object,
   metric: PropTypes.string,
-  mouseOver: PropTypes.string,
-  highlight: PropTypes.string,
   setMetric: PropTypes.func,
+  mouseOver: PropTypes.string,
   setMouseOver: PropTypes.func,
+  highlight: PropTypes.string,
   setHighlight: PropTypes.func,
   showGroupMedian: PropTypes.bool,
 };

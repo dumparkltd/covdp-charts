@@ -20,6 +20,7 @@ export const DATA_URL = '//covdp-data.web.app/data';
 
 export const PATHS = {
   DOSES_DELIVERED: 'doses-delivered',
+  DOSES_DELIVERED_MEDIAN: 'doses-delivered-median',
   // cumulative doses delivered over time by income group: line-chart
   // indicator: del_dose_add_pc
   VAX_SUPPLY: 'vaccine-supply',
@@ -209,6 +210,24 @@ export const DATA_RESOURCES = [
     },
     keyCategories: 'INCOME',
     chartTitle: 'Vaccine supply by income group',
+  },
+  {
+    key: 'doses-delivered-median',
+    file: 'doses-delivered.csv',
+    group_fk: 'income_group',
+    metrics: {
+      median: 'del_dose_add_pc_0.5',
+      lower: 'del_dose_add_pc_0.25',
+      upper: 'del_dose_add_pc_0.75',
+    },
+    keyCategories: 'INCOME',
+    chartTitle: 'Vaccine supply by country income group',
+    labelPositions: {
+      HIC: 'top',
+      UMIC: 'top',
+      LMIC: 'bottom',
+      LIC: 'top',
+    },
   },
 ];
 

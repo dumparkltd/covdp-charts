@@ -7,13 +7,22 @@ import { isMinSize } from 'utils/responsive';
 
 export const getXTime = date => new Date(`${date}`).getTime();
 
-export const mapNodes = ({ data }) =>
+export const mapNodes = data =>
   // prettier-ignore
   data
     .map(d => ({
       ...d,
       x: getXTime(d.xValue),
       y: d.yValue,
+    }));
+export const mapRangeNodes = data =>
+  // prettier-ignore
+  data
+    .map(d => ({
+      ...d,
+      x: getXTime(d.xValue),
+      y: d.yValueUpper,
+      y0: d.yValueLower,
     }));
 
 export const groupNodes = ({ nodes, seriesColumn }) => {

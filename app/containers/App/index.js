@@ -14,6 +14,7 @@ import PathVaccineSupply from 'containers/PathVaccineSupply/Loadable';
 import PathPopulationGroups from 'containers/PathPopulationGroups/Loadable';
 import PathUHC from 'containers/PathUHC/Loadable';
 import PathDosesDelivered from 'containers/PathDosesDelivered/Loadable';
+import PathDosesDeliveredMedian from 'containers/PathDosesDeliveredMedian/Loadable';
 import PathDosesAdmin from 'containers/PathDosesAdmin/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
@@ -43,6 +44,10 @@ export default function App() {
         <Route
           path={`/${PATHS.DOSES_DELIVERED}`}
           component={PathDosesDelivered}
+        />
+        <Route
+          path={`/${PATHS.DOSES_DELIVERED_MEDIAN}`}
+          component={PathDosesDeliveredMedian}
         />
         <Route path="" component={NotFoundPage} />
       </Switch>
