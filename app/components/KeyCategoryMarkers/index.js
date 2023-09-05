@@ -5,6 +5,7 @@ import { Box, Text, ResponsiveContext } from 'grommet';
 
 import { CATEGORIES, DATACOLORS } from 'containers/App/constants';
 import { isMinSize } from 'utils/responsive';
+import { formatNumberLabel } from 'utils/charts';
 
 const Label = styled(p => <Text {...p} />)`
   font-size: ${({ theme }) => theme.text.xxsmall.size};
@@ -28,8 +29,26 @@ const Dot = styled.div`
   }
 `;
 
-export function KeyCategoryMarkers({ categories, includeKeys }) {
+const getLabel = ({ includeGroupIDs, catId, medians, config }) => {
+  let result = '';
+  if (includeGroupIDs) {
+    result = `${catId}: `;
+  }
+  result = `${result}${CATEGORIES[config.keyCategories][catId]}`;
+  if (medians) {
+    const value = formatNumberLabel({
+      value: medians[catId],
+      isPercentage: config.isPercentage,
+    });
+    // prettier-ignore
+    result = `${result}: ${value} (median)`;
+  }
+  return result;
+};
+
+export function KeyCategoryMarkers({ config, includeGroupIDs, medians }) {
   const size = useContext(ResponsiveContext);
+  const categories = config.keyCategories;
   return (
     <Box
       direction={isMinSize(size, 'medium') ? 'row' : 'column'}
@@ -42,8 +61,14 @@ export function KeyCategoryMarkers({ categories, includeKeys }) {
         Object.keys(CATEGORIES[categories]).map(catId => (
           <Box key={catId} direction="row" gap="xsmall" align="center">
             <Dot categoryColor={DATACOLORS[catId]} />
-            <Label>{CATEGORIES[categories][catId]}</Label>
-            {includeKeys && <Label>{`(${catId})`}</Label>}
+            <Label>
+              {getLabel({
+                includeGroupIDs,
+                catId,
+                medians,
+                config,
+              })}
+            </Label>
           </Box>
         ))}
     </Box>
@@ -51,8 +76,9 @@ export function KeyCategoryMarkers({ categories, includeKeys }) {
 }
 
 KeyCategoryMarkers.propTypes = {
-  categories: PropTypes.string,
-  includeKeys: PropTypes.bool,
+  config: PropTypes.object,
+  includeGroupIDs: PropTypes.bool,
+  medians: PropTypes.object,
 };
 
 export default KeyCategoryMarkers;

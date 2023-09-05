@@ -51,8 +51,8 @@ const getChartData = ({
             label: c.name_short,
             sizeRaw: parseInt(population, 10),
             group: c[groupByColumn],
-            value: parseFloat(countryData[metricColumn]),
-            groupIndex: Object.keys(CATEGORIES.INCOME).length - index - 0.5,
+            value: Math.min(parseFloat(countryData[metricColumn]), 100),
+            groupIndex: index + 0.5,
             hint: {
               label: config.meta[metric].hintLabel,
               value: `${countryData[metricColumn]}%`,
@@ -98,7 +98,7 @@ export function PathPopulationGroups({
   return (
     <article>
       <Helmet>
-        <title>PathPopulationGroups</title>
+        <title>{config && config.chartTitle}</title>
         <meta name="description" content="PathPopulationGroups" />
       </Helmet>
       <div>
@@ -111,6 +111,8 @@ export function PathPopulationGroups({
           setHighlight={setHighlight}
           highlight={highlight}
           config={config}
+          groups={CATEGORIES.INCOME}
+          showGroupMedian
         />
       </div>
     </article>

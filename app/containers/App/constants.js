@@ -66,7 +66,7 @@ export const DATA_RESOURCES = [
   {
     key: 'vaccine-supply',
     file: 'vaccine-supply.csv',
-    chartTitle: 'Vaccine supply by income group',
+    chartTitle: 'Vaccine supply by income group (March 2023)',
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
@@ -79,6 +79,7 @@ export const DATA_RESOURCES = [
     keyCategories: 'INCOME',
     metricOptions: ['secured', 'delivered', 'administered'],
     metricOptionLabel: 'Select indicator',
+    groupByColumn: 'income_group',
     meta: {
       secured: {
         axisLabel: 'Doses secured (per capita)',
@@ -162,13 +163,14 @@ export const DATA_RESOURCES = [
   {
     key: 'population-groups',
     file: 'population-groups.csv',
-    chartTitle: 'Population groups fully vaccinated',
+    chartTitle: 'Population groups fully vaccinated (March 2023)',
     country_fk: 'iso',
     metrics: {
       all: 'cov_total_fv',
       old: 'cov_old_fv',
       hcw: 'cov_hcw_fv',
     },
+    groupByColumn: 'income_group',
     maxValue: 108,
     maxSize: 1500000000,
     isPercentage: true,
@@ -220,10 +222,10 @@ export const CATEGORIES = {
     WPR: 'Western Pacific Region',
   },
   INCOME: {
-    LIC: 'Low Income Group',
-    LMIC: 'Lower Middle Income Group',
-    UMIC: 'Upper Middle Income Group',
-    HIC: 'High Income Group',
+    HIC: 'High Income Countries',
+    UMIC: 'Upper Middle Income Countries',
+    LMIC: 'Lower Middle Income Countries',
+    LIC: 'Low Income Countries',
   },
   COVAX: {
     AMC: 'AMC (Advance Market Commitment)',

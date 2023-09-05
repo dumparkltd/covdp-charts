@@ -221,7 +221,7 @@ export function ChartTimelineSimple({
         )}
       </FlexibleWidthXYPlot>
       {!isMinSize(size, 'small') && config.keyCategories && (
-        <KeyCategoryMarkers categories={config.keyCategories} />
+        <KeyCategoryMarkers config={config} />
       )}
     </Styled>
   );

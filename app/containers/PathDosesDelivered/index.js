@@ -51,7 +51,7 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
   return (
     <article>
       <Helmet>
-        <title>PathDosesDelivered</title>
+        <title>{config && config.chartTitle}</title>
         <meta name="description" content="PathDosesDelivered" />
       </Helmet>
       <div>

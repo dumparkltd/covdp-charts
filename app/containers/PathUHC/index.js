@@ -93,7 +93,7 @@ export function PathUHC({ onLoadData, countries, dataReady, data }) {
   return (
     <article>
       <Helmet>
-        <title>PathUHC</title>
+        <title>{config && config.chartTitle}</title>
         <meta name="description" content="PathUHC" />
       </Helmet>
       <div>

@@ -50,8 +50,8 @@ const getChartData = ({
             label: c.name_short,
             sizeRaw: parseInt(c.pop, 10),
             group: c[groupByColumn],
-            value: parseFloat(countryData[metricColumn]),
-            groupIndex: Object.keys(CATEGORIES.INCOME).length - index - 0.5,
+            value: Math.min(parseFloat(countryData[metricColumn]), 100),
+            groupIndex: index + 0.5,
             hint: {
               label: config.meta[metric].axisLabel,
               value: countryData[metricColumn],
@@ -86,12 +86,12 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
       metric,
       config,
       metricColumn: metrics[metric],
-      groupByColumn: 'income_group',
+      groupByColumn: config.groupByColumn,
     });
   return (
     <article>
       <Helmet>
-        <title>PathVaccineSupply</title>
+        <title>{config && config.chartTitle}</title>
         <meta name="description" content="PathVaccineSupply" />
       </Helmet>
       <div>
@@ -109,6 +109,8 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
             label: 'WHO target:',
             label2: '1.4 doses per capita',
           }}
+          groups={CATEGORIES.INCOME}
+          showGroupMedian
         />
       </div>
     </article>

@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import { cloneDeep } from 'lodash/lang';
+import { groupBy } from 'lodash/collection';
 import forceBoundary from 'd3-force-boundary';
 import { DATACOLORS } from 'containers/App/constants';
 import { SIZES } from 'theme';
@@ -110,3 +111,22 @@ export const getNodePosition = (nodes, { maxWidth, maxHeight }) => {
 };
 
 export const getChartHeight = size => SIZES.beeswarmChartHeight[size];
+
+const getMedian = data => {
+  const sortedValues = data.map(d => d.value).sort((a, b) => (a > b ? 1 : -1));
+  const middle = sortedValues.length / 2;
+  return middle % 1 === 0
+    ? (sortedValues[middle - 1] + sortedValues[middle]) / 2
+    : sortedValues[Math.floor(middle)];
+};
+
+export const getGroupMedians = data => {
+  const groups = groupBy(data, d => d.group);
+  return Object.keys(groups).reduce(
+    (memo, groupId) => ({
+      ...memo,
+      [groupId]: getMedian(groups[groupId]),
+    }),
+    {},
+  );
+};

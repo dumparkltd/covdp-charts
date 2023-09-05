@@ -324,7 +324,7 @@ export function ChartTimelinePeaks({
         )}
       </FlexibleWidthXYPlot>
       <XAxisLabelWrap />
-      <KeyCategoryMarkers categories={config.keyCategories} />
+      <KeyCategoryMarkers config={config} />
     </Styled>
   );
 }

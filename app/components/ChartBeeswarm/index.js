@@ -25,10 +25,10 @@ import Title from 'components/Title';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import KeyTarget from 'components/KeyTarget';
 import Options from 'components/Options';
-import { CATEGORIES } from 'containers/App/constants';
+// import { CATEGORIES } from 'containers/App/constants';
 
 import { isMinSize } from 'utils/responsive';
-import { getHintAlign } from 'utils/charts';
+import { getHintAlign, formatNumberLabel } from 'utils/charts';
 
 import {
   mapNodes,
@@ -36,6 +36,7 @@ import {
   getChartHeight,
   scaleValue,
   scaleGroup,
+  getGroupMedians,
 } from './utils';
 
 const chartMargins = {
@@ -83,18 +84,15 @@ const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
     line-height: ${({ theme }) => theme.text.xxsmall.height};
   }
 `;
-const myXAxisLabelFormatter = (v, size, scaleX) => {
-  const index = Math.round(scaleX.invert(v) + 0.5);
+const myXAxisLabelFormatter = (v, size, scaleX, groups) => {
+  const index = Math.round(scaleX.invert(v) - 0.5);
   // prettier-ignore
   return (
     <tspan style={{ fontFamily: 'ABCMonumentBold' }}>
       {isMinSize(size, 'medium')
-        ? Object.values(CATEGORIES.INCOME)[
-          Object.keys(CATEGORIES.INCOME).length - index
-        ]
-        : Object.keys(CATEGORIES.INCOME)[
-          Object.keys(CATEGORIES.INCOME).length - index
-        ]}
+        ? Object.values(groups)[index]
+        : Object.keys(groups)[index]
+      }
     </tspan>
   );
 };
@@ -119,6 +117,8 @@ export function ChartBeeswarm({
   target,
   setMouseOver,
   mouseOver,
+  showGroupMedian,
+  groups,
 }) {
   const size = useContext(ResponsiveContext);
   const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
@@ -191,6 +191,14 @@ export function ChartBeeswarm({
     maxValue,
     scaleY,
   });
+
+  let medians;
+  if (showGroupMedian && config.groupByColumn) {
+    medians = getGroupMedians(data);
+  }
+
+  const maxOffset =
+    positions && d3.max(positions, p => Math.abs(scaleX(p.groupIndex) - p.x));
   return (
     <Styled ref={chartRef}>
       <Title>{config.chartTitle}</Title>
@@ -229,7 +237,7 @@ export function ChartBeeswarm({
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
             text: { stroke: 'none' },
           }}
-          tickFormat={v => myXAxisLabelFormatter(v, size, scaleX)}
+          tickFormat={v => myXAxisLabelFormatter(v, size, scaleX, groups)}
           tickValues={[scaleX(0.5), scaleX(1.5), scaleX(2.5), scaleX(3.5)]}
           tickPadding={isMinSize(size, 'medium') ? 5 : 3}
           tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
@@ -241,7 +249,9 @@ export function ChartBeeswarm({
             text: { stroke: 'none' },
           }}
           tickFormat={v =>
-            config.isPercentage ? `${scaleY.invert(v)}%` : scaleY.invert(v)
+            config.isPercentage
+              ? `${Math.round(scaleY.invert(v))}%`
+              : Math.round(scaleY.invert(v))
           }
           tickValues={tickValuesY}
           tickPadding={isMinSize(size, 'medium') ? 5 : 3}
@@ -264,7 +274,94 @@ export function ChartBeeswarm({
             strokeDasharray={[8, 4]}
           />
         )}
-        {isMinSize(size, 'medium') && target && (
+        {medians &&
+          Object.keys(medians).map(groupId => {
+            const groupIndex = Object.keys(groups).indexOf(groupId);
+            const x = scaleX(groupIndex + 0.5);
+            return (
+              <LineSeries
+                key={groupId}
+                animation
+                data={[
+                  {
+                    x: x - maxOffset * 1.2,
+                    y: scaleY(medians[groupId]),
+                  },
+                  {
+                    x: x + maxOffset * 1.2,
+                    y: scaleY(medians[groupId]),
+                  },
+                ]}
+                style={{ stroke: '#041733', strokeWidth: 1, opacity: 1 }}
+              />
+            );
+          })}
+        {medians &&
+          isMinSize(size, 'medium') &&
+          Object.keys(medians).map(groupId => {
+            const groupIndex = Object.keys(groups).indexOf(groupId);
+            const x = scaleX(groupIndex + 0.5);
+            return (
+              <LabelSeries
+                key={groupId}
+                animation
+                data={[
+                  {
+                    x: x + maxOffset * 1.2,
+                    y: scaleY(medians[groupId]),
+                    label: formatNumberLabel({
+                      value: medians[groupId],
+                      isPercentage: config.isPercentage,
+                    }),
+                    xOffset: 5,
+                  },
+                ]}
+                style={{
+                  fontFamily: 'ABCMonument',
+                  stroke: '#F6F7FC',
+                  strokeWidth: '6px',
+                  fontSize: 12,
+                  opacity: 1,
+                  maxWidth: '30px',
+                }}
+                labelAnchorX="start"
+                labelAnchorY="middle"
+              />
+            );
+          })}
+        {medians &&
+          isMinSize(size, 'medium') &&
+          Object.keys(medians).map(groupId => {
+            const groupIndex = Object.keys(groups).indexOf(groupId);
+            const x = scaleX(groupIndex + 0.5);
+            return (
+              <LabelSeries
+                key={groupId}
+                animation
+                data={[
+                  {
+                    x: x + maxOffset * 1.2,
+                    y: scaleY(medians[groupId]),
+                    label: formatNumberLabel({
+                      value: medians[groupId],
+                      isPercentage: config.isPercentage,
+                    }),
+                    xOffset: 5,
+                  },
+                ]}
+                style={{
+                  fontFamily: 'ABCMonument',
+                  fill: '#041733',
+                  fontSize: 12,
+                  opacity: 1,
+                  maxWidth: '30px',
+                }}
+                labelAnchorX="start"
+                labelAnchorY="middle"
+              />
+            );
+          })}
+        {target && isMinSize(size, 'medium') && (
           <LabelSeries
             data={[
               {
@@ -355,7 +452,7 @@ export function ChartBeeswarm({
         </XAxisLabelWrap>
       )}
       {!isMinSize(size, 'medium') && (
-        <KeyCategoryMarkers categories={config.keyCategories} includeKeys />
+        <KeyCategoryMarkers config={config} includeGroupIDs medians={medians} />
       )}
       {!isMinSize(size, 'medium') && target && <KeyTarget target={target} />}
     </Styled>
@@ -366,12 +463,14 @@ ChartBeeswarm.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   config: PropTypes.object,
   target: PropTypes.object,
+  groups: PropTypes.object,
   metric: PropTypes.string,
   mouseOver: PropTypes.string,
   highlight: PropTypes.string,
   setMetric: PropTypes.func,
   setMouseOver: PropTypes.func,
   setHighlight: PropTypes.func,
+  showGroupMedian: PropTypes.bool,
 };
 
 export default ChartBeeswarm;

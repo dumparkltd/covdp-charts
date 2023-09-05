@@ -200,7 +200,7 @@ export function ChartScatter({
       <XAxisLabelWrap>
         <AxisLabel>{xAxisLabel}</AxisLabel>
       </XAxisLabelWrap>
-      <KeyCategoryMarkers categories={config.keyCategories} />
+      <KeyCategoryMarkers config={config} />
     </Styled>
   );
 }
