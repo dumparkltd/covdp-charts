@@ -111,7 +111,7 @@ export function PathPopulationGroups({
           setHighlight={setHighlight}
           highlight={highlight}
           config={config}
-          groups={CATEGORIES.INCOME}
+          groups={CATEGORIES.INCOME_SHORT}
           showGroupMedian
         />
       </div>

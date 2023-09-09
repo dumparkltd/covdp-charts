@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Text, ResponsiveContext } from 'grommet';
+import { Box, ResponsiveContext } from 'grommet';
 import * as d3 from 'd3';
 import {
   FlexibleWidthXYPlot,
@@ -21,10 +21,10 @@ import {
 } from 'react-vis';
 
 import CountryHint from 'components/CountryHint';
-import Title from 'components/Title';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import KeyTarget from 'components/KeyTarget';
 import Options from 'components/Options';
+import AxisLabel from 'components/AxisLabel';
 // import { CATEGORIES } from 'containers/App/constants';
 
 import { isMinSize } from 'utils/responsive';
@@ -43,7 +43,7 @@ const chartMargins = {
   bottom: 30,
   top: 10,
   right: 20,
-  left: 50,
+  left: 80,
 };
 const chartMarginsSmall = {
   bottom: 20,
@@ -56,39 +56,11 @@ const Styled = styled.div`
   padding-bottom: 10px;
 `;
 
-const YAxisLabelWrap = styled.div`
-  margin-top: 5px;
-  margin-left: 40px;
-  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
-    margin-left: 50px;
-  }
-`;
-const XAxisLabelWrap = styled.div`
-  margin-bottom: 10px;
-  margin-right: 2px;
-  text-align: right;
-  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
-    margin-bottom: 20px;
-    margin-right: 20px;
-  }
-`;
-const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
-  text-transform: uppercase;
-  font-family: 'ABCMonumentBold';
-  color: white;
-  background-color: #041733;
-  padding: 1px 2px;
-  line-height: 11px;
-  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
-    padding: 1px 5px;
-    line-height: ${({ theme }) => theme.text.xxsmall.height};
-  }
-`;
 const myXAxisLabelFormatter = (v, size, scaleX, groups) => {
   const index = Math.round(scaleX.invert(v) - 0.5);
   // prettier-ignore
   return (
-    <tspan style={{ fontFamily: 'ABCMonumentBold' }}>
+    <tspan>
       {isMinSize(size, 'medium')
         ? Object.values(groups)[index]
         : Object.keys(groups)[index]
@@ -201,18 +173,25 @@ export function ChartBeeswarm({
     positions && d3.max(positions, p => Math.abs(scaleX(p.groupIndex) - p.x));
   return (
     <Styled ref={chartRef}>
-      <Title>{config.chartTitle}</Title>
-      <Options
-        metric={metric}
-        setMetric={setMetric}
-        setHighlight={setHighlight}
-        highlightNode={highlightNode}
-        data={data}
-        config={config}
+      <Box margin={{ bottom: 'large' }}>
+        <Options
+          metric={metric}
+          setMetric={setMetric}
+          setHighlight={setHighlight}
+          highlightNode={highlightNode}
+          data={data}
+          config={config}
+        />
+      </Box>
+      <AxisLabel
+        axis="y"
+        config={{
+          yAxisLabel: config.meta[metric].axisLabel,
+          yAxisLabelAdditional: config.meta[metric].axisLabelAdditional,
+        }}
+        chartMarginLeft={margins.left}
       />
-      <YAxisLabelWrap>
-        <AxisLabel>{config.meta[metric].axisLabel}</AxisLabel>
-      </YAxisLabelWrap>
+
       <FlexibleWidthXYPlot
         height={chartHeight}
         margin={margins}
@@ -235,7 +214,7 @@ export function ChartBeeswarm({
         <XAxis
           style={{
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
-            text: { stroke: 'none' },
+            text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
           }}
           tickFormat={v => myXAxisLabelFormatter(v, size, scaleX, groups)}
           tickValues={[scaleX(0.5), scaleX(1.5), scaleX(2.5), scaleX(3.5)]}
@@ -246,7 +225,7 @@ export function ChartBeeswarm({
         <YAxis
           style={{
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
-            text: { stroke: 'none' },
+            text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
           }}
           tickFormat={v =>
             config.isPercentage
@@ -446,15 +425,19 @@ export function ChartBeeswarm({
           </Hint>
         )}
       </FlexibleWidthXYPlot>
+      <AxisLabel axis="x" config={config} />
       {!isMinSize(size, 'medium') && (
-        <XAxisLabelWrap>
-          <AxisLabel>{config.xAxisLabel}</AxisLabel>
-        </XAxisLabelWrap>
+        <Box margin={{ left: `${margins.left}px` }}>
+          <Box margin={{ top: 'medium' }}>
+            <KeyCategoryMarkers
+              config={config}
+              includeGroupIDs
+              medians={medians}
+            />
+          </Box>
+          {target && <KeyTarget target={target} />}
+        </Box>
       )}
-      {!isMinSize(size, 'medium') && (
-        <KeyCategoryMarkers config={config} includeGroupIDs medians={medians} />
-      )}
-      {!isMinSize(size, 'medium') && target && <KeyTarget target={target} />}
     </Styled>
   );
 }

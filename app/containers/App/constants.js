@@ -120,7 +120,7 @@ export const DATA_RESOURCES = [
     ],
     dateLabel: 'Peak date',
     includePopulation: true,
-    xAxisLabel: 'Time',
+    xAxisLabel: 'Date',
     yAxisLabel: 'Vaccination rate',
     yAxisLabelAdditional: '(% of population)',
   },
@@ -147,7 +147,7 @@ export const DATA_RESOURCES = [
         updated: '01/05/2023',
         sourceURL: 'https://data.who.int/indicators/i/9A706FD',
         source: 'UHC service coverage index',
-        label: 'UHC Service Index (2021)',
+        label: 'UHC Index (2021)',
       },
       one_dose_2021: {
         date: '06/2021',
@@ -158,7 +158,7 @@ export const DATA_RESOURCES = [
         label: 'June 2022',
       },
     },
-    xAxisLabel: 'UHC Service Index (2021)',
+    xAxisLabel: 'Universal Health Coverage index (2021)',
     yAxisLabel: 'At least 1 dose',
     yAxisLabelAdditional: '(% of population)',
   },
@@ -181,7 +181,8 @@ export const DATA_RESOURCES = [
     groupByColumn: 'income_group',
     meta: {
       secured: {
-        axisLabel: 'Doses secured (per capita)',
+        axisLabel: 'Doses secured',
+        axisLabelAdditional: '(per capita)',
         label: 'Doses secured',
         updated: '08/31/2022',
         sourceURL:
@@ -189,15 +190,17 @@ export const DATA_RESOURCES = [
         source: 'IMF/WHO vaccine supply tracker',
       },
       delivered: {
-        axisLabel: 'Doses delivered (per capita)',
-        label: 'Doses delivered',
+        axisLabel: 'Doses supplied',
+        axisLabelAdditional: '(per capita)',
+        label: 'Doses supplied',
       },
       administered: {
-        axisLabel: 'Doses administered (per capita)',
+        axisLabel: 'Doses administered',
+        axisLabelAdditional: '(per capita)',
         label: 'Doses administered',
       },
     },
-    xAxisLabel: 'Income Groups',
+    xAxisLabel: 'Country Income Groups',
   },
   {
     key: 'population-groups',
@@ -214,30 +217,30 @@ export const DATA_RESOURCES = [
     maxSize: 1500000000,
     isPercentage: true,
     yDefault: 'all',
-    keyCategories: 'INCOME',
+    keyCategories: 'INCOME_SHORT',
     metricOptions: ['all', 'old', 'hcw'],
     metricOptionLabel: 'Select group',
     meta: {
       all: {
         axisLabel: '% fully vaccinated',
-        hintLabel: 'Fully vaccinated (all people)',
+        hintLabel: '% fully vaccinated (all people)',
         label: 'All people',
         popColumn: 'pop',
       },
       old: {
         axisLabel: '% fully vaccinated',
-        hintLabel: 'Fully vaccinated (older adults)',
+        hintLabel: '% fully vaccinated (older adults)',
         label: 'Older adults',
         popColumn: 'pop_older',
       },
       hcw: {
         axisLabel: '% fully vaccinated',
-        hintLabel: 'Fully vaccinated (healthcare workers)',
+        hintLabel: '% fully vaccinated (healthcare workers)',
         label: 'Healthcare workers',
         popColumn: 'pop_hcw',
       },
     },
-    xAxisLabel: 'Income Groups',
+    xAxisLabel: 'Country Income Groups',
   },
 ];
 
@@ -255,6 +258,12 @@ export const CATEGORIES = {
     UMIC: 'Upper Middle Income Countries',
     LMIC: 'Lower Middle Income Countries',
     LIC: 'Low Income Countries',
+  },
+  INCOME_SHORT: {
+    HIC: 'High Income',
+    UMIC: 'Upper Middle Income',
+    LMIC: 'Lower Middle Income',
+    LIC: 'Low Income',
   },
   COVAX: {
     AMC: 'AMC (Advance Market Commitment)',

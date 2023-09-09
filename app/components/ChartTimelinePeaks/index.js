@@ -137,13 +137,17 @@ export function ChartTimelinePeaks({
 
   return (
     <Styled>
-      <Options
-        setHighlight={setHighlight}
-        highlightNode={highlightSeries}
-        data={seriesNodes}
-        config={config}
-      />
-      <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
+      <Box direction="row" gap="small" justify="between">
+        <Box flex={{ shrink: 0 }}>
+          <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
+        </Box>
+        <Options
+          setHighlight={setHighlight}
+          highlightNode={highlightSeries}
+          data={seriesNodes}
+          config={config}
+        />
+      </Box>
       <FlexibleWidthXYPlot
         xType="time"
         height={getChartHeight(size)}
@@ -170,7 +174,7 @@ export function ChartTimelinePeaks({
             tickValues={tickValuesX}
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none', fontSize: '13px' },
+              text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
@@ -183,7 +187,7 @@ export function ChartTimelinePeaks({
             tickValues={getYAxisLabels(yMax)}
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none', fontSize: '13px' },
+              text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
@@ -196,7 +200,7 @@ export function ChartTimelinePeaks({
               data={series.data}
               key={series.id}
               style={{
-                opacity: 0.8,
+                opacity: highlightNode ? 0.3 : 0.8,
                 stroke: '#ccc',
                 strokeWidth: 0.2,
               }}
@@ -229,7 +233,7 @@ export function ChartTimelinePeaks({
             strokeType="literal"
             fillType="literal"
             style={{
-              opacity: 0.8,
+              opacity: highlightNode ? 0.3 : 0.8,
             }}
             onNearestXY={node => {
               if (isMinSize(size, 'small')) {
@@ -266,7 +270,7 @@ export function ChartTimelinePeaks({
           lineStyle={{ stroke: '#041733', strokeWidth: 0.5 }}
           markStyle={{ fill: '#041733', stroke: '#041733' }}
         />
-        {hintNode && (
+        {isMinSize(size, 'medium') && hintNode && (
           <Hint
             align={{
               vertical: 'top',

@@ -18,21 +18,23 @@ const Dot = styled.div`
   margin-top: -1.5px;
 `;
 
-const getLabel = ({ includeGroupIDs, catId, medians, config }) => {
+// font-family: 'ABCMonumentMono';
+
+const getLabel = ({ includeGroupIDs, catId, config }) => {
   let result = '';
   if (includeGroupIDs) {
     result = `${catId}: `;
   }
   result = `${result}${CATEGORIES[config.keyCategories][catId]}`;
-  if (medians) {
-    const value = formatNumberLabel({
-      value: medians[catId],
-      isPercentage: config.isPercentage,
-    });
-    // prettier-ignore
-    result = `${result}: ${value} (median)`;
-  }
   return result;
+};
+const getMedianLabel = ({ catId, medians, config }) => {
+  const value = formatNumberLabel({
+    value: medians[catId],
+    isPercentage: config.isPercentage,
+  });
+  // prettier-ignore
+  return ` (median: ${value})`;
 };
 
 export function KeyCategoryMarkers({ config, includeGroupIDs, medians }) {
@@ -49,14 +51,24 @@ export function KeyCategoryMarkers({ config, includeGroupIDs, medians }) {
         Object.keys(CATEGORIES[categories]).map(catId => (
           <Box key={catId} direction="row" gap="xsmall" align="center">
             <Dot categoryColor={DATACOLORS[catId]} />
-            <KeyLabel>
-              {getLabel({
-                includeGroupIDs,
-                catId,
-                medians,
-                config,
-              })}
-            </KeyLabel>
+            <Box direction="row" gap="xsmall">
+              <KeyLabel>
+                {getLabel({
+                  includeGroupIDs,
+                  catId,
+                  config,
+                })}
+              </KeyLabel>
+              {medians && (
+                <KeyLabel>
+                  {getMedianLabel({
+                    medians,
+                    catId,
+                    config,
+                  })}
+                </KeyLabel>
+              )}
+            </Box>
           </Box>
         ))}
     </Box>

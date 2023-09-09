@@ -128,7 +128,7 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
       {!isMinSize(size, 'medium') && !selected && (
         <ButtonSelected onClick={() => setShowOptions(true)}>
           <Box direction="row" gap="hair" align="center" justify="between">
-            <ButtonSelectedText>Country or area</ButtonSelectedText>
+            <ButtonSelectedText>Search country</ButtonSelectedText>
             <FormDown color="black" size="small" />
           </Box>
         </ButtonSelected>

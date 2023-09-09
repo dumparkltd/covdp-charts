@@ -48,7 +48,7 @@ const chartMargins = {
   bottom: 30,
   top: 10,
   right: 70,
-  left: 50,
+  left: 70,
 };
 const chartMarginsSmall = {
   bottom: 20,
@@ -85,10 +85,12 @@ const formatXLabels = ({ v, size }) => {
     </tspan>
   );
 };
+
 formatXLabels.propTypes = {
   v: PropTypes.number,
   size: PropTypes.string,
 };
+
 // ms per px
 // const getDX = ({ xMin, xMax, chartWidth }) => (xMax - xMin) / chartWidth; // in ms
 const monthInMS = 1000 * 60 * 60 * 24 * 45;
@@ -203,11 +205,11 @@ export function ChartTimelineSimple({
       >
         {data && (
           <XAxis
-            tickFormat={v => formatXLabels(v)}
+            tickFormat={v => formatXLabels({ v, size })}
             tickValues={tickValuesX}
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none', fontSize: '13px' },
+              text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
@@ -218,7 +220,7 @@ export function ChartTimelineSimple({
           <YAxis
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none', fontSize: '13px' },
+              text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}

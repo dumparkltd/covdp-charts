@@ -65,10 +65,8 @@ export function ChartScatter({
   const size = useContext(ResponsiveContext);
   const nodes = data && mapNodes(data, { mouseOver, highlight });
 
-  const medianYValue =
-    data && medianY && getMedian(data, { attribute: 'yValue' });
-  const medianXValue =
-    data && medianX && getMedian(data, { attribute: 'xValue' });
+  const medianYValue = data && medianY && getMedian(data, 'yValue');
+  const medianXValue = data && medianX && getMedian(data, 'xValue');
 
   // const forceRange = [
   //   { x: xRange[0], y: yRange[0] },
@@ -85,14 +83,16 @@ export function ChartScatter({
 
   return (
     <Styled>
-      <Options
-        metric={metric}
-        setMetric={setMetric}
-        setHighlight={setHighlight}
-        highlightNode={highlightNode}
-        data={data}
-        config={config}
-      />
+      <Box margin={{ bottom: 'medium' }}>
+        <Options
+          metric={metric}
+          setMetric={setMetric}
+          setHighlight={setHighlight}
+          highlightNode={highlightNode}
+          data={data}
+          config={config}
+        />
+      </Box>
       <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
       <FlexibleWidthXYPlot
         height={getChartHeight(size)}
@@ -116,7 +116,7 @@ export function ChartScatter({
         <XAxis
           style={{
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
-            text: { stroke: 'none' },
+            text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
           }}
           tickValues={tickValuesX}
           tickPadding={isMinSize(size, 'medium') ? 5 : 3}
@@ -127,7 +127,7 @@ export function ChartScatter({
           tickFormat={v => `${v}%`}
           style={{
             ticks: { stroke: '#041733', strokeWidth: 0.5 },
-            text: { stroke: 'none' },
+            text: { fill: '#041733', stroke: 'none', fontSize: '13px' },
           }}
           tickValues={
             isMinSize(size, 'medium') ? tickValuesY : tickValuesYSmall
@@ -215,7 +215,7 @@ export function ChartScatter({
             }}
           />
         )}
-        {(highlightNode || mouseOverNode) && (
+        {isMinSize(size, 'medium') && (highlightNode || mouseOverNode) && (
           <Hint
             align={{ vertical: 'top', horizontal: 'left' }}
             value={highlightNode || mouseOverNode}

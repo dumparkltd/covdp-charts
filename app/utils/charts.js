@@ -10,7 +10,7 @@ export const formatNumberLabel = ({ value, isPercentage, digits = 1 }) => {
   return Math.round(value * 10 ** digits) / 10 ** digits;
 };
 
-export const getMedian = (data, { attribute }) => {
+export const getMedian = (data, attribute) => {
   const sortedValues = data
     .map(d => d[attribute || 'value'])
     .sort((a, b) => (a > b ? 1 : -1));

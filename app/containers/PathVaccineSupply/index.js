@@ -109,7 +109,7 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
             label: 'WHO target:',
             label2: '1.4 doses per capita',
           }}
-          groups={CATEGORIES.INCOME}
+          groups={CATEGORIES.INCOME_SHORT}
           showGroupMedian
         />
       </div>

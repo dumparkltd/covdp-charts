@@ -76,12 +76,10 @@ export function Options({
   }
   return (
     <Box
-      margin={{
-        bottom: isMinSize(size, 'medium') ? 'medium' : 'xsmall',
-      }}
       direction={wrap ? 'column' : 'row'}
-      justify="between"
-      style={{ minHeight: '50px' }}
+      gap={wrap ? 'medium' : null}
+      justify={wrap ? 'start' : 'between'}
+      align={wrap ? 'start' : 'end'}
     >
       {!config.metricOptions && <Box />}
       {config.metricOptions && (
@@ -108,7 +106,11 @@ export function Options({
         </Box>
       )}
       <Box gap="hair">
-        <LabelChartOption align="right">Search country</LabelChartOption>
+        {isMinSize(size, 'medium') && (
+          <LabelChartOption align={wrap ? 'left' : 'right'}>
+            Search country
+          </LabelChartOption>
+        )}
         <Box>
           <CountrySearchSelect
             selected={highlightNode}
