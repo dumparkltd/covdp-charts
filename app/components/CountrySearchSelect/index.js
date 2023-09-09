@@ -31,7 +31,7 @@ const InputWraper = styled(p => (
 ))`
   border: 1px solid #041733;
   width: 100%;
-  @media (min-width: ${({ theme }) => theme.breakpoints.medium}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.medium}) {
     min-width: 400px;
     width: auto;
   }
@@ -40,7 +40,7 @@ const InputWraper = styled(p => (
 const ButtonOption = styled(p => <Button plain {...p} />)`
   &:hover {
     background-color: ${({ theme }) =>
-    theme.global.colors.buttonActiveBG} !important;
+    theme.global.colors.buttonBG} !important;
   }
 `;
 // prettier-ignore
@@ -49,27 +49,30 @@ const ButtonSelected = styled(p => <Button plain {...p} />)`
   cursor: pointer;
   font-family: 'ABCMonumentBold';
   padding: 3px 2px 3px 6px;
-  background-color: ${({ theme }) => theme.global.colors.buttonActiveBG};
+  color: ${({ theme, active }) =>
+    active ? theme.global.colors.white : theme.global.colors.black};
+  background-color: ${({ theme, active }) =>
+    active ? theme.global.colors.buttonActiveBG : theme.global.colors.buttonBG};
   &:hover {
-    background-color: ${({ theme }) =>
-    theme.global.colors.buttonHoverBG} !important;
+    background-color: ${({ theme, active }) =>
+    active ? theme.global.colors.buttonBG : theme.global.colors.buttonHoverBG} !important;
   }
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     padding: 3px 5px 3px 10px;
   }
 `;
 const ButtonSelectedText = styled(p => <Text {...p} />)`
   font-size: ${({ theme }) => theme.text.xsmall.size};
   line-height: ${({ theme }) => theme.text.xsmall.height};
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     font-size: ${({ theme }) => theme.text.small.size};
     line-height: ${({ theme }) => theme.text.small.height};
   }
-  @media (min-width: ${({ theme }) => theme.breakpoints.medium}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.medium}) {
     font-size: ${({ theme }) => theme.text.medium.size};
     line-height: ${({ theme }) => theme.text.medium.height};
   }
-  @media (min-width: ${({ theme }) => theme.breakpoints.large}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.large}) {
     font-size: ${({ theme }) => theme.text.large.size};
     line-height: ${({ theme }) => theme.text.large.height};
   }
@@ -109,10 +112,16 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
   return (
     <Box ref={targetRef}>
       {selected && (
-        <ButtonSelected onClick={() => onSelect(null)}>
+        <ButtonSelected
+          active
+          onClick={() => {
+            onSelect(null);
+            setSearch('');
+          }}
+        >
           <Box direction="row" gap="xsmall" align="center" justify="between">
             <ButtonSelectedText>{selected.label}</ButtonSelectedText>
-            <FormClose color="black" />
+            <FormClose color="white" />
           </Box>
         </ButtonSelected>
       )}
@@ -128,7 +137,7 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
         <InputWraper>
           <StyledTextInput
             type="text"
-            placeholder="Search by name or iso code"
+            placeholder=""
             value={search}
             onChange={e => setSearch(e.target.value)}
             onFocus={() => setShowOptions(true)}

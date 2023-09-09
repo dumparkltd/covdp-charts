@@ -4,16 +4,19 @@ import { groupBy } from 'lodash/collection';
 import { DATACOLORS } from 'containers/App/constants';
 import { SIZES } from 'theme';
 import { isMinSize } from 'utils/responsive';
+import { formatNumberLabel } from 'utils/charts';
 
 export const getXTime = date => new Date(`${date}`).getTime();
 
-export const mapNodes = data =>
+export const mapNodes = ({ data, seriesColumn, seriesLabels }) =>
   // prettier-ignore
   data
     .map(d => ({
       ...d,
       x: getXTime(d.xValue),
       y: d.yValue,
+      label: seriesLabels[d[seriesColumn]],
+      color: DATACOLORS[d[seriesColumn]],
     }));
 export const mapRangeNodes = data =>
   // prettier-ignore
@@ -64,10 +67,10 @@ const getMonths = (fromDate, toDate, timestep) => {
 };
 
 export const getTickValuesX = ({ range, size }) => {
-  if (isMinSize(size, 'medium')) {
-    // auto (monthly)
-    return null;
-  }
+  // if (isMinSize(size, 'medium')) {
+  //   // auto (monthly)
+  //   return null;
+  // }
   const dateMin = new Date(range[0]);
   const dateMax = new Date(range[1]);
   if (isMinSize(size, 'small')) {
@@ -76,4 +79,25 @@ export const getTickValuesX = ({ range, size }) => {
   }
   // 6 monthly
   return getMonths(dateMin, dateMax, 6);
+};
+
+export const getHintValues = ({ hint, metrics }) => {
+  if (!metrics) return null;
+  const values = [];
+  if (metrics.median) {
+    values.push({
+      label: 'Average (median)',
+      value: formatNumberLabel({ value: hint[metrics.median] }),
+    });
+    if (metrics.upper && metrics.lower) {
+      const value = `${formatNumberLabel({
+        value: hint[metrics.lower],
+      })}-${formatNumberLabel({ value: hint[metrics.upper] })}`;
+      values.push({
+        label: 'Range (50% interval)',
+        value,
+      });
+    }
+  }
+  return values;
 };

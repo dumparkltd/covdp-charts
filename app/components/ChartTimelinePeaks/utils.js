@@ -65,10 +65,6 @@ const getMonths = (fromDate, toDate, timestep) => {
 };
 
 export const getTickValuesX = ({ range, size }) => {
-  if (isMinSize(size, 'medium')) {
-    // auto (monthly)
-    return null;
-  }
   const dateMin = new Date(range[0]);
   const dateMax = new Date(range[1]);
   if (isMinSize(size, 'small')) {

@@ -65,6 +65,104 @@ export const DATA_RESOURCES = [
     },
   },
   {
+    key: 'doses-delivered',
+    file: 'doses-delivered.csv',
+    group_fk: 'income_group',
+    metrics: {
+      delivered: 'del_dose_add_pc',
+    },
+    keyCategories: 'INCOME',
+    chartTitle: 'Vaccine supply by income group',
+    yAxisLabel: 'Doses supplied (by capita)',
+  },
+  {
+    key: 'doses-delivered-median',
+    file: 'doses-delivered.csv',
+    xAxisLabel: 'Time',
+    yAxisLabel: 'Doses supplied',
+    yAxisLabelAdditional: '(per capita)',
+    group_fk: 'income_group',
+    metrics: {
+      median: 'del_dose_add_pc_0.5',
+      lower: 'del_dose_add_pc_0.25',
+      upper: 'del_dose_add_pc_0.75',
+    },
+    keyCategories: 'INCOME',
+    chartTitle: 'Vaccine supply by country income group',
+    labelPositions: {
+      HIC: 'center',
+      UMIC: 'top',
+      LMIC: 'bottom',
+      LIC: 'center',
+    },
+  },
+  {
+    key: 'doses-administered',
+    file: 'doses-administered-weekly.csv',
+    country_fk: 'iso',
+    metrics: {
+      doses: 'dvr_4wk_td_per',
+    },
+    keyCategories: 'INCOME',
+    chartTitle: 'Vaccination rates over time',
+    hint: [
+      {
+        label: 'Peak daily vaccination rate (% of population)',
+        column: 'dvr_4wk_td_per',
+        unit: '%',
+        roundDigits: 2,
+      },
+      {
+        label: 'Peak daily doses administered (4-week average)',
+        column: 'dvr_4wk_td',
+        roundDigits: 0,
+      },
+    ],
+    dateLabel: 'Peak date',
+    includePopulation: true,
+    xAxisLabel: 'Time',
+    yAxisLabel: 'Vaccination rate',
+    yAxisLabelAdditional: '(% of population)',
+  },
+  {
+    key: 'uhc-coverage',
+    file: 'uhc-coverage.csv',
+    country_fk: 'iso',
+    type: 'scatter',
+    chartTitle:
+      'Impact of health system capacities on vaccine administration progress',
+    metrics: {
+      uhc: 'uhc_sci',
+      one_dose_2021: 'cov_total_a1d_2021',
+      one_dose_2022: 'cov_total_a1d_2022',
+    },
+    xDefault: 'uhc',
+    yDefault: 'one_dose_2021',
+    metricOptions: ['one_dose_2021', 'one_dose_2022'],
+    metricOptionLabel: 'Select time',
+    hintMetricOptionLabel: 'At least 1 dose (% of population)',
+    keyCategories: 'INCOME',
+    meta: {
+      uhc: {
+        updated: '01/05/2023',
+        sourceURL: 'https://data.who.int/indicators/i/9A706FD',
+        source: 'UHC service coverage index',
+        label: 'UHC Service Index (2021)',
+      },
+      one_dose_2021: {
+        date: '06/2021',
+        label: 'June 2021',
+      },
+      one_dose_2022: {
+        date: '06/2022',
+        label: 'June 2022',
+      },
+    },
+    xAxisLabel: 'UHC Service Index (2021)',
+    yAxisLabel: 'At least 1 dose',
+    yAxisLabelAdditional: '(% of population)',
+  },
+  {
     key: 'vaccine-supply',
     file: 'vaccine-supply.csv',
     chartTitle: 'Vaccine supply by income group (March 2023)',
@@ -100,66 +198,6 @@ export const DATA_RESOURCES = [
       },
     },
     xAxisLabel: 'Income Groups',
-  },
-  {
-    key: 'uhc-coverage',
-    file: 'uhc-coverage.csv',
-    country_fk: 'iso',
-    type: 'scatter',
-    chartTitle:
-      'Impact of health system capacities on vaccine administration progress',
-    metrics: {
-      uhc: 'uhc_sci',
-      one_dose_2021: 'cov_total_a1d_2021',
-      one_dose_2022: 'cov_total_a1d_2022',
-    },
-    xDefault: 'uhc',
-    yDefault: 'one_dose_2021',
-    metricOptions: ['one_dose_2021', 'one_dose_2022'],
-    metricOptionLabel: 'Select time',
-    hintMetricOptionLabel: 'At least 1 dose (% of population)',
-    keyCategories: 'INCOME',
-    meta: {
-      uhc: {
-        updated: '01/05/2023',
-        sourceURL: 'https://data.who.int/indicators/i/9A706FD',
-        source: 'UHC service coverage index',
-        label: 'UHC service coverage (score)',
-      },
-      one_dose_2021: {
-        date: '06/2021',
-        label: 'June 2021',
-      },
-      one_dose_2022: {
-        date: '06/2022',
-        label: 'June 2022',
-      },
-    },
-  },
-  {
-    key: 'doses-administered',
-    file: 'doses-administered-weekly.csv',
-    country_fk: 'iso',
-    metrics: {
-      doses: 'dvr_4wk_td_per',
-    },
-    keyCategories: 'INCOME',
-    chartTitle: 'Vaccination rates over time',
-    hint: [
-      {
-        label: 'Peak daily vaccination rate (% of population)',
-        column: 'dvr_4wk_td_per',
-        unit: '%',
-        roundDigits: 2,
-      },
-      {
-        label: 'Peak daily vaccines administered',
-        column: 'dvr_4wk_td',
-        roundDigits: 0,
-      },
-    ],
-    dateLabel: 'Peak date',
-    includePopulation: true,
   },
   {
     key: 'population-groups',
@@ -200,34 +238,6 @@ export const DATA_RESOURCES = [
       },
     },
     xAxisLabel: 'Income Groups',
-  },
-  {
-    key: 'doses-delivered',
-    file: 'doses-delivered.csv',
-    group_fk: 'income_group',
-    metrics: {
-      delivered: 'del_dose_add_pc',
-    },
-    keyCategories: 'INCOME',
-    chartTitle: 'Vaccine supply by income group',
-  },
-  {
-    key: 'doses-delivered-median',
-    file: 'doses-delivered.csv',
-    group_fk: 'income_group',
-    metrics: {
-      median: 'del_dose_add_pc_0.5',
-      lower: 'del_dose_add_pc_0.25',
-      upper: 'del_dose_add_pc_0.75',
-    },
-    keyCategories: 'INCOME',
-    chartTitle: 'Vaccine supply by country income group',
-    labelPositions: {
-      HIC: 'top',
-      UMIC: 'top',
-      LMIC: 'bottom',
-      LIC: 'top',
-    },
   },
 ];
 

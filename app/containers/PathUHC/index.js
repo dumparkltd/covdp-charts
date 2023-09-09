@@ -56,8 +56,8 @@ const getChartData = ({ countries, data, yColumn, xColumn, colorByColumn }) => {
                 uhc:
                   Math.round(parseFloat(countryMetricData[xColumn]) * 100) /
                   100,
-                one_dose_2021: countryMetricData.cov_total_a1d_2021,
-                one_dose_2022: countryMetricData.cov_total_a1d_2022,
+                one_dose_2021: `${countryMetricData.cov_total_a1d_2021}%`,
+                one_dose_2022: `${countryMetricData.cov_total_a1d_2022}%`,
               },
             },
           },
@@ -108,6 +108,8 @@ export function PathUHC({ onLoadData, countries, dataReady, data }) {
           config={config}
           xAxisLabel="UHC service coverage (score)"
           yAxisLabel="At least 1 dose (% of population)"
+          medianY
+          medianX
         />
       </div>
     </article>

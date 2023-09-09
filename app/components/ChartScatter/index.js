@@ -2,11 +2,13 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 // import * as d3 from 'd3';
 import styled from 'styled-components';
-import { Text, ResponsiveContext } from 'grommet';
+import { Box, ResponsiveContext } from 'grommet';
 import {
   FlexibleWidthXYPlot,
   MarkSeries,
   LineMarkSeries,
+  LabelSeries,
+  LineSeries,
   Hint,
   XAxis,
   YAxis,
@@ -15,11 +17,13 @@ import {
 } from 'react-vis';
 
 import CountryHint from 'components/CountryHint';
-import Title from 'components/Title';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import Options from 'components/Options';
+import KeyTarget from 'components/KeyTarget';
+import AxisLabel from 'components/AxisLabel';
 
 import { isMinSize } from 'utils/responsive';
+import { getMedian } from 'utils/charts';
 
 import { mapNodes, getChartHeight } from './utils';
 
@@ -27,7 +31,7 @@ const chartMargins = {
   bottom: 30,
   top: 10,
   right: 20,
-  left: 50,
+  left: 70,
 };
 const chartMarginsSmall = {
   bottom: 20,
@@ -39,37 +43,8 @@ const chartMarginsSmall = {
 const Styled = styled.div`
   padding-bottom: 10px;
 `;
-const XAxisLabelWrap = styled.div`
-  margin-bottom: 10px;
-  margin-right: 2px;
-  text-align: right;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    margin-bottom: 20px;
-    margin-right: 20px;
-  }
-`;
-const YAxisLabelWrap = styled.div`
-  margin-top: 5px;
-  margin-left: 40px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    margin-left: 50px;
-  }
-`;
-const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
-  text-transform: uppercase;
-  font-family: 'ABCMonumentBold';
-  color: white;
-  background-color: #041733;
-  padding: 1px 2px;
-  line-height: 11px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    padding: 1px 5px;
-    line-height: ${({ theme }) => theme.text.xxsmall.height};
-  }
-`;
-
-const tickValuesY = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-const tickValuesYSmall = [20, 40, 60, 80, 100];
+const tickValuesY = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+const tickValuesYSmall = [0, 20, 40, 60, 80, 100];
 const tickValuesX = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 const axisNodes = [{ x: 0, y: 100 }, { x: 0, y: 0 }, { x: 100, y: 0 }];
 // const tickValuesX = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
@@ -84,13 +59,17 @@ export function ChartScatter({
   mouseOver,
   setHighlight,
   highlight,
-  xAxisLabel,
-  yAxisLabel,
+  medianX,
+  medianY,
 }) {
   const size = useContext(ResponsiveContext);
   const nodes = data && mapNodes(data, { mouseOver, highlight });
-  // console.log('nodes', nodes)
-  // console.log('config', config)
+
+  const medianYValue =
+    data && medianY && getMedian(data, { attribute: 'yValue' });
+  const medianXValue =
+    data && medianX && getMedian(data, { attribute: 'xValue' });
+
   // const forceRange = [
   //   { x: xRange[0], y: yRange[0] },
   //   { x: xRange[1], y: yRange[1] },
@@ -102,10 +81,10 @@ export function ChartScatter({
   // ];
   const mouseOverNode = mouseOver && nodes.find(n => n.id === mouseOver);
   const highlightNode = highlight && nodes.find(n => n.id === highlight);
-  // console.log(coverRange)
+  const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
+
   return (
     <Styled>
-      <Title>{config.chartTitle}</Title>
       <Options
         metric={metric}
         setMetric={setMetric}
@@ -114,12 +93,10 @@ export function ChartScatter({
         data={data}
         config={config}
       />
-      <YAxisLabelWrap>
-        <AxisLabel>{yAxisLabel}</AxisLabel>
-      </YAxisLabelWrap>
+      <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
       <FlexibleWidthXYPlot
         height={getChartHeight(size)}
-        margin={isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall}
+        margin={margins}
         style={{
           fill: 'transparent',
           cursor: 'pointer',
@@ -159,6 +136,63 @@ export function ChartScatter({
           tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
           tickSizeInner={0}
         />
+        {medianYValue && (
+          <LineSeries
+            data={[
+              {
+                x: 0,
+                y: medianYValue,
+              },
+              {
+                x: 100,
+                y: medianYValue,
+              },
+            ]}
+            style={{ stroke: '#041733', strokeWidth: 0.5, opacity: 0.6 }}
+            strokeDasharray={[8, 4]}
+            animation
+          />
+        )}
+        {medianXValue && (
+          <LineSeries
+            data={[
+              {
+                x: medianXValue,
+                y: 0,
+              },
+              {
+                x: medianXValue,
+                y: 100,
+              },
+            ]}
+            style={{ stroke: '#041733', strokeWidth: 0.5, opacity: 0.6 }}
+            strokeDasharray={[8, 4]}
+            animation
+          />
+        )}
+        {isMinSize(size, 'medium') && medianYValue && (
+          <LabelSeries
+            data={[
+              {
+                x: 0,
+                y: medianYValue,
+                yOffset: 15,
+                xOffset: 15,
+                label: `Average (median)`,
+              },
+            ]}
+            style={{
+              fontFamily: 'ABCMonument',
+              fill: '#041733',
+              fontSize: 12,
+              opacity: 0.8,
+            }}
+            labelAnchorX="start"
+            labelAnchorY="text-bottom"
+            allowOffsetToBeReversed={false}
+            animation
+          />
+        )}
         <LineMarkSeries
           data={axisNodes}
           size={2}
@@ -191,16 +225,25 @@ export function ChartScatter({
             }}
           >
             <CountryHint
+              onClose={() => setHighlight(null)}
+              hasClose={!!highlight}
               country={highlightNode || mouseOverNode}
               config={config}
             />
           </Hint>
         )}
       </FlexibleWidthXYPlot>
-      <XAxisLabelWrap>
-        <AxisLabel>{xAxisLabel}</AxisLabel>
-      </XAxisLabelWrap>
-      <KeyCategoryMarkers config={config} />
+      <AxisLabel axis="x" config={config} />
+      <Box margin={{ left: `${margins.left}px` }}>
+        <Box margin={{ top: 'medium' }}>
+          <KeyCategoryMarkers config={config} />
+        </Box>
+        {!isMinSize(size, 'medium') && medianYValue && (
+          <Box margin={{ top: 'small' }}>
+            <KeyTarget target={{ label: 'Averages (median)' }} />
+          </Box>
+        )}
+      </Box>
     </Styled>
   );
 }
@@ -230,11 +273,11 @@ ChartScatter.propTypes = {
   metric: PropTypes.string,
   mouseOver: PropTypes.string,
   highlight: PropTypes.string,
-  xAxisLabel: PropTypes.string,
-  yAxisLabel: PropTypes.string,
   setMetric: PropTypes.func,
   setMouseOver: PropTypes.func,
   setHighlight: PropTypes.func,
+  medianX: PropTypes.bool,
+  medianY: PropTypes.bool,
 };
 
 export default ChartScatter;

@@ -9,10 +9,11 @@ import CountrySearchSelect from 'components/CountrySearchSelect';
 import { isMinSize } from 'utils/responsive';
 
 const LabelChartOption = styled(p => <Text {...p} />)`
+  text-align: ${({ align }) => align || 'left'};
   font-size: ${({ theme }) => theme.text.xxsmall.size};
   line-height: ${({ theme }) => theme.text.xxsmall.height};
   color: ${({ theme }) => theme.global.colors.textSecondary};
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     font-size: ${({ theme }) => theme.text.xsmall.size};
     line-height: ${({ theme }) => theme.text.xsmall.height};
   }
@@ -21,15 +22,15 @@ const LabelChartOption = styled(p => <Text {...p} />)`
 const ButtonSelectMetricText = styled(p => <Text {...p} />)`
   font-size: ${({ theme }) => theme.text.xsmall.size};
   line-height: ${({ theme }) => theme.text.xsmall.height};
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     font-size: ${({ theme }) => theme.text.small.size};
     line-height: ${({ theme }) => theme.text.small.height};
   }
-  @media (min-width: ${({ theme }) => theme.breakpoints.medium}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.medium}) {
     font-size: ${({ theme }) => theme.text.medium.size};
     line-height: ${({ theme }) => theme.text.medium.height};
   }
-  @media (min-width: ${({ theme }) => theme.breakpoints.large}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.large}) {
     font-size: ${({ theme }) => theme.text.large.size};
     line-height: ${({ theme }) => theme.text.large.height};
   }
@@ -37,16 +38,18 @@ const ButtonSelectMetricText = styled(p => <Text {...p} />)`
 // prettier-ignore
 const ButtonSelectMetric = styled(p => <Button plain {...p} />)`
   fill: transparent;
-  cursor: pointer;
+  cursor: ${({ active }) => active ? 'default' : 'pointer'};
   font-family: 'ABCMonumentBold';
   padding: 3px 8px;
+  color: ${({ theme, active }) =>
+    active ? theme.global.colors.white : theme.global.colors.black};
   background-color: ${({ theme, active }) =>
-    active ? theme.global.colors.buttonActiveBG : 'transparent'};
+    active ? theme.global.colors.buttonActiveBG : theme.global.colors.buttonBG};
   &:hover {
-    background-color: ${({ theme }) =>
-    theme.global.colors.buttonHoverBG} !important;
+    background-color: ${({ theme, active }) =>
+    active ? theme.global.colors.buttonActiveBG : theme.global.colors.buttonHoverBG} !important;
   }
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     padding: 3px 15px;
   }
 `;
@@ -73,11 +76,14 @@ export function Options({
   }
   return (
     <Box
-      margin={{ top: isMinSize(size, 'medium') ? 'small' : 'xsmall' }}
+      margin={{
+        bottom: isMinSize(size, 'medium') ? 'medium' : 'xsmall',
+      }}
       direction={wrap ? 'column' : 'row'}
-      gap={isMinSize(size, 'medium') ? 'medium' : 'small'}
+      justify="between"
       style={{ minHeight: '50px' }}
     >
+      {!config.metricOptions && <Box />}
       {config.metricOptions && (
         <Box gap="hair">
           <LabelChartOption>{config.metricOptionLabel}</LabelChartOption>
@@ -102,7 +108,7 @@ export function Options({
         </Box>
       )}
       <Box gap="hair">
-        <LabelChartOption>Select country or area</LabelChartOption>
+        <LabelChartOption align="right">Search country</LabelChartOption>
         <Box>
           <CountrySearchSelect
             selected={highlightNode}

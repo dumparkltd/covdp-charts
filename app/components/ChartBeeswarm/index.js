@@ -59,7 +59,7 @@ const Styled = styled.div`
 const YAxisLabelWrap = styled.div`
   margin-top: 5px;
   margin-left: 40px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     margin-left: 50px;
   }
 `;
@@ -67,7 +67,7 @@ const XAxisLabelWrap = styled.div`
   margin-bottom: 10px;
   margin-right: 2px;
   text-align: right;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     margin-bottom: 20px;
     margin-right: 20px;
   }
@@ -79,7 +79,7 @@ const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
   background-color: #041733;
   padding: 1px 2px;
   line-height: 11px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     padding: 1px 5px;
     line-height: ${({ theme }) => theme.text.xxsmall.height};
   }

@@ -153,11 +153,12 @@ const theme = {
       family: 'ABCMonument',
     },
     colors: {
-      black: '#000000',
+      black: '#041733',
       white: '#FFFFFF',
       textSecondary: '#888',
       focus: 'transparent',
-      buttonActiveBG: '#e5e6ec',
+      buttonBG: '#e4e6ec',
+      buttonActiveBG: '#041733',
       buttonHoverBG: '#cbccd2',
     },
     // margins & paddings

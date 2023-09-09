@@ -1,26 +1,39 @@
-import React, { useContext } from 'react';
+import React, {
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Text, ResponsiveContext, Box } from 'grommet';
+import { ResponsiveContext, Box } from 'grommet';
 import * as d3 from 'd3';
 import { utcFormat as timeFormat } from 'd3-time-format';
+import { injectIntl, intlShape } from 'react-intl';
 
 import {
   FlexibleWidthXYPlot,
   LineMarkSeries,
+  MarkSeries,
   LineSeries,
   LabelSeries,
   XAxis,
   YAxis,
   AreaSeries,
+  Hint,
   // HorizontalGridLines,
   // VerticalGridLines,
 } from 'react-vis';
 
-import Title from 'components/Title';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
+import KeyLineRange from 'components/KeyLineRange';
+import KeyTarget from 'components/KeyTarget';
+import AxisLabel from 'components/AxisLabel';
+import CountryHint from 'components/CountryHint';
 
 import { isMinSize } from 'utils/responsive';
+import { getHintAlign } from 'utils/charts';
 
 import {
   mapNodes,
@@ -28,12 +41,13 @@ import {
   groupNodes,
   getChartHeight,
   getTickValuesX,
+  getHintValues,
 } from './utils';
 
 const chartMargins = {
   bottom: 30,
   top: 10,
-  right: 20,
+  right: 70,
   left: 50,
 };
 const chartMarginsSmall = {
@@ -46,31 +60,34 @@ const chartMarginsSmall = {
 const Styled = styled.div`
   padding-bottom: 10px;
 `;
-
-const YAxisLabelWrap = styled.div`
-  margin-top: 5px;
-  margin-left: 40px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    margin-left: 50px;
-  }
+const SeriesLabelWrap = styled.div`
+  max-width: ${({ marginRight }) => marginRight}px;
+  padding-left: 15px;
+  transform: translateY(
+    ${({ value }) => (value.position === 'center' ? 50 : 0)}%
+  );
 `;
-const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
-  text-transform: uppercase;
-  font-family: 'ABCMonumentBold';
-  color: white;
-  background-color: #041733;
-  padding: 1px 2px;
-  line-height: 11px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    padding: 1px 5px;
-    line-height: ${({ theme }) => theme.text.xxsmall.height};
-  }
+const SeriesLabel = styled.div`
+  font-family: 'ABCMonument';
+  color: #041733;
+  background-color: #f6f7fc;
+  font-size: 13px;
+  line-height: 15px;
 `;
-const formatXLabels = v => {
+// https://github.com/d3/d3-time-format
+const formatXLabels = ({ v, size }) => {
   if (timeFormat('%m')(v) === '01') {
-    return timeFormat('%Y')(v);
+    return <tspan>{timeFormat('%Y')(v)}</tspan>;
   }
-  return <tspan style={{ opacity: 0.5 }}>{timeFormat('%m')(v)}</tspan>;
+  return (
+    <tspan style={{ opacity: 0.75 }}>
+      {timeFormat(isMinSize(size, 'medium') ? '%B' : '%b')(v)}
+    </tspan>
+  );
+};
+formatXLabels.propTypes = {
+  v: PropTypes.number,
+  size: PropTypes.string,
 };
 // ms per px
 // const getDX = ({ xMin, xMax, chartWidth }) => (xMax - xMin) / chartWidth; // in ms
@@ -78,41 +95,59 @@ const monthInMS = 1000 * 60 * 60 * 24 * 45;
 export function ChartTimelineSimple({
   data,
   config,
-  yAxisLabel,
   seriesColumn,
   seriesLabels,
   target,
   seriesLabelsPosition,
   setMouseOver,
   mouseOver,
+  seriesMouseOver,
+  setSeriesMouseOver,
+  intl,
 }) {
+  const [chartWidth, setChartWidth] = useState(0);
+  const targetRef = useRef();
+  const handleResize = () => {
+    if (targetRef.current) {
+      setChartWidth(targetRef.current.offsetWidth);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useLayoutEffect(() => {
+    handleResize();
+  }, []);
+
   const size = useContext(ResponsiveContext);
 
-  const nodes = data && mapNodes(data);
+  const nodes = data && mapNodes({ data, seriesColumn, seriesLabels });
   const seriesNodes = data && groupNodes({ nodes, seriesColumn });
   const range =
     data && config.metrics.lower && config.metrics.upper && mapRangeNodes(data);
 
-  let seriesRange = range && groupNodes({ nodes: range, seriesColumn });
-  seriesRange =
-    seriesRange && mouseOver && seriesRange.filter(s => s.id === mouseOver);
+  const seriesRange = range && groupNodes({ nodes: range, seriesColumn });
+  // const seriesRangeF =
+  //   seriesRange && mouseOver && seriesRange.filter(s => s.id === mouseOver);
   const labelData =
     data &&
-    mouseOver &&
-    seriesNodes
-      .filter(s => s.id === mouseOver)
-      .map(series => {
-        const lastNode = series.data[series.data.length - 1];
-        const position = seriesLabelsPosition
-          ? seriesLabelsPosition[series.id]
-          : 'top';
-        return {
-          label: seriesLabels[series.id],
-          x: lastNode.x,
-          y: lastNode.y,
-          yOffset: position === 'top' ? -13 : 15,
-        };
-      });
+    seriesNodes.map(series => {
+      const lastNode = series.data[series.data.length - 1];
+      const position = seriesLabelsPosition
+        ? seriesLabelsPosition[series.id]
+        : 'top';
+      return {
+        id: series.id,
+        label: seriesLabels[series.id],
+        x: lastNode.x,
+        y: lastNode.y,
+        position,
+        yOffset: position === 'top' ? -13 : 15,
+      };
+    });
   const xRange = data ? d3.extent(nodes, d => d.x) : [0, 100];
   let yRange = [0, 10];
   if (range) {
@@ -137,22 +172,34 @@ export function ChartTimelineSimple({
       { x: 100, y: 0 },
     ];
   const tickValuesX = getTickValuesX({ range: xRange, size });
+
+  const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
+  const dx = (xMax - xMin) / chartWidth; // in ms
+  const chartPaddingRight = monthInMS / dx;
+  const hintAlign =
+    mouseOver &&
+    getHintAlign({
+      xPosition: mouseOver.x,
+      xMin,
+      xMax,
+      threshold: 0.3,
+    });
   return (
-    <Styled>
-      <Title>{config.chartTitle}</Title>
-      <YAxisLabelWrap>
-        <AxisLabel>{yAxisLabel}</AxisLabel>
-      </YAxisLabelWrap>
+    <Styled ref={targetRef}>
+      <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
       <FlexibleWidthXYPlot
         xType="time"
         height={getChartHeight(size)}
-        margin={isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall}
+        margin={margins}
         style={{
           fill: 'transparent',
-          // cursor: 'pointer',
+          cursor: 'pointer',
           fontFamily: 'ABCMonumentMonoBold',
         }}
-        onMouseLeave={() => setMouseOver && setMouseOver(null)}
+        onMouseLeave={() => {
+          if (setMouseOver) setMouseOver(null);
+          if (setSeriesMouseOver) setSeriesMouseOver(null);
+        }}
       >
         {data && (
           <XAxis
@@ -160,7 +207,7 @@ export function ChartTimelineSimple({
             tickValues={tickValuesX}
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none' },
+              text: { stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
@@ -171,13 +218,33 @@ export function ChartTimelineSimple({
           <YAxis
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none' },
+              text: { stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
             tickSizeInner={0}
           />
         )}
+        {seriesNodes &&
+          labelData &&
+          isMinSize(size, 'medium') &&
+          labelData.map(label => (
+            <Hint
+              key={label.id}
+              value={label}
+              align={{
+                horizontal: 'right',
+                vertical: label.position === 'bottom' ? 'bottom' : 'top',
+              }}
+            >
+              <SeriesLabelWrap
+                value={label}
+                marginRight={margins.right + chartPaddingRight}
+              >
+                <SeriesLabel>{label.label}</SeriesLabel>
+              </SeriesLabelWrap>
+            </Hint>
+          ))}
         {target && (
           <LineSeries
             data={[
@@ -199,7 +266,7 @@ export function ChartTimelineSimple({
             <AreaSeries
               data={series.data}
               key={series.id}
-              opacity={0.15}
+              opacity={series.id === seriesMouseOver ? 0.15 : 0.04}
               style={{
                 fill: series.color,
                 stroke: 'transparent',
@@ -209,38 +276,46 @@ export function ChartTimelineSimple({
           ))}
         {seriesNodes &&
           seriesNodes.map(series => (
-            <LineMarkSeries
+            <LineSeries
               data={series.data}
               key={series.id}
-              size={isMinSize(size, 'medium') ? 3.5 : 2.5}
-              lineStyle={{
+              style={{
                 stroke: series.color,
                 strokeWidth: isMinSize(size, 'medium') ? 2 : 1.5,
               }}
-              markStyle={{ fill: series.color, stroke: series.color }}
-              onSeriesMouseOver={() => setMouseOver && setMouseOver(series.id)}
             />
           ))}
-        {seriesNodes && labelData && isMinSize(size, 'small') && (
-          <LabelSeries
-            data={labelData}
-            style={{
-              fill: '#041733',
-              fontSize: 12,
-              fontFamily: 'ABCMonumentBold',
+        {nodes && (
+          <MarkSeries
+            data={nodes}
+            size={isMinSize(size, 'medium') ? 3.5 : 2.5}
+            colorType="literal"
+            onNearestXY={value => {
+              if (setSeriesMouseOver) {
+                setSeriesMouseOver(value[seriesColumn]);
+              }
+              if (setMouseOver) {
+                setMouseOver(value);
+              }
             }}
-            labelAnchorX="end"
-            labelAnchorY="middle"
-            allowOffsetToBeReversed={false}
           />
         )}
-        {target && (
+        {isMinSize(size, 'small') && nodes && mouseOver && (
+          <MarkSeries
+            data={[mouseOver]}
+            size={isMinSize(size, 'medium') ? 3.5 : 2.5}
+            colorType="literal"
+            style={{ stroke: 'black' }}
+          />
+        )}
+        {isMinSize(size, 'medium') && target && (
           <LabelSeries
             data={[
               {
                 x: xMax,
                 y: target.value,
                 yOffset: 15,
+                xOffset: -120,
                 label: target.label,
               },
             ]}
@@ -262,17 +337,54 @@ export function ChartTimelineSimple({
           markStyle={{ fill: '#041733', stroke: '#041733' }}
           style={{ pointerEvents: 'none' }}
         />
+        {isMinSize(size, 'medium') && mouseOver && (
+          <Hint
+            value={mouseOver}
+            align={{
+              vertical: 'top',
+              horizontal: hintAlign,
+            }}
+            style={{
+              pointerEvents: 'none',
+              margin: '15px 0',
+            }}
+          >
+            <CountryHint
+              align={hintAlign}
+              date={{
+                label: config.xAxisLabel,
+                value: intl.formatDate(new Date(mouseOver.x), {
+                  year: 'numeric',
+                  month: 'long',
+                }),
+              }}
+              valueGroupTitle={`${config.yAxisLabel} ${
+                config.yAxisLabelAdditional
+              }`}
+              values={getHintValues({
+                hint: mouseOver,
+                metrics: config.metrics,
+              })}
+            />
+          </Hint>
+        )}
       </FlexibleWidthXYPlot>
-      {config.keyCategories && (
-        <Box margin={{ top: 'small' }}>
-          <KeyCategoryMarkers config={config} />
+      <AxisLabel axis="x" config={config} />
+      <Box margin={{ left: `${margins.left}px` }}>
+        {!isMinSize(size, 'medium') && config.keyCategories && (
+          <Box margin={{ top: 'medium' }}>
+            <KeyCategoryMarkers config={config} />
+          </Box>
+        )}
+        <Box margin={{ top: 'medium' }}>
+          <KeyLineRange />
         </Box>
-      )}
-      {range && isMinSize(size, 'medium') && (
-        <Box margin={{ top: 'small' }} align="center">
-          <Text size="xsmall">50% interval shown on hover</Text>
-        </Box>
-      )}
+        {!isMinSize(size, 'medium') && target && (
+          <Box margin={{ top: 'small' }}>
+            <KeyTarget target={target} />
+          </Box>
+        )}
+      </Box>
     </Styled>
   );
 }
@@ -281,12 +393,14 @@ ChartTimelineSimple.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   config: PropTypes.object,
   seriesColumn: PropTypes.string,
-  yAxisLabel: PropTypes.string,
   seriesLabels: PropTypes.object,
   seriesLabelsPosition: PropTypes.object,
   target: PropTypes.object,
-  mouseOver: PropTypes.string,
+  mouseOver: PropTypes.object,
   setMouseOver: PropTypes.func,
+  seriesMouseOver: PropTypes.string,
+  setSeriesMouseOver: PropTypes.func,
+  intl: intlShape,
 };
 
-export default ChartTimelineSimple;
+export default injectIntl(ChartTimelineSimple);

@@ -14,6 +14,7 @@ const Styled = styled(p => (
   background-color: #041733;
   color: white;
   position: relative;
+  pointer-events: ${({ hasClose }) => hasClose ? 'all' : 'none'};
   &:after {
     position: absolute;
     content: '';
@@ -28,7 +29,7 @@ const Styled = styled(p => (
     border-right: 4px solid
       ${({ alignHint }) => (alignHint === 'left' ? '#041733' : 'transparent')};
     border-top: 4px solid #041733;
-    @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+    @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
       height: 10px;
       border-left: 6px solid
         ${({ alignHint }) =>
@@ -42,18 +43,21 @@ const Styled = styled(p => (
 `;
 
 const MetricValue = styled(p => <Text size="xsmall" {...p} />)`
+  font-family: 'ABCMonumentMonoBold';
+`;
+const GroupLabel = styled(p => <Text size="xsmall" {...p} />)`
   font-family: 'ABCMonumentBold';
 `;
 const MetricLabel = styled(p => <Text size="xsmall" {...p} />)``;
 const MetricValueSecondary = styled(p => <Text size="xxsmall" {...p} />)`
-  font-family: 'ABCMonumentBold';
+  font-family: 'ABCMonumentMonoBold';
 `;
 const MetricLabelSecondary = styled(p => <Text size="xxsmall" {...p} />)``;
 const Title = styled(p => <Text {...p} />)`
   font-family: 'ABCMonumentBold';
   font-size: ${({ theme }) => theme.text.small.size};
   line-height: ${({ theme }) => theme.text.small.height};
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     font-size: ${({ theme }) => theme.text.medium.size};
     line-height: ${({ theme }) => theme.text.medium.height};
   }
@@ -62,8 +66,9 @@ const Title = styled(p => <Text {...p} />)`
 const ButtonClose = styled(p => <Button plain {...p} />)`
   fill: transparent;
   cursor: pointer;
+  pointer-events: all;
   height: ${({ theme }) => theme.text.small.height};
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
     height: ${({ theme }) => theme.text.medium.height};
   }
 `;
@@ -77,14 +82,17 @@ export function CountryHint({
   population,
   onClose,
   hasClose,
+  valueGroupTitle,
 }) {
   const size = useContext(ResponsiveContext);
   return (
-    <Styled alignHint={align}>
+    <Styled alignHint={align} hasClose={hasClose}>
       <Box direction="row" justify="between" align="center" gap="xsmall">
-        <Box>
-          <Title>{country.label}</Title>
-        </Box>
+        {country && country.label && (
+          <Box>
+            <Title>{country.label}</Title>
+          </Box>
+        )}
         {hasClose && (
           <ButtonClose
             onClick={() => onClose()}
@@ -93,37 +101,32 @@ export function CountryHint({
         )}
       </Box>
       {isMinSize(size, 'medium') && (
-        <Box gap="xsmall" margin={{ top: 'xsmall' }}>
-          {date && (
-            <Box direction="row" gap="xsmall">
-              <MetricLabel>{`${date.label}:`}</MetricLabel>
-              <MetricValue>{date.value}</MetricValue>
+        <Box gap="small" margin={{ top: 'xsmall' }}>
+          {valueGroupTitle && (
+            <Box gap="xxsmall">
+              <GroupLabel>{`${valueGroupTitle}:`}</GroupLabel>
+              {values &&
+                values.map(value => (
+                  <Box key={value.label} direction="row" gap="xsmall">
+                    <MetricLabelSecondary>{`${
+                      value.label
+                    }:`}</MetricLabelSecondary>
+                    <MetricValueSecondary>{value.value}</MetricValueSecondary>
+                  </Box>
+                ))}
             </Box>
           )}
-          {values &&
+          {!valueGroupTitle &&
+            values &&
             values.map(value => (
               <Box key={value.label} direction="row" gap="xsmall">
                 <MetricLabel>{`${value.label}:`}</MetricLabel>
                 <MetricValue>{value.value}</MetricValue>
               </Box>
             ))}
-          {population && (
-            <Box direction="row" gap="xsmall">
-              <MetricLabel>Population:</MetricLabel>
-              <MetricValue>{population}</MetricValue>
-            </Box>
-          )}
-          {config && config.xDefault && (
-            <Box direction="row" gap="xsmall">
-              <MetricLabel>{`${
-                config.meta[config.xDefault].label
-              }:`}</MetricLabel>
-              <MetricValue>{country.hint.metrics[config.xDefault]}</MetricValue>
-            </Box>
-          )}
           {config && config.metricOptions && (
             <Box>
-              <MetricLabel>{`${config.hintMetricOptionLabel}:`}</MetricLabel>
+              <GroupLabel>{`${config.hintMetricOptionLabel}:`}</GroupLabel>
               <Box margin={{ top: 'xxsmall' }} gap="hair">
                 {config.metricOptions.map(o => (
                   <Box direction="row" gap="xsmall" key={o}>
@@ -138,10 +141,30 @@ export function CountryHint({
               </Box>
             </Box>
           )}
-          {country.hint && country.hint.label && country.hint.value && (
+          {country && country.hint && country.hint.label && country.hint.value && (
             <Box direction="row" gap="xsmall">
               <MetricLabel>{`${country.hint.label}:`}</MetricLabel>
               <MetricValue>{country.hint.value}</MetricValue>
+            </Box>
+          )}
+          {config && config.xDefault && (
+            <Box direction="row" gap="xsmall">
+              <MetricLabel>{`${
+                config.meta[config.xDefault].label
+              }:`}</MetricLabel>
+              <MetricValue>{country.hint.metrics[config.xDefault]}</MetricValue>
+            </Box>
+          )}
+          {population && (
+            <Box direction="row" gap="xsmall">
+              <MetricLabel>Population:</MetricLabel>
+              <MetricValue>{population}</MetricValue>
+            </Box>
+          )}
+          {date && (
+            <Box direction="row" gap="xsmall">
+              <MetricLabel>{`${date.label || 'Date'}:`}</MetricLabel>
+              <MetricValue>{date.value}</MetricValue>
             </Box>
           )}
         </Box>
@@ -154,6 +177,7 @@ CountryHint.propTypes = {
   country: PropTypes.object,
   config: PropTypes.object,
   align: PropTypes.string,
+  valueGroupTitle: PropTypes.string,
   date: PropTypes.object,
   values: PropTypes.array,
   population: PropTypes.string,

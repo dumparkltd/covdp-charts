@@ -39,6 +39,7 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
     onLoadData();
   }, []);
   const [mouseOver, setMouseOver] = useState(null);
+  const [seriesMouseOver, setSeriesMouseOver] = useState(null);
   const config = DATA_RESOURCES.find(r => r.key === 'doses-delivered-median');
   // const [mouseOver, setMouseOver] = useState(null);
   const { metrics } = config;
@@ -51,7 +52,6 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
       yColumnLower: metrics.lower,
       yColumnUpper: metrics.upper,
     });
-
   return (
     <article>
       <Helmet>
@@ -67,11 +67,12 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
             label: 'WHO target: 1.4 doses per capita',
           }}
           seriesColumn="income_group"
-          yAxisLabel="Median doses delivered (per capita)"
           seriesLabels={CATEGORIES.INCOME}
           seriesLabelsPosition={config.labelPositions}
           setMouseOver={setMouseOver}
           mouseOver={mouseOver}
+          setSeriesMouseOver={setSeriesMouseOver}
+          seriesMouseOver={seriesMouseOver}
         />
       </div>
     </article>

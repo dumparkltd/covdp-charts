@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Text, ResponsiveContext } from 'grommet';
+import { Box, ResponsiveContext } from 'grommet';
 import * as d3 from 'd3';
 import { utcFormat as timeFormat } from 'd3-time-format';
 
@@ -17,10 +17,10 @@ import {
   // VerticalGridLines,
 } from 'react-vis';
 
-import Title from 'components/Title';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import Options from 'components/Options';
 import CountryHint from 'components/CountryHint';
+import AxisLabel from 'components/AxisLabel';
 
 import { isMinSize } from 'utils/responsive';
 import { getHintAlign } from 'utils/charts';
@@ -31,7 +31,7 @@ const chartMargins = {
   bottom: 30,
   top: 10,
   right: 20,
-  left: 50,
+  left: 70,
 };
 const chartMarginsSmall = {
   bottom: 20,
@@ -44,39 +44,20 @@ const Styled = styled.div`
   padding-bottom: 10px;
 `;
 
-const YAxisLabelWrap = styled.div`
-  margin-top: 5px;
-  margin-left: 40px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    margin-left: 50px;
-  }
-`;
-const XAxisLabelWrap = styled.div`
-  margin-bottom: 10px;
-  margin-right: 2px;
-  text-align: right;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    margin-bottom: 20px;
-    margin-right: 20px;
-  }
-`;
-const AxisLabel = styled(p => <Text size="xxsmall" {...p} />)`
-  text-transform: uppercase;
-  font-family: 'ABCMonumentBold';
-  color: white;
-  background-color: #041733;
-  padding: 1px 2px;
-  line-height: 11px;
-  @media (min-width: ${({ theme }) => theme.breakpoints.small}) {
-    padding: 1px 5px;
-    line-height: ${({ theme }) => theme.text.xxsmall.height};
-  }
-`;
-const formatXLabels = v => {
+// https://github.com/d3/d3-time-format
+const formatXLabels = ({ v, size }) => {
   if (timeFormat('%m')(v) === '01') {
-    return timeFormat('%Y')(v);
+    return <tspan>{timeFormat('%Y')(v)}</tspan>;
   }
-  return <tspan style={{ opacity: 0.5 }}>{timeFormat('%m')(v)}</tspan>;
+  return (
+    <tspan style={{ opacity: 0.75 }}>
+      {timeFormat(isMinSize(size, 'medium') ? '%B' : '%b')(v)}
+    </tspan>
+  );
+};
+formatXLabels.propTypes = {
+  v: PropTypes.number,
+  size: PropTypes.string,
 };
 
 const getYAxisLabels = yMax => {
@@ -94,7 +75,6 @@ export function ChartTimelinePeaks({
   data,
   countries,
   config,
-  yAxisLabel,
   setMouseOver,
   mouseOver,
   setHighlight,
@@ -153,22 +133,21 @@ export function ChartTimelinePeaks({
   const hintAlign =
     hintNode && getHintAlign({ xPosition: hintNode.x, xMin, xMax });
 
+  const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
+
   return (
     <Styled>
-      <Title>{config.chartTitle}</Title>
       <Options
         setHighlight={setHighlight}
         highlightNode={highlightSeries}
         data={seriesNodes}
         config={config}
       />
-      <YAxisLabelWrap>
-        <AxisLabel>{yAxisLabel}</AxisLabel>
-      </YAxisLabelWrap>
+      <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
       <FlexibleWidthXYPlot
         xType="time"
         height={getChartHeight(size)}
-        margin={isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall}
+        margin={margins}
         style={{
           fill: 'transparent',
           // cursor: 'pointer',
@@ -187,11 +166,11 @@ export function ChartTimelinePeaks({
       >
         {data && (
           <XAxis
-            tickFormat={v => formatXLabels(v)}
+            tickFormat={v => formatXLabels({ v, size })}
             tickValues={tickValuesX}
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none' },
+              text: { stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
@@ -204,7 +183,7 @@ export function ChartTimelinePeaks({
             tickValues={getYAxisLabels(yMax)}
             style={{
               ticks: { stroke: '#041733', strokeWidth: 0.5 },
-              text: { stroke: 'none' },
+              text: { stroke: 'none', fontSize: '13px' },
             }}
             tickPadding={isMinSize(size, 'medium') ? 5 : 3}
             tickSizeOuter={isMinSize(size, 'medium') ? 10 : 5}
@@ -323,8 +302,12 @@ export function ChartTimelinePeaks({
           </Hint>
         )}
       </FlexibleWidthXYPlot>
-      <XAxisLabelWrap />
-      <KeyCategoryMarkers config={config} />
+      <AxisLabel axis="x" config={config} />
+      <Box margin={{ left: `${margins.left}px` }}>
+        <Box margin={{ top: 'medium' }}>
+          <KeyCategoryMarkers config={config} />
+        </Box>
+      </Box>
     </Styled>
   );
 }
@@ -333,7 +316,6 @@ ChartTimelinePeaks.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   config: PropTypes.object,
-  yAxisLabel: PropTypes.string,
   mouseOver: PropTypes.string,
   highlight: PropTypes.string,
   setMouseOver: PropTypes.func,
