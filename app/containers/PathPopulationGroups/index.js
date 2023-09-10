@@ -24,6 +24,8 @@ import {
 
 import ChartBeeswarm from 'components/ChartBeeswarm';
 
+import { formatNumberLabel } from 'utils/charts';
+
 const DEPENDENCIES = ['countries', 'population-groups'];
 
 const getChartData = ({
@@ -55,7 +57,10 @@ const getChartData = ({
             groupIndex: index + 0.5,
             hint: {
               label: config.meta[metric].hintLabel,
-              value: `${countryData[metricColumn]}%`,
+              value: formatNumberLabel({
+                value: countryData[metricColumn],
+                isPercentage: true,
+              }),
             },
           },
         ];
@@ -94,7 +99,6 @@ export function PathPopulationGroups({
       metricColumn: metrics[metric],
       groupByColumn: 'income_group',
     });
-
   return (
     <article>
       <Helmet>
@@ -113,6 +117,7 @@ export function PathPopulationGroups({
           config={config}
           groups={CATEGORIES.INCOME_SHORT}
           showGroupMedian
+          countries={countries}
         />
       </div>
     </article>

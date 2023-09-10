@@ -137,17 +137,16 @@ export function ChartTimelinePeaks({
 
   return (
     <Styled>
-      <Box direction="row" gap="small" justify="between">
-        <Box flex={{ shrink: 0 }}>
-          <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
-        </Box>
+      <Box margin={{ bottom: 'xsmall' }}>
         <Options
           setHighlight={setHighlight}
           highlightNode={highlightSeries}
           data={seriesNodes}
           config={config}
+          countries={countries}
         />
       </Box>
+      <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
       <FlexibleWidthXYPlot
         xType="time"
         height={getChartHeight(size)}

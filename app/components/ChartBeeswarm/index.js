@@ -21,6 +21,7 @@ import {
 } from 'react-vis';
 
 import CountryHint from 'components/CountryHint';
+import NoDataHint from 'components/NoDataHint';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import KeyTarget from 'components/KeyTarget';
 import Options from 'components/Options';
@@ -47,7 +48,7 @@ const chartMargins = {
 };
 const chartMarginsSmall = {
   bottom: 20,
-  top: 5,
+  top: 10,
   right: 12,
   left: 40,
 };
@@ -91,6 +92,7 @@ export function ChartBeeswarm({
   mouseOver,
   showGroupMedian,
   groups,
+  countries,
 }) {
   const size = useContext(ResponsiveContext);
   const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
@@ -151,6 +153,11 @@ export function ChartBeeswarm({
   });
   const mouseOverNode = mouseOver && positions.find(n => n.id === mouseOver);
   const highlightNode = highlight && positions.find(n => n.id === highlight);
+  let highlightAlt;
+  if (highlight && !highlightNode && countries) {
+    highlightAlt = countries.find(c => c.iso === highlight);
+    highlightAlt.label = highlightAlt.name_short;
+  }
   const hintNode = highlightNode || mouseOverNode;
   const hintAlign =
     hintNode &&
@@ -171,6 +178,7 @@ export function ChartBeeswarm({
 
   const maxOffset =
     positions && d3.max(positions, p => Math.abs(scaleX(p.groupIndex) - p.x));
+
   return (
     <Styled ref={chartRef}>
       <Box margin={{ bottom: 'large' }}>
@@ -178,9 +186,10 @@ export function ChartBeeswarm({
           metric={metric}
           setMetric={setMetric}
           setHighlight={setHighlight}
-          highlightNode={highlightNode}
+          highlightNode={highlightNode || highlightAlt}
           data={data}
           config={config}
+          countries={countries}
         />
       </Box>
       <AxisLabel
@@ -404,6 +413,24 @@ export function ChartBeeswarm({
           lineStyle={{ stroke: '#041733', strokeWidth: 0.5 }}
           markStyle={{ fill: '#041733', stroke: '#041733' }}
         />
+        {highlightAlt && (
+          <Hint
+            align={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            value={{
+              x: maxWidth / 2,
+              y: maxHeight / 2,
+            }}
+            style={{
+              pointerEvents: 'all',
+              margin: '15px 0',
+            }}
+          >
+            <NoDataHint country={highlightAlt} />
+          </Hint>
+        )}
         {hintNode && (
           <Hint
             align={{
@@ -427,7 +454,7 @@ export function ChartBeeswarm({
       </FlexibleWidthXYPlot>
       <AxisLabel axis="x" config={config} />
       {!isMinSize(size, 'medium') && (
-        <Box margin={{ left: `${margins.left}px` }}>
+        <Box margin={{ left: 'small' }} gap="small">
           <Box margin={{ top: 'medium' }}>
             <KeyCategoryMarkers
               config={config}
@@ -454,6 +481,7 @@ ChartBeeswarm.propTypes = {
   highlight: PropTypes.string,
   setHighlight: PropTypes.func,
   showGroupMedian: PropTypes.bool,
+  countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 export default ChartBeeswarm;

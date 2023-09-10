@@ -94,7 +94,7 @@ formatXLabels.propTypes = {
 // ms per px
 // const getDX = ({ xMin, xMax, chartWidth }) => (xMax - xMin) / chartWidth; // in ms
 const monthInMS = 1000 * 60 * 60 * 24 * 45;
-export function ChartTimelineSimple({
+export function ChartTimelineGroups({
   data,
   config,
   seriesColumn,
@@ -391,7 +391,7 @@ export function ChartTimelineSimple({
   );
 }
 
-ChartTimelineSimple.propTypes = {
+ChartTimelineGroups.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   config: PropTypes.object,
   seriesColumn: PropTypes.string,
@@ -405,4 +405,4 @@ ChartTimelineSimple.propTypes = {
   intl: intlShape,
 };
 
-export default injectIntl(ChartTimelineSimple);
+export default injectIntl(ChartTimelineGroups);

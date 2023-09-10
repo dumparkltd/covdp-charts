@@ -23,6 +23,8 @@ import {
 
 import ChartScatter from 'components/ChartScatter';
 
+import { formatNumberLabel } from 'utils/charts';
+
 const DEPENDENCIES = ['countries', 'uhc-coverage'];
 
 const getChartData = ({ countries, data, yColumn, xColumn, colorByColumn }) => {
@@ -53,11 +55,17 @@ const getChartData = ({ countries, data, yColumn, xColumn, colorByColumn }) => {
             label: country.name_short,
             hint: {
               metrics: {
-                uhc:
-                  Math.round(parseFloat(countryMetricData[xColumn]) * 100) /
-                  100,
-                one_dose_2021: `${countryMetricData.cov_total_a1d_2021}%`,
-                one_dose_2022: `${countryMetricData.cov_total_a1d_2022}%`,
+                uhc: formatNumberLabel({
+                  value: parseFloat(countryMetricData[xColumn]),
+                }),
+                one_dose_2021: formatNumberLabel({
+                  value: countryMetricData.cov_total_a1d_2021,
+                  isPercentage: true,
+                }),
+                one_dose_2022: formatNumberLabel({
+                  value: countryMetricData.cov_total_a1d_2022,
+                  isPercentage: true,
+                }),
               },
             },
           },
@@ -110,6 +118,7 @@ export function PathUHC({ onLoadData, countries, dataReady, data }) {
           yAxisLabel="At least 1 dose (% of population)"
           medianY
           medianX
+          countries={countries}
         />
       </div>
     </article>

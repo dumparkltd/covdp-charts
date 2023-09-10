@@ -13,7 +13,7 @@ export const mapNodes = ({ data, xColumn, yColumn }) =>
     .map(d => ({
       ...d,
       x: getXTime(d[xColumn]),
-      y: d[yColumn],
+      y: parseFloat(d[yColumn]),
     }));
 
 export const groupNodes = ({ nodes, countries }) => {

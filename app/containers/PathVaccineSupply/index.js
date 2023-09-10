@@ -23,6 +23,7 @@ import {
 } from 'containers/App/selectors';
 
 import ChartBeeswarm from 'components/ChartBeeswarm';
+import { formatNumberLabel } from 'utils/charts';
 
 const DEPENDENCIES = ['countries', 'vaccine-supply'];
 
@@ -54,7 +55,9 @@ const getChartData = ({
             groupIndex: index + 0.5,
             hint: {
               label: config.meta[metric].axisLabel,
-              value: countryData[metricColumn],
+              value: formatNumberLabel({
+                value: countryData[metricColumn],
+              }),
             },
           },
         ];
@@ -111,6 +114,7 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
           }}
           groups={CATEGORIES.INCOME_SHORT}
           showGroupMedian
+          countries={countries}
         />
       </div>
     </article>

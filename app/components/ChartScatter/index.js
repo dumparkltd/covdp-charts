@@ -61,6 +61,7 @@ export function ChartScatter({
   highlight,
   medianX,
   medianY,
+  countries,
 }) {
   const size = useContext(ResponsiveContext);
   const nodes = data && mapNodes(data, { mouseOver, highlight });
@@ -91,6 +92,7 @@ export function ChartScatter({
           highlightNode={highlightNode}
           data={data}
           config={config}
+          countries={countries}
         />
       </Box>
       <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
@@ -278,6 +280,7 @@ ChartScatter.propTypes = {
   setHighlight: PropTypes.func,
   medianX: PropTypes.bool,
   medianY: PropTypes.bool,
+  countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 
 export default ChartScatter;

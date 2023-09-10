@@ -7,7 +7,7 @@ export const formatNumberLabel = ({ value, isPercentage, digits = 1 }) => {
   if (isPercentage) {
     return `${Math.round(value * 10) / 10}%`;
   }
-  return Math.round(value * 10 ** digits) / 10 ** digits;
+  return `${Math.round(value * 10 ** digits) / 10 ** digits}`;
 };
 
 export const getMedian = (data, attribute) => {

@@ -51,24 +51,19 @@ export function KeyCategoryMarkers({ config, includeGroupIDs, medians }) {
         Object.keys(CATEGORIES[categories]).map(catId => (
           <Box key={catId} direction="row" gap="xsmall" align="center">
             <Dot categoryColor={DATACOLORS[catId]} />
-            <Box direction="row" gap="xsmall">
-              <KeyLabel>
-                {getLabel({
-                  includeGroupIDs,
+            <KeyLabel>
+              {getLabel({
+                includeGroupIDs,
+                catId,
+                config,
+              })}
+              {medians &&
+                getMedianLabel({
+                  medians,
                   catId,
                   config,
                 })}
-              </KeyLabel>
-              {medians && (
-                <KeyLabel>
-                  {getMedianLabel({
-                    medians,
-                    catId,
-                    config,
-                  })}
-                </KeyLabel>
-              )}
-            </Box>
+            </KeyLabel>
           </Box>
         ))}
     </Box>

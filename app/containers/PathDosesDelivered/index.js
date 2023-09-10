@@ -18,7 +18,7 @@ import { DATA_RESOURCES, CATEGORIES } from 'containers/App/constants';
 import { loadDataIfNeeded } from 'containers/App/actions';
 import { getDataByKey, getDependenciesReady } from 'containers/App/selectors';
 
-import ChartTimelineSimple from 'components/ChartTimelineSimple';
+import ChartTimelineGroups from 'components/ChartTimelineGroups';
 
 const getChartData = ({ data, xColumn, yColumn }) =>
   data.map(d => ({
@@ -55,7 +55,7 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
         <meta name="description" content="PathDosesDelivered" />
       </Helmet>
       <div>
-        <ChartTimelineSimple
+        <ChartTimelineGroups
           data={chartData}
           config={config}
           target={{

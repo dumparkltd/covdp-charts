@@ -175,10 +175,10 @@ export const DATA_RESOURCES = [
     maxValue: 10,
     maxSize: 1500000000,
     yDefault: 'secured',
-    keyCategories: 'INCOME',
+    keyCategories: 'INCOME_SHORT',
+    groupByColumn: 'income_group',
     metricOptions: ['secured', 'delivered', 'administered'],
     metricOptionLabel: 'Select indicator',
-    groupByColumn: 'income_group',
     meta: {
       secured: {
         axisLabel: 'Doses secured',
