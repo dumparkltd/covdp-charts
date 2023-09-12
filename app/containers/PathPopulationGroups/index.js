@@ -7,12 +7,13 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-// import { FormattedMessage } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectSaga } from 'utils/injectSaga';
+import { lowerCase } from 'utils/string';
 import saga from 'containers/App/saga';
 import { DATA_RESOURCES, CATEGORIES } from 'containers/App/constants';
 import { loadDataIfNeeded } from 'containers/App/actions';
@@ -35,6 +36,7 @@ const getChartData = ({
   groupByColumn,
   config,
   metric,
+  intl,
 }) => {
   const countriesData = countries.reduce((m, c) => {
     const countryData = data.find(d => d.iso === c.iso);
@@ -55,13 +57,22 @@ const getChartData = ({
             group: c[groupByColumn],
             value: Math.min(parseFloat(countryData[metricColumn]), 100),
             groupIndex: index + 0.5,
-            hint: {
-              label: config.meta[metric].hintLabel,
-              value: formatNumberLabel({
-                value: countryData[metricColumn],
-                isPercentage: true,
-              }),
-            },
+            hint: [
+              {
+                label: config.meta[metric].hintLabel,
+                value: formatNumberLabel({
+                  value: countryData[metricColumn],
+                  isPercentage: true,
+                }),
+              },
+              {
+                label: `Population (${lowerCase(config.meta[metric].label)})`,
+                value: formatNumberLabel({
+                  value: c[config.meta[metric].popColumn],
+                  intl,
+                }),
+              },
+            ],
           },
         ];
       }
@@ -77,6 +88,7 @@ export function PathPopulationGroups({
   countries,
   dataReady,
   data,
+  intl,
 }) {
   useInjectSaga({ key: 'app', saga });
 
@@ -98,6 +110,7 @@ export function PathPopulationGroups({
       config,
       metricColumn: metrics[metric],
       groupByColumn: 'income_group',
+      intl,
     });
   return (
     <article>
@@ -129,6 +142,7 @@ PathPopulationGroups.propTypes = {
   countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   dataReady: PropTypes.bool,
+  intl: intlShape,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -154,4 +168,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(PathPopulationGroups);
+)(injectIntl(PathPopulationGroups));

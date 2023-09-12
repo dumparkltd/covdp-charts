@@ -242,7 +242,10 @@ export function ChartScatter({
         </Box>
         {!isMinSize(size, 'medium') && medianYValue && (
           <Box margin={{ top: 'small' }}>
-            <KeyTarget target={{ label: 'Averages (median)' }} />
+            <KeyTarget
+              target={{ label: 'Averages (median)' }}
+              strokeDasharray={[8, 4]}
+            />
           </Box>
         )}
       </Box>

@@ -62,7 +62,7 @@ const Styled = styled.div`
 `;
 const SeriesLabelWrap = styled.div`
   max-width: ${({ marginRight }) => marginRight}px;
-  padding-left: 15px;
+  padding-left: 9px;
   transform: translateY(
     ${({ value }) => (value.position === 'center' ? 50 : 0)}%
   );
@@ -70,9 +70,10 @@ const SeriesLabelWrap = styled.div`
 const SeriesLabel = styled.div`
   font-family: 'ABCMonument';
   color: #041733;
-  background-color: #f6f7fc;
   font-size: 13px;
   line-height: 15px;
+  background-color: #f6f7fc;
+  padding-left: 4px;
 `;
 // https://github.com/d3/d3-time-format
 const formatXLabels = ({ v, size }) => {
@@ -383,7 +384,7 @@ export function ChartTimelineGroups({
         </Box>
         {!isMinSize(size, 'medium') && target && (
           <Box margin={{ top: 'small' }}>
-            <KeyTarget target={target} />
+            <KeyTarget target={target} strokeDasharray={[8, 4]} />
           </Box>
         )}
       </Box>

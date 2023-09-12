@@ -27,7 +27,7 @@ export const PATHS = {
   // vaccine supply by income group for each country: beeswarm plots
   // indicators (select one):
   // - secured: secured_vaccines_pc
-  // - delivered: del_dose_add_pc
+  // - received: del_dose_add_pc
   // - administered: adm_td_add_pc
   UHC_COVERAGE: 'uhc-coverage',
   // % at least one dose vs UHC service coverage index for each country: scatter plot
@@ -69,17 +69,16 @@ export const DATA_RESOURCES = [
     file: 'doses-delivered.csv',
     group_fk: 'income_group',
     metrics: {
-      delivered: 'del_dose_add_pc',
+      received: 'del_dose_add_pc',
     },
     keyCategories: 'INCOME',
-    chartTitle: 'Vaccine supply by income group',
-    yAxisLabel: 'Doses supplied (by capita)',
+    yAxisLabel: 'Doses received (by capita)',
   },
   {
     key: 'doses-delivered-median',
     file: 'doses-delivered.csv',
     xAxisLabel: 'Time',
-    yAxisLabel: 'Doses supplied',
+    yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
     group_fk: 'income_group',
     metrics: {
@@ -88,7 +87,6 @@ export const DATA_RESOURCES = [
       upper: 'del_dose_add_pc_0.75',
     },
     keyCategories: 'INCOME',
-    chartTitle: 'Vaccine supply by country income group',
     labelPositions: {
       HIC: 'center',
       UMIC: 'top',
@@ -104,7 +102,6 @@ export const DATA_RESOURCES = [
       doses: 'dvr_4wk_td_per',
     },
     keyCategories: 'INCOME',
-    chartTitle: 'Vaccination rates over time',
     hint: [
       {
         label: 'Peak daily vaccination rate (% of population)',
@@ -121,7 +118,7 @@ export const DATA_RESOURCES = [
     dateLabel: 'Peak date',
     includePopulation: true,
     xAxisLabel: 'Date',
-    yAxisLabel: 'Vaccination rate',
+    yAxisLabel: 'Daily vaccination rate',
     yAxisLabelAdditional: '(% of population)',
   },
   {
@@ -140,7 +137,8 @@ export const DATA_RESOURCES = [
     yDefault: 'one_dose_2021',
     metricOptions: ['one_dose_2021', 'one_dose_2022'],
     metricOptionLabel: 'Select time',
-    hintMetricOptionLabel: 'At least 1 dose (% of population)',
+    hintMetricOptionLabel:
+      'Individuals with at least one dose (% of population)',
     keyCategories: 'INCOME',
     meta: {
       uhc: {
@@ -159,7 +157,7 @@ export const DATA_RESOURCES = [
       },
     },
     xAxisLabel: 'Universal Health Coverage index (2021)',
-    yAxisLabel: 'At least 1 dose',
+    yAxisLabel: 'Individuals with at least one dose',
     yAxisLabelAdditional: '(% of population)',
   },
   {
@@ -169,16 +167,18 @@ export const DATA_RESOURCES = [
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
-      delivered: 'del_dose_add_pc',
+      received: 'del_dose_add_pc',
       administered: 'adm_td_add_pc',
     },
     maxValue: 10,
     maxSize: 1500000000,
+    minDiamater: 2.6, // 2.2 - 10million
     yDefault: 'secured',
     keyCategories: 'INCOME_SHORT',
     groupByColumn: 'income_group',
-    metricOptions: ['secured', 'delivered', 'administered'],
+    metricOptions: ['secured', 'received', 'administered'],
     metricOptionLabel: 'Select indicator',
+    metricType: 'indicator',
     meta: {
       secured: {
         axisLabel: 'Doses secured',
@@ -189,10 +189,10 @@ export const DATA_RESOURCES = [
           'https://docs.google.com/spreadsheets/d/1aR4L0VStsBrY37aRKTjlUwjQuPS3hDwdRyTwGInkRyE/edit?usp=sharing',
         source: 'IMF/WHO vaccine supply tracker',
       },
-      delivered: {
-        axisLabel: 'Doses supplied',
+      received: {
+        axisLabel: 'Doses received',
         axisLabelAdditional: '(per capita)',
-        label: 'Doses supplied',
+        label: 'Doses received',
       },
       administered: {
         axisLabel: 'Doses administered',
@@ -215,27 +215,32 @@ export const DATA_RESOURCES = [
     groupByColumn: 'income_group',
     maxValue: 108,
     maxSize: 1500000000,
+    minDiamater: 2.6, // 2.2 - 10million
     isPercentage: true,
     yDefault: 'all',
     keyCategories: 'INCOME_SHORT',
     metricOptions: ['all', 'old', 'hcw'],
     metricOptionLabel: 'Select group',
+    metricType: 'group',
     meta: {
       all: {
-        axisLabel: '% fully vaccinated',
-        hintLabel: '% fully vaccinated (all people)',
+        axisLabel: 'Complete primary series',
+        axisLabelAdditional: '(% of group)',
+        hintLabel: 'Complete primary series (% of all people)',
         label: 'All people',
         popColumn: 'pop',
       },
       old: {
-        axisLabel: '% fully vaccinated',
-        hintLabel: '% fully vaccinated (older adults)',
+        axisLabel: 'Complete primary series',
+        axisLabelAdditional: '(% of group)',
+        hintLabel: 'Complete primary series (% of older adults)',
         label: 'Older adults',
         popColumn: 'pop_older',
       },
       hcw: {
-        axisLabel: '% fully vaccinated',
-        hintLabel: '% fully vaccinated (healthcare workers)',
+        axisLabel: 'Complete primary series',
+        axisLabelAdditional: '(% of group)',
+        hintLabel: 'Complete primary series (% of healthcare workers)',
         label: 'Healthcare workers',
         popColumn: 'pop_hcw',
       },
@@ -281,3 +286,15 @@ export const DATACOLORS = {
   UMIC: '#D67732',
   HIC: '#9B3436',
 };
+
+// in millions
+export const POPULATION_KEY_VALUES = [
+  {
+    label: '1.5 billion people',
+    value: 1500,
+  },
+  {
+    label: '150 million',
+    value: 150,
+  },
+];

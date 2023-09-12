@@ -7,7 +7,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-// import { FormattedMessage } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -34,6 +34,7 @@ const getChartData = ({
   groupByColumn,
   config,
   metric,
+  intl,
 }) => {
   const countriesData = countries.reduce((m, c) => {
     const countryData = data.find(d => d.iso === c.iso);
@@ -53,12 +54,22 @@ const getChartData = ({
             group: c[groupByColumn],
             value: Math.min(parseFloat(countryData[metricColumn]), 100),
             groupIndex: index + 0.5,
-            hint: {
-              label: config.meta[metric].axisLabel,
-              value: formatNumberLabel({
-                value: countryData[metricColumn],
-              }),
-            },
+            hint: [
+              {
+                label: config.meta[metric].axisLabel,
+                value: formatNumberLabel({
+                  value: countryData[metricColumn],
+                  intl,
+                }),
+              },
+              {
+                label: 'Population',
+                value: formatNumberLabel({
+                  value: c.pop,
+                  intl,
+                }),
+              },
+            ],
           },
         ];
       }
@@ -69,7 +80,13 @@ const getChartData = ({
   return countriesData;
 };
 
-export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
+export function PathVaccineSupply({
+  onLoadData,
+  countries,
+  dataReady,
+  data,
+  intl,
+}) {
   useInjectSaga({ key: 'app', saga });
 
   useEffect(() => {
@@ -90,6 +107,7 @@ export function PathVaccineSupply({ onLoadData, countries, dataReady, data }) {
       config,
       metricColumn: metrics[metric],
       groupByColumn: config.groupByColumn,
+      intl,
     });
   return (
     <article>
@@ -126,6 +144,7 @@ PathVaccineSupply.propTypes = {
   countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   dataReady: PropTypes.bool,
+  intl: intlShape,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -151,4 +170,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(PathVaccineSupply);
+)(injectIntl(PathVaccineSupply));

@@ -155,6 +155,7 @@ const theme = {
     colors: {
       black: '#041733',
       white: '#FFFFFF',
+      text: '#041733',
       textSecondary: '#888',
       focus: 'transparent',
       buttonBG: '#e4e6ec',

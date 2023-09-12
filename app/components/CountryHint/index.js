@@ -5,6 +5,7 @@ import { Box, Text, Button, ResponsiveContext } from 'grommet';
 import { Close } from 'grommet-icons';
 
 import { isMinSize } from 'utils/responsive';
+import asArray from 'utils/as-array';
 
 // prettier-ignore
 const Styled = styled(p => (
@@ -141,12 +142,19 @@ export function CountryHint({
               </Box>
             </Box>
           )}
-          {country && country.hint && country.hint.label && country.hint.value && (
-            <Box direction="row" gap="xsmall">
-              <MetricLabel>{`${country.hint.label}:`}</MetricLabel>
-              <MetricValue>{country.hint.value}</MetricValue>
-            </Box>
-          )}
+          {country &&
+            country.hint &&
+            asArray(country.hint).map((hint, key) => {
+              if (hint.label && hint.value) {
+                return (
+                  <Box key={hint.key || key} direction="row" gap="xsmall">
+                    <MetricLabel>{`${hint.label}:`}</MetricLabel>
+                    <MetricValue>{hint.value}</MetricValue>
+                  </Box>
+                );
+              }
+              return null;
+            })}
           {config && config.xDefault && (
             <Box direction="row" gap="xsmall">
               <MetricLabel>{`${

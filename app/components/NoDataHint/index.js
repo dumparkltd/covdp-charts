@@ -15,16 +15,17 @@ const Styled = styled(p => (
   border: 1px solid #041733;
 `;
 
-export function NoDataHint({ country }) {
+export function NoDataHint({ country, metricType = 'indicator' }) {
   return (
     <Styled>{`No data available for ${
       country.label
-    } for selected metric`}</Styled>
+    } for selected ${metricType}`}</Styled>
   );
 }
 
 NoDataHint.propTypes = {
   country: PropTypes.object,
+  metricType: PropTypes.string,
 };
 
 export default NoDataHint;

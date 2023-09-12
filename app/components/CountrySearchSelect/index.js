@@ -32,7 +32,7 @@ const InputWraper = styled(p => (
   border: 1px solid #041733;
   width: 100%;
   @media (min-width: ${({ theme }) => theme.breakpointsMin.medium}) {
-    min-width: 400px;
+    min-width: 300px;
     width: auto;
   }
 `;

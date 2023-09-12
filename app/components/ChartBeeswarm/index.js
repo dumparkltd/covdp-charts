@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import PropTypes from 'prop-types';
+
 import styled from 'styled-components';
 import { Box, ResponsiveContext } from 'grommet';
 import * as d3 from 'd3';
@@ -24,6 +25,8 @@ import CountryHint from 'components/CountryHint';
 import NoDataHint from 'components/NoDataHint';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import KeyTarget from 'components/KeyTarget';
+import KeyMedian from 'components/KeyMedian';
+import KeyPopulation from 'components/KeyPopulation';
 import Options from 'components/Options';
 import AxisLabel from 'components/AxisLabel';
 // import { CATEGORIES } from 'containers/App/constants';
@@ -37,6 +40,7 @@ import {
   getChartHeight,
   scaleValue,
   scaleGroup,
+  scaleSize,
   getGroupMedians,
 } from './utils';
 
@@ -79,7 +83,8 @@ const getTickValuesY = ({ maxValue, scaleY }) => {
   }
   return [0, scaleY(2), scaleY(4), scaleY(6), scaleY(8), scaleY(10)];
 };
-
+const spaceRight = 0.5;
+const spaceRightWithTarget = 1;
 export function ChartBeeswarm({
   data,
   config,
@@ -116,24 +121,24 @@ export function ChartBeeswarm({
   const maxValue =
     config.maxValue || (data && Math.ceil(d3.max(data, d => d.value)));
   const maxX = data && d3.max(data, d => d.groupIndex);
-  const minSize = data && d3.min(data, d => d.sizeRaw);
+  // const minSize = data && d3.min(data, d => d.sizeRaw);
   const maxSize = config.maxSize || (data && d3.max(data, d => d.sizeRaw));
   const chartHeight = getChartHeight(size);
   const maxHeight = chartHeight - margins.top - margins.bottom;
   const maxWidth = chartWidth - margins.left - margins.right;
-  const minDiameter = isMinSize(size, 'small') ? 2 : 2; // px
-  const maxDiameter = Math.min(maxHeight * 0.05, maxWidth * 0.04); // px
+  const minDiameter = config.minDiamater || 2.2; // in px scales to 10million
+  const maxDiameter = Math.min(maxHeight * 0.06, maxWidth * 0.05); // px
+  const spaceRightFinal = target ? spaceRightWithTarget : spaceRight;
 
   const nodes =
     data &&
     mapNodes(data, {
-      minSize,
       maxSize,
       minDiameter,
       maxDiameter,
       maxValue,
       maxHeight,
-      maxWidth: maxWidth * (maxX / (maxX + 0.75)),
+      maxWidth: maxWidth * (maxX / (maxX + spaceRightFinal)),
       maxX,
       mouseOver,
       highlight,
@@ -148,9 +153,10 @@ export function ChartBeeswarm({
   ];
   const scaleY = scaleValue({ maxHeight, maxValue });
   const scaleX = scaleGroup({
-    maxWidth: maxWidth * (maxX / (maxX + 0.75)),
+    maxWidth: maxWidth * (maxX / (maxX + spaceRightFinal)),
     maxX,
   });
+  const scaleZ = scaleSize({ maxSize, maxDiameter });
   const mouseOverNode = mouseOver && positions.find(n => n.id === mouseOver);
   const highlightNode = highlight && positions.find(n => n.id === highlight);
   let highlightAlt;
@@ -164,7 +170,7 @@ export function ChartBeeswarm({
     getHintAlign({
       xPosition: hintNode.x,
       xMin: 0,
-      xMax: maxWidth * (maxX / (maxX + 0.75)),
+      xMax: maxWidth * (maxX / (maxX + spaceRightFinal)),
     });
   const tickValuesY = getTickValuesY({
     maxValue,
@@ -178,6 +184,8 @@ export function ChartBeeswarm({
 
   const maxOffset =
     positions && d3.max(positions, p => Math.abs(scaleX(p.groupIndex) - p.x));
+  const minValue =
+    minDiameter && Math.round(scaleZ.invert(minDiameter) / 1000000);
 
   return (
     <Styled ref={chartRef}>
@@ -428,7 +436,7 @@ export function ChartBeeswarm({
               margin: '15px 0',
             }}
           >
-            <NoDataHint country={highlightAlt} />
+            <NoDataHint country={highlightAlt} metricType={config.metricType} />
           </Hint>
         )}
         {hintNode && (
@@ -462,7 +470,21 @@ export function ChartBeeswarm({
               medians={medians}
             />
           </Box>
-          {target && <KeyTarget target={target} />}
+          {medians && <KeyMedian />}
+          {target && <KeyTarget target={target} strokeDasharray={[8, 4]} />}
+          {scaleZ && (
+            <Box margin={{ top: 'small' }}>
+              <KeyPopulation scaleSize={scaleZ} minValue={minValue} />
+            </Box>
+          )}
+        </Box>
+      )}
+      {isMinSize(size, 'medium') && (
+        <Box margin={{ top: 'medium' }} gap="small" align="center">
+          {medians && <KeyMedian />}
+          {scaleZ && minValue && (
+            <KeyPopulation scaleSize={scaleZ} minValue={minValue} />
+          )}
         </Box>
       )}
     </Styled>

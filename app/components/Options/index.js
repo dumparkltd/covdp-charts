@@ -10,12 +10,12 @@ import { isMinSize } from 'utils/responsive';
 
 const LabelChartOption = styled(p => <Text {...p} />)`
   text-align: ${({ align }) => align || 'left'};
-  font-size: ${({ theme }) => theme.text.xxsmall.size};
-  line-height: ${({ theme }) => theme.text.xxsmall.height};
-  color: ${({ theme }) => theme.global.colors.textSecondary};
+  font-size: ${({ theme }) => theme.text.xsmall.size};
+  line-height: ${({ theme }) => theme.text.xsmall.height};
+  color: ${({ theme }) => theme.global.colors.text};
   @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
-    font-size: ${({ theme }) => theme.text.xsmall.size};
-    line-height: ${({ theme }) => theme.text.xsmall.height};
+    font-size: ${({ theme }) => theme.text.small.size};
+    line-height: ${({ theme }) => theme.text.small.height};
   }
 `;
 

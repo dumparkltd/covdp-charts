@@ -3,11 +3,18 @@ export const getHintAlign = ({ xPosition, xMin, xMax, threshold = 0.4 }) => {
   return xRatio < threshold ? 'right' : 'left';
 };
 
-export const formatNumberLabel = ({ value, isPercentage, digits = 1 }) => {
+export const formatNumberLabel = ({
+  value,
+  isPercentage,
+  digits = 1,
+  intl,
+}) => {
   if (isPercentage) {
     return `${Math.round(value * 10) / 10}%`;
   }
-  return `${Math.round(value * 10 ** digits) / 10 ** digits}`;
+  return intl
+    ? `${intl.formatNumber(Math.round(value * 10 ** digits) / 10 ** digits)}`
+    : `${Math.round(value * 10 ** digits) / 10 ** digits}`;
 };
 
 export const getMedian = (data, attribute) => {

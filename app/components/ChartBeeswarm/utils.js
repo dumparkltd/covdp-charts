@@ -19,11 +19,11 @@ export const scaleGroup = ({ maxWidth, maxX }) =>
     .domain([0, maxX])
     .range([0, maxWidth]);
 
-const scaleSize = ({ minSize, maxSize, minDiameter, maxDiameter }) =>
+export const scaleSize = ({ maxSize, maxDiameter }) =>
   d3
     .scaleSqrt()
-    .domain([minSize, maxSize])
-    .range([minDiameter, maxDiameter]);
+    .domain([0, maxSize])
+    .range([0, maxDiameter]);
 
 const xStrength = data =>
   d3
@@ -35,7 +35,7 @@ const xStrength = data =>
 export const mapNodes = (
   data,
   {
-    minSize,
+    // minSize,
     maxSize,
     minDiameter,
     maxDiameter,
@@ -60,7 +60,7 @@ export const mapNodes = (
         : 'transparent';
       return ({
         ...d,
-        size: scaleSize({ minSize, maxSize, minDiameter, maxDiameter })(d.sizeRaw),
+        size: Math.max(scaleSize({ maxSize, maxDiameter })(d.sizeRaw), minDiameter),
         y: scaleValue({ maxHeight, maxValue })(d.value),
         x: scaleGroup({ maxWidth, maxX })(d.groupIndex),
         fill: DATACOLORS[d.group],
