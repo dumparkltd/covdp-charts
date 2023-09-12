@@ -7,7 +7,7 @@ export const mapNodes = (data, { mouseOver, highlight }) =>
   // prettier-ignore
   data
     .map(d => {
-      let opacity = highlight ? 0.3 : 0.7;
+      let opacity = highlight || mouseOver ? 0.3 : 0.7;
       if (highlight === d.id || mouseOver === d.id) {
         opacity = 1;
       }
