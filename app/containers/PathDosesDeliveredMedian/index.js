@@ -56,7 +56,7 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
   return (
     <article>
       <Helmet>
-        <title>{config && config.chartTitle}</title>
+        <title>{config && config.key}</title>
         <meta name="description" content="PathDosesDeliveredMedian" />
       </Helmet>
       <div>

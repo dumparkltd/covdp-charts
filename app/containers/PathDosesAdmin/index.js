@@ -35,7 +35,7 @@ export function PathDosesAdmin({ data, countries, onLoadData }) {
   return (
     <article>
       <Helmet>
-        <title>{config && config.chartTitle}</title>
+        <title>{config && config.key}</title>
         <meta name="description" content="PathDosesAdmin" />
       </Helmet>
       <div>

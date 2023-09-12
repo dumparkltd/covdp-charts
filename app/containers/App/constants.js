@@ -138,8 +138,6 @@ export const DATA_RESOURCES = [
     file: 'uhc-coverage.csv',
     country_fk: 'iso',
     type: 'scatter',
-    chartTitle:
-      'Impact of health system capacities on vaccine administration progress',
     metrics: {
       uhc: 'uhc_sci',
       one_dose_2021: 'cov_total_a1d_2021',
@@ -175,7 +173,6 @@ export const DATA_RESOURCES = [
   {
     key: 'vaccine-supply',
     file: 'vaccine-supply.csv',
-    chartTitle: 'Vaccine supply by income group (March 2023)',
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
@@ -217,7 +214,6 @@ export const DATA_RESOURCES = [
   {
     key: 'population-groups',
     file: 'population-groups.csv',
-    chartTitle: 'Population groups fully vaccinated (March 2023)',
     country_fk: 'iso',
     metrics: {
       all: 'cov_total_fv',

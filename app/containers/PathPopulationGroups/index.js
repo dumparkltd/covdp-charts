@@ -115,7 +115,7 @@ export function PathPopulationGroups({
   return (
     <article>
       <Helmet>
-        <title>{config && config.chartTitle}</title>
+        <title>{config && config.key}</title>
         <meta name="description" content="PathPopulationGroups" />
       </Helmet>
       <div>
