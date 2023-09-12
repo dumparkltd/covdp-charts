@@ -480,11 +480,17 @@ export function ChartBeeswarm({
         </Box>
       )}
       {isMinSize(size, 'medium') && (
-        <Box margin={{ top: 'medium' }} gap="small" align="center">
-          {medians && <KeyMedian />}
+        <Box
+          margin={{ top: 'medium' }}
+          gap="medium"
+          align="center"
+          justify="center"
+          direction="row"
+        >
           {scaleZ && minValue && (
             <KeyPopulation scaleSize={scaleZ} minValue={minValue} />
           )}
+          {medians && <KeyMedian />}
         </Box>
       )}
     </Styled>
