@@ -31,6 +31,7 @@ import KeyLineRange from 'components/KeyLineRange';
 import KeyTarget from 'components/KeyTarget';
 import AxisLabel from 'components/AxisLabel';
 import CountryHint from 'components/CountryHint';
+import Options from 'components/Options';
 
 import { isMinSize } from 'utils/responsive';
 import { getHintAlign } from 'utils/charts';
@@ -107,6 +108,8 @@ export function ChartTimelineGroups({
   seriesMouseOver,
   setSeriesMouseOver,
   intl,
+  metric,
+  setMetric,
 }) {
   const [chartWidth, setChartWidth] = useState(0);
   const targetRef = useRef();
@@ -130,7 +133,11 @@ export function ChartTimelineGroups({
   const nodes = data && mapNodes({ data, seriesColumn, seriesLabels });
   const seriesNodes = data && groupNodes({ nodes, seriesColumn });
   const range =
-    data && config.metrics.lower && config.metrics.upper && mapRangeNodes(data);
+    metric === 'median' &&
+    data &&
+    config.metrics.lower &&
+    config.metrics.upper &&
+    mapRangeNodes(data);
 
   const seriesRange = range && groupNodes({ nodes: range, seriesColumn });
   // const seriesRangeF =
@@ -141,7 +148,7 @@ export function ChartTimelineGroups({
       const lastNode = series.data[series.data.length - 1];
       const position = seriesLabelsPosition
         ? seriesLabelsPosition[series.id]
-        : 'top';
+        : 'center';
       return {
         id: series.id,
         label: seriesLabels[series.id],
@@ -189,6 +196,11 @@ export function ChartTimelineGroups({
     });
   return (
     <Styled ref={targetRef}>
+      {config.metricOptions && (
+        <Box margin={{ bottom: 'medium' }}>
+          <Options metric={metric} setMetric={setMetric} config={config} />
+        </Box>
+      )}
       <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
       <FlexibleWidthXYPlot
         xType="time"
@@ -280,6 +292,7 @@ export function ChartTimelineGroups({
         {seriesNodes &&
           seriesNodes.map(series => (
             <LineSeries
+              animation
               data={series.data}
               key={series.id}
               style={{
@@ -290,6 +303,7 @@ export function ChartTimelineGroups({
           ))}
         {nodes && (
           <MarkSeries
+            animation
             data={nodes}
             size={isMinSize(size, 'medium') ? 3.5 : 2.5}
             colorType="literal"
@@ -367,6 +381,7 @@ export function ChartTimelineGroups({
               values={getHintValues({
                 hint: mouseOver,
                 metrics: config.metrics,
+                metric,
               })}
             />
           </Hint>
@@ -379,9 +394,11 @@ export function ChartTimelineGroups({
             <KeyCategoryMarkers config={config} />
           </Box>
         )}
-        <Box margin={{ top: 'medium' }}>
-          <KeyLineRange />
-        </Box>
+        {metric === 'median' && range && (
+          <Box margin={{ top: 'medium' }}>
+            <KeyLineRange />
+          </Box>
+        )}
         {!isMinSize(size, 'medium') && target && (
           <Box margin={{ top: 'small' }}>
             <KeyTarget target={target} strokeDasharray={[8, 4]} />
@@ -403,6 +420,8 @@ ChartTimelineGroups.propTypes = {
   setMouseOver: PropTypes.func,
   seriesMouseOver: PropTypes.string,
   setSeriesMouseOver: PropTypes.func,
+  setMetric: PropTypes.func,
+  metric: PropTypes.string,
   intl: intlShape,
 };
 

@@ -81,10 +81,10 @@ export const getTickValuesX = ({ range, size }) => {
   return getMonths(dateMin, dateMax, 6);
 };
 
-export const getHintValues = ({ hint, metrics }) => {
+export const getHintValues = ({ hint, metrics, metric }) => {
   if (!metrics) return null;
   const values = [];
-  if (metrics.median) {
+  if (metrics.median && metric === 'median') {
     values.push({
       label: 'Average (median)',
       value: formatNumberLabel({ value: hint[metrics.median] }),
@@ -98,6 +98,11 @@ export const getHintValues = ({ hint, metrics }) => {
         value,
       });
     }
+  } else {
+    values.push({
+      label: 'Average (weighted)',
+      value: formatNumberLabel({ value: hint[metrics[metric]] }),
+    });
   }
   return values;
 };

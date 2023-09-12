@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Box } from 'grommet';
 import KeyLabel from 'components/KeyLabel';
 
-const SymbolWrapper = styled(p => <Box flex={{ shrink: false }} {...p} />)`
+const SymbolWrapper = styled(p => <Box flex={{ shrink: 0 }} {...p} />)`
   display: block;
   position: relative;
   width: 30px;

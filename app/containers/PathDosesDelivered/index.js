@@ -45,7 +45,7 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
     getChartData({
       data,
       xColumn: 'datetime',
-      yColumn: metrics.delivered,
+      yColumn: metrics.received,
     });
 
   return (

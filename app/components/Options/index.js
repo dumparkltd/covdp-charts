@@ -105,20 +105,22 @@ export function Options({
           </Box>
         </Box>
       )}
-      <Box gap="hair">
-        {isMinSize(size, 'medium') && (
-          <LabelChartOption align={wrap ? 'left' : 'right'}>
-            Search country
-          </LabelChartOption>
-        )}
-        <Box>
-          <CountrySearchSelect
-            selected={highlightNode}
-            onSelect={key => setHighlight(key)}
-            options={data}
-          />
+      {data && (
+        <Box gap="hair">
+          {isMinSize(size, 'medium') && (
+            <LabelChartOption align={wrap ? 'left' : 'right'}>
+              Search country
+            </LabelChartOption>
+          )}
+          <Box>
+            <CountrySearchSelect
+              selected={highlightNode}
+              onSelect={key => setHighlight(key)}
+              options={data}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 }

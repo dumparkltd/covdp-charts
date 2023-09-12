@@ -39,6 +39,7 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
     onLoadData();
   }, []);
   const [mouseOver, setMouseOver] = useState(null);
+  const [metric, setMetric] = useState('mean');
   const [seriesMouseOver, setSeriesMouseOver] = useState(null);
   const config = DATA_RESOURCES.find(r => r.key === 'doses-delivered-median');
   // const [mouseOver, setMouseOver] = useState(null);
@@ -48,9 +49,9 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
     getChartData({
       data,
       xColumn: 'datetime',
-      yColumn: metrics.median,
-      yColumnLower: metrics.lower,
-      yColumnUpper: metrics.upper,
+      yColumn: metrics[metric],
+      yColumnLower: metric === 'median' ? metrics.lower : null,
+      yColumnUpper: metric === 'median' ? metrics.upper : null,
     });
   return (
     <article>
@@ -68,11 +69,15 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
           }}
           seriesColumn="income_group"
           seriesLabels={CATEGORIES.INCOME}
-          seriesLabelsPosition={config.labelPositions}
+          seriesLabelsPosition={
+            metric === 'median' ? config.labelPositions : null
+          }
           setMouseOver={setMouseOver}
           mouseOver={mouseOver}
           setSeriesMouseOver={setSeriesMouseOver}
           seriesMouseOver={seriesMouseOver}
+          metric={metric}
+          setMetric={setMetric}
         />
       </div>
     </article>

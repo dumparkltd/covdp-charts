@@ -90,13 +90,13 @@ export function ChartTimelinePeaks({
       xColumn: 'date',
       yColumn: metrics.doses,
     });
-  const seriesNodes = data && groupNodes({ nodes, countries });
+  const seriesNodes = data && groupNodes({ nodes, countries }); // .filter(s => s.pop > 1500000);
 
   const xRange = data && d3.extent(nodes, d => d.x);
-  const yRange = data && d3.extent(nodes, d => d.y);
+  const yMax1 = data && d3.max(seriesNodes, s => d3.max(s.data, d => d.y));
   const xMin = xRange[0] - monthInMS;
   const xMax = xRange[1] + monthInMS;
-  const yMax = Math.ceil(yRange[1]) + 0.2;
+  const yMax = Math.ceil(yMax1) + 0.2;
   // prettier-ignore
   const axisNodes = data
     ? [
@@ -109,6 +109,7 @@ export function ChartTimelinePeaks({
       { x: 0, y: 0 },
       { x: 100, y: 0 },
     ];
+
   const tickValuesX = getTickValuesX({ range: xRange, size });
   const peaks =
     seriesNodes &&
@@ -199,7 +200,7 @@ export function ChartTimelinePeaks({
               data={series.data}
               key={series.id}
               style={{
-                opacity: highlightNode ? 0.3 : 0.8,
+                opacity: hintNode ? 0.3 : 0.8,
                 stroke: '#ccc',
                 strokeWidth: 0.2,
               }}
@@ -232,7 +233,7 @@ export function ChartTimelinePeaks({
             strokeType="literal"
             fillType="literal"
             style={{
-              opacity: highlightNode ? 0.3 : 0.8,
+              opacity: hintNode ? 0.3 : 0.8,
             }}
             onNearestXY={node => {
               if (isMinSize(size, 'small')) {

@@ -30,6 +30,7 @@ export const PATHS = {
   // - received: del_dose_add_pc
   // - administered: adm_td_add_pc
   UHC_COVERAGE: 'uhc-coverage',
+  UHC_COVERAGE_ALT: 'uhc-coverage-alt',
   // % at least one dose vs UHC service coverage index for each country: scatter plot
   // indicators:
   // - uhc_sci
@@ -82,6 +83,7 @@ export const DATA_RESOURCES = [
     yAxisLabelAdditional: '(per capita)',
     group_fk: 'income_group',
     metrics: {
+      mean: 'del_dose_add_pc',
       median: 'del_dose_add_pc_0.5',
       lower: 'del_dose_add_pc_0.25',
       upper: 'del_dose_add_pc_0.75',
@@ -92,6 +94,16 @@ export const DATA_RESOURCES = [
       UMIC: 'top',
       LMIC: 'bottom',
       LIC: 'center',
+    },
+    metricOptions: ['mean', 'median'],
+    metricOptionLabel: 'Select metric',
+    meta: {
+      mean: {
+        label: 'Average (weighted)',
+      },
+      median: {
+        label: 'Average (median)',
+      },
     },
   },
   {
@@ -120,6 +132,7 @@ export const DATA_RESOURCES = [
     xAxisLabel: 'Date',
     yAxisLabel: 'Daily vaccination rate',
     yAxisLabelAdditional: '(% of population)',
+    yMax: 3.5,
   },
   {
     key: 'uhc-coverage',
@@ -159,6 +172,45 @@ export const DATA_RESOURCES = [
     xAxisLabel: 'Universal Health Coverage index (2021)',
     yAxisLabel: 'Individuals with at least one dose',
     yAxisLabelAdditional: '(% of population)',
+  },
+  {
+    key: 'uhc-coverage-alt',
+    file: 'uhc-coverage.csv',
+    country_fk: 'iso',
+    type: 'scatter',
+    chartTitle:
+      'Impact of health system capacities on vaccine administration progress',
+    metrics: {
+      uhc: 'uhc_sci',
+      one_dose_2021: 'cov_total_a1d_2021',
+      one_dose_2022: 'cov_total_a1d_2022',
+    },
+    yDefault: 'uhc',
+    xDefault: 'one_dose_2022',
+    metricOptions: ['one_dose_2021', 'one_dose_2022'],
+    metricOptionLabel: 'Select time',
+    hintMetricOptionLabel:
+      'Individuals with at least one dose (% of population)',
+    keyCategories: 'INCOME',
+    meta: {
+      uhc: {
+        updated: '01/05/2023',
+        sourceURL: 'https://data.who.int/indicators/i/9A706FD',
+        source: 'UHC service coverage index',
+        label: 'UHC Index (2021)',
+      },
+      one_dose_2021: {
+        date: '06/2021',
+        label: 'June 2021',
+      },
+      one_dose_2022: {
+        date: '06/2022',
+        label: 'June 2022',
+      },
+    },
+    yAxisLabel: 'Universal Health Coverage index (2021)',
+    xAxisLabel: 'Individuals with at least one dose',
+    xAxisLabelAdditional: '(% of population)',
   },
   {
     key: 'vaccine-supply',
