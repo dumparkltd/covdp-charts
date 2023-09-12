@@ -87,7 +87,7 @@ export const DATA_RESOURCES = [
       lower: 'del_dose_add_pc_0.25',
       upper: 'del_dose_add_pc_0.75',
     },
-    keyCategories: 'INCOME',
+    keyCategories: 'INCOME_GROUP',
     labelPositions: {
       HIC: 'center',
       UMIC: 'top',
@@ -95,13 +95,13 @@ export const DATA_RESOURCES = [
       LIC: 'center',
     },
     metricOptions: ['mean', 'median'],
-    metricOptionLabel: 'Select metric',
+    metricOptionLabel: 'Select country group average',
     meta: {
       mean: {
-        label: 'Average (weighted)',
+        label: 'Weighted (by population)',
       },
       median: {
-        label: 'Average (median)',
+        label: 'Median (middle value)',
       },
     },
   },
@@ -182,12 +182,16 @@ export const DATA_RESOURCES = [
     maxValue: 10,
     maxSize: 1500000000,
     minDiamater: 2.6, // 2.2 - 10million
+    minDiamaterSmall: 2, // 2.2 - 10million
     yDefault: 'secured',
-    keyCategories: 'INCOME_SHORT',
+    keyCategories: 'INCOME',
     groupByColumn: 'income_group',
     metricOptions: ['secured', 'received', 'administered'],
     metricOptionLabel: 'Select indicator',
     metricType: 'indicator',
+    medianPosition: {
+      UMIC: 'end',
+    },
     meta: {
       secured: {
         axisLabel: 'Doses secured',
@@ -224,12 +228,18 @@ export const DATA_RESOURCES = [
     maxValue: 108,
     maxSize: 1500000000,
     minDiamater: 2.6, // 2.2 - 10million
+    minDiamaterSmall: 2, // 2.2 - 10million
     isPercentage: true,
     yDefault: 'all',
-    keyCategories: 'INCOME_SHORT',
+    keyCategories: 'INCOME',
     metricOptions: ['all', 'old', 'hcw'],
     metricOptionLabel: 'Select group',
     metricType: 'group',
+    medianPosition: {
+      UMIC: 'end',
+      LMIC: 'end',
+      LIC: 'end',
+    },
     meta: {
       all: {
         axisLabel: 'Complete primary series',
@@ -271,6 +281,18 @@ export const CATEGORIES = {
     UMIC: 'Upper Middle Income Countries',
     LMIC: 'Lower Middle Income Countries',
     LIC: 'Low Income Countries',
+  },
+  INCOME_GROUP: {
+    HIC: 'High Income Country Group',
+    UMIC: 'Upper Middle Income Country Group',
+    LMIC: 'Lower Middle Income Country Group',
+    LIC: 'Low Income Country Group',
+  },
+  INCOME_GROUP_SHORT: {
+    HIC: 'High Income Group',
+    UMIC: 'Upper Middle Income Group',
+    LMIC: 'Lower Middle Income Group',
+    LIC: 'Low Income Group',
   },
   INCOME_SHORT: {
     HIC: 'High Income',

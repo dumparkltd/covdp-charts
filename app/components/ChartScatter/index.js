@@ -35,7 +35,7 @@ const chartMargins = {
 };
 const chartMarginsSmall = {
   bottom: 20,
-  top: 5,
+  top: 7,
   right: 12,
   left: 40,
 };
@@ -95,7 +95,7 @@ export function ChartScatter({
           countries={countries}
         />
       </Box>
-      <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
+      <AxisLabel axis="y" config={config} chartMargins={margins} />
       <FlexibleWidthXYPlot
         height={getChartHeight(size)}
         margin={margins}
@@ -235,7 +235,7 @@ export function ChartScatter({
           </Hint>
         )}
       </FlexibleWidthXYPlot>
-      <AxisLabel axis="x" config={config} />
+      <AxisLabel axis="x" config={config} chartMargins={margins} />
       <Box margin={{ left: `${margins.left}px` }}>
         <Box margin={{ top: 'medium' }}>
           <KeyCategoryMarkers config={config} />

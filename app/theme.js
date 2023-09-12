@@ -9,7 +9,7 @@ export const SIZES = {
     xxlarge: 480,
   },
   timelineSimpleChartHeight: {
-    xsmall: 350,
+    xsmall: 200,
     small: 420,
     medium: 440,
     large: 460,
@@ -17,7 +17,7 @@ export const SIZES = {
     xxlarge: 480,
   },
   timelinePeakChartHeight: {
-    xsmall: 300,
+    xsmall: 220,
     small: 420,
     medium: 440,
     large: 460,
@@ -25,7 +25,7 @@ export const SIZES = {
     xxlarge: 480,
   },
   beeswarmChartHeight: {
-    xsmall: 350,
+    xsmall: 220,
     small: 420,
     medium: 440,
     large: 460,

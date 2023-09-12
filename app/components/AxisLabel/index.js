@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Text } from 'grommet';
+import { Text, Box, ResponsiveContext } from 'grommet';
+
+import { isMinSize } from 'utils/responsive';
 
 // const XAxisLabelWrap = styled.div`
 //   margin-bottom: 10px;
@@ -16,18 +18,23 @@ import { Text } from 'grommet';
 const getWidthPx = margin => `${margin * 2}px`;
 
 // prettier-ignore
-const AxisLabelWrap = styled.div`
+const AxisLabelWrap = styled(p => <Box {...p} />)`
   pointer-events: none;
-  margin-top: 15px;
-  margin-bottom: 8px;
-  margin-left: 5px;
+  margin-top: 12px;
+  margin-bottom: 3px;
+  margin-left:  ${({ axis, chartMargins }) =>
+    axis !== 'y' && chartMargins && chartMargins.left ? chartMargins.left : 5}px;
+  margin-right:  ${({ axis, chartMargins }) =>
+    axis !== 'y' && chartMargins && chartMargins.right ? chartMargins.right : 5}px;
   line-height: 12px;
-  text-align: ${({ axis }) => axis === 'x' ? 'center' : 'auto'};
   @media (min-width: ${({ theme }) => theme.breakpointsMin.medium}) {
-    margin-left: 0;
+    margin-top: 15px;
+    margin-bottom: 8px;
     text-align: center;
-    width: ${({ axis, marginLeft }) =>
-    axis === 'y' && marginLeft ? getWidthPx(marginLeft) : 'auto'};
+    width: ${({ axis, chartMargins }) =>
+    axis === 'y' && chartMargins && chartMargins.left
+      ? getWidthPx(chartMargins.left)
+      : 'auto'};
   }
 `;
 const AxisText = styled(p => <Text size="xsmall" {...p} />)`
@@ -36,7 +43,8 @@ const AxisText = styled(p => <Text size="xsmall" {...p} />)`
   color: #041733;
 `;
 
-export function AxisLabel({ chartMarginLeft, config, axis }) {
+export function AxisLabel({ chartMargins, config, axis }) {
+  const size = useContext(ResponsiveContext);
   const {
     yAxisLabel,
     xAxisLabel,
@@ -56,21 +64,28 @@ export function AxisLabel({ chartMarginLeft, config, axis }) {
     labelAdd = xAxisLabelAdditional;
   }
   return (
-    <AxisLabelWrap axis={axis} marginLeft={chartMarginLeft}>
-      <div>
+    <AxisLabelWrap
+      direction={isMinSize(size, 'medium') ? 'column' : 'row'}
+      justify={axis === 'x' ? 'center' : 'start'}
+      wrap={!isMinSize(size, 'medium')}
+      axis={axis}
+      chartMargins={chartMargins}
+    >
+      <Box>
         <AxisText>{label}</AxisText>
-      </div>
+      </Box>
+      {!isMinSize(size, 'medium') && <span>&nbsp;</span>}
       {labelAdd && (
-        <div>
+        <Box>
           <AxisText>{labelAdd}</AxisText>
-        </div>
+        </Box>
       )}
     </AxisLabelWrap>
   );
 }
 
 AxisLabel.propTypes = {
-  chartMarginLeft: PropTypes.number,
+  chartMargins: PropTypes.object,
   config: PropTypes.object,
   axis: PropTypes.string,
 };

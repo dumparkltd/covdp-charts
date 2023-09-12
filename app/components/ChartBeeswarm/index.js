@@ -126,9 +126,15 @@ export function ChartBeeswarm({
   const chartHeight = getChartHeight(size);
   const maxHeight = chartHeight - margins.top - margins.bottom;
   const maxWidth = chartWidth - margins.left - margins.right;
-  const minDiameter = config.minDiamater || 2.2; // in px scales to 10million
-  const maxDiameter = Math.min(maxHeight * 0.06, maxWidth * 0.05); // px
-  const spaceRightFinal = target ? spaceRightWithTarget : spaceRight;
+  let minDiameter = config.minDiamater || 2.2; // in px scales to 10million
+  if (!isMinSize(size, 'medium')) {
+    minDiameter = config.minDiamaterSmall || 2; // in px scales to 10million
+  }
+  const maxDiameter = isMinSize(size, 'medium')
+    ? Math.min(maxHeight * 0.06, maxWidth * 0.05)
+    : Math.min(maxHeight * 0.05, maxWidth * 0.05); // px
+  const spaceRightFinal =
+    isMinSize(size, 'medium') && target ? spaceRightWithTarget : spaceRight;
 
   const nodes =
     data &&
@@ -206,7 +212,7 @@ export function ChartBeeswarm({
           yAxisLabel: config.meta[metric].axisLabel,
           yAxisLabelAdditional: config.meta[metric].axisLabelAdditional,
         }}
-        chartMarginLeft={margins.left}
+        chartMargins={margins}
       />
 
       <FlexibleWidthXYPlot
@@ -326,33 +332,48 @@ export function ChartBeeswarm({
             );
           })}
         {medians &&
-          isMinSize(size, 'medium') &&
           Object.keys(medians).map(groupId => {
             const groupIndex = Object.keys(groups).indexOf(groupId);
-            const x = scaleX(groupIndex + 0.5);
+            let x = scaleX(groupIndex + 0.5);
+            let labelAnchorX;
+            let xOffset;
+            if (
+              isMinSize(size, 'small') ||
+              !config.medianPosition ||
+              !config.medianPosition[groupId] ||
+              config.medianPosition[groupId] === 'start'
+            ) {
+              labelAnchorX = 'start';
+              xOffset = isMinSize(size, 'small') ? 5 : 2;
+              x += maxOffset * 1.2;
+            } else {
+              labelAnchorX = config.medianPosition[groupId];
+              xOffset = -2;
+              x -= maxOffset * 1.2;
+            }
             return (
               <LabelSeries
                 key={groupId}
                 animation
                 data={[
                   {
-                    x: x + maxOffset * 1.2,
+                    x,
                     y: scaleY(medians[groupId]),
                     label: formatNumberLabel({
                       value: medians[groupId],
                       isPercentage: config.isPercentage,
                     }),
-                    xOffset: 5,
+                    xOffset,
                   },
                 ]}
                 style={{
                   fontFamily: 'ABCMonument',
                   fill: '#041733',
-                  fontSize: 12,
+                  fontSize: isMinSize(size, 'small') ? 12 : 11,
                   opacity: 1,
                   maxWidth: '30px',
                 }}
-                labelAnchorX="start"
+                labelAnchorX={labelAnchorX}
                 labelAnchorY="middle"
               />
             );
@@ -460,15 +481,11 @@ export function ChartBeeswarm({
           </Hint>
         )}
       </FlexibleWidthXYPlot>
-      <AxisLabel axis="x" config={config} />
+      <AxisLabel axis="x" config={config} chartMargins={margins} />
       {!isMinSize(size, 'medium') && (
-        <Box margin={{ left: 'small' }} gap="small">
+        <Box margin={{ left: `${margins.left}px` }} gap="small">
           <Box margin={{ top: 'medium' }}>
-            <KeyCategoryMarkers
-              config={config}
-              includeGroupIDs
-              medians={medians}
-            />
+            <KeyCategoryMarkers config={config} includeGroupIDs />
           </Box>
           {medians && <KeyMedian />}
           {target && <KeyTarget target={target} strokeDasharray={[8, 4]} />}

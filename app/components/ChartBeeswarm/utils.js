@@ -87,7 +87,7 @@ export const getNodePosition = (nodes, { maxWidth, maxHeight }) => {
       d3
         .forceY()
         .y(d => d.y)
-        .strength(0.8),
+        .strength(1.1),
     )
     .force(
       'collide',

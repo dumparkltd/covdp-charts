@@ -63,10 +63,13 @@ const Styled = styled.div`
 `;
 const SeriesLabelWrap = styled.div`
   max-width: ${({ marginRight }) => marginRight}px;
-  padding-left: 9px;
+  padding-left: 3px;
   transform: translateY(
     ${({ value }) => (value.position === 'center' ? 50 : 0)}%
   );
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
+    padding-left: 9px;
+  }
 `;
 const SeriesLabel = styled.div`
   font-family: 'ABCMonument';
@@ -167,7 +170,9 @@ export function ChartTimelineGroups({
   }
 
   const xMin = xRange[0] - monthInMS;
-  const xMax = xRange[1] + monthInMS;
+  const xMax = isMinSize(size, 'medium')
+    ? xRange[1] + monthInMS
+    : xRange[1] + 2 * monthInMS;
   const yMax = Math.ceil(yRange[1]) + 0.2;
   // prettier-ignore
   const axisNodes = data
@@ -201,7 +206,7 @@ export function ChartTimelineGroups({
           <Options metric={metric} setMetric={setMetric} config={config} />
         </Box>
       )}
-      <AxisLabel axis="y" config={config} chartMarginLeft={margins.left} />
+      <AxisLabel axis="y" config={config} chartMargins={margins} />
       <FlexibleWidthXYPlot
         xType="time"
         height={getChartHeight(size)}
@@ -242,7 +247,6 @@ export function ChartTimelineGroups({
         )}
         {seriesNodes &&
           labelData &&
-          isMinSize(size, 'medium') &&
           labelData.map(label => (
             <Hint
               key={label.id}
@@ -254,9 +258,15 @@ export function ChartTimelineGroups({
             >
               <SeriesLabelWrap
                 value={label}
-                marginRight={margins.right + chartPaddingRight}
+                marginRight={
+                  isMinSize(size, 'medium')
+                    ? margins.right + chartPaddingRight
+                    : margins.right + chartPaddingRight * 2
+                }
               >
-                <SeriesLabel>{label.label}</SeriesLabel>
+                <SeriesLabel>
+                  {isMinSize(size, 'medium') ? label.label : label.id}
+                </SeriesLabel>
               </SeriesLabelWrap>
             </Hint>
           ))}
@@ -387,11 +397,11 @@ export function ChartTimelineGroups({
           </Hint>
         )}
       </FlexibleWidthXYPlot>
-      <AxisLabel axis="x" config={config} />
+      <AxisLabel axis="x" config={config} chartMargins={margins} />
       <Box margin={{ left: `${margins.left}px` }}>
         {!isMinSize(size, 'medium') && config.keyCategories && (
           <Box margin={{ top: 'medium' }}>
-            <KeyCategoryMarkers config={config} />
+            <KeyCategoryMarkers config={config} includeGroupIDs />
           </Box>
         )}
         {metric === 'median' && range && (
