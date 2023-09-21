@@ -39,7 +39,7 @@ const AxisLabelWrap = styled(p => <Box {...p} />)`
 `;
 const AxisText = styled(p => <Text size="xsmall" {...p} />)`
   text-transform: uppercase;
-  font-family: 'ABCMonumentMonoBold';
+  font-family: 'roboto-mono-bold', monospace;
   color: #041733;
 `;
 

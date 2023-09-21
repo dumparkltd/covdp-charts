@@ -44,14 +44,15 @@ const Styled = styled(p => (
 `;
 
 const MetricValue = styled(p => <Text size="xsmall" {...p} />)`
-  font-family: 'ABCMonumentMonoBold';
+  font-family: 'roboto-mono-bold', monospace;
 `;
 const GroupLabel = styled(p => <Text size="xsmall" {...p} />)`
-  font-family: 'ABCMonumentBold';
+  font-family: 'aktiv-grotesk';
+  font-weight: bold;
 `;
 const MetricLabel = styled(p => <Text size="xsmall" {...p} />)``;
 const MetricValueSecondary = styled(p => <Text size="xxsmall" {...p} />)`
-  font-family: 'ABCMonumentMonoBold';
+  font-family: 'roboto-mono-bold', monospace;
 `;
 const MetricLabelSecondary = styled(p => <Text size="xxsmall" {...p} />)``;
 const Title = styled(p => <Text {...p} />)`

@@ -221,7 +221,7 @@ export function ChartBeeswarm({
         style={{
           fill: 'transparent',
           cursor: 'pointer',
-          fontFamily: 'ABCMonumentMonoBold',
+          fontFamily: 'roboto-mono-bold',
         }}
         onMouseLeave={() => setMouseOver(null)}
         onClick={() => {
@@ -319,7 +319,7 @@ export function ChartBeeswarm({
                   },
                 ]}
                 style={{
-                  fontFamily: 'ABCMonument',
+                  fontFamily: 'aktiv-grotesk',
                   stroke: '#F6F7FC',
                   strokeWidth: '6px',
                   fontSize: 12,
@@ -367,7 +367,7 @@ export function ChartBeeswarm({
                   },
                 ]}
                 style={{
-                  fontFamily: 'ABCMonument',
+                  fontFamily: 'aktiv-grotesk',
                   fill: '#041733',
                   fontSize: isMinSize(size, 'small') ? 12 : 11,
                   opacity: 1,
@@ -389,7 +389,7 @@ export function ChartBeeswarm({
               },
             ]}
             style={{
-              fontFamily: 'ABCMonument',
+              fontFamily: 'aktiv-grotesk',
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,
@@ -411,7 +411,7 @@ export function ChartBeeswarm({
               },
             ]}
             style={{
-              fontFamily: 'ABCMonument',
+              fontFamily: 'aktiv-grotesk',
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,

@@ -150,7 +150,7 @@ const theme = {
       },
     },
     font: {
-      family: 'ABCMonument',
+      family: 'aktiv-grotesk',
     },
     colors: {
       black: '#041733',
