@@ -67,12 +67,14 @@ export const DATA_RESOURCES = [
   {
     key: 'doses-delivered',
     file: 'doses-delivered.csv',
+    xAxisLabel: 'Time',
+    yAxisLabel: 'Doses received',
+    yAxisLabelAdditional: '(per capita)',
     group_fk: 'income_group',
     metrics: {
-      received: 'del_dose_add_pc',
+      mean: 'del_dose_add_pc',
     },
-    keyCategories: 'INCOME',
-    yAxisLabel: 'Doses received (by capita)',
+    keyCategories: 'INCOME_GROUP',
   },
   {
     key: 'doses-delivered-median',

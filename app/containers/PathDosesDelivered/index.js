@@ -4,7 +4,7 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 // import { FormattedMessage } from 'react-intl';
@@ -20,11 +20,13 @@ import { getDataByKey, getDependenciesReady } from 'containers/App/selectors';
 
 import ChartTimelineGroups from 'components/ChartTimelineGroups';
 
-const getChartData = ({ data, xColumn, yColumn }) =>
+const getChartData = ({ data, xColumn, yColumn, yColumnLower, yColumnUpper }) =>
   data.map(d => ({
     ...d,
     xValue: d[xColumn],
     yValue: parseFloat(d[yColumn]),
+    yValueUpper: parseFloat(d[yColumnUpper]),
+    yValueLower: parseFloat(d[yColumnLower]),
   }));
 
 const DEPENDENCIES = ['doses-delivered'];
@@ -36,7 +38,9 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
     // kick off loading of data
     onLoadData();
   }, []);
-
+  const [mouseOver, setMouseOver] = useState(null);
+  const [metric, setMetric] = useState('mean');
+  const [seriesMouseOver, setSeriesMouseOver] = useState(null);
   const config = DATA_RESOURCES.find(r => r.key === 'doses-delivered');
   // const [mouseOver, setMouseOver] = useState(null);
   const { metrics } = config;
@@ -45,9 +49,10 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
     getChartData({
       data,
       xColumn: 'datetime',
-      yColumn: metrics.received,
+      yColumn: metrics[metric],
+      yColumnLower: metric === 'median' ? metrics.lower : null,
+      yColumnUpper: metric === 'median' ? metrics.upper : null,
     });
-
   return (
     <article>
       <Helmet>
@@ -63,8 +68,16 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
             label: 'WHO target: 1.4 doses per capita',
           }}
           seriesColumn="income_group"
-          yAxisLabel="Doses delivered per capita"
-          seriesLabels={CATEGORIES.INCOME}
+          seriesLabels={CATEGORIES.INCOME_GROUP}
+          seriesLabelsPosition={
+            metric === 'median' ? config.labelPositions : null
+          }
+          setMouseOver={setMouseOver}
+          mouseOver={mouseOver}
+          setSeriesMouseOver={setSeriesMouseOver}
+          seriesMouseOver={seriesMouseOver}
+          metric={metric}
+          setMetric={setMetric}
         />
       </div>
     </article>
