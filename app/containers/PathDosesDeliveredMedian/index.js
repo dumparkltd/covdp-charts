@@ -60,6 +60,9 @@ export function PathDosesDeliveredMedian({ onLoadData, dataReady, data }) {
         <meta name="description" content="PathDosesDeliveredMedian" />
       </Helmet>
       <div>
+        <h1>
+          Do not use. Use simple chart instead (showing weighted average only)
+        </h1>
         <ChartTimelineGroups
           data={chartData}
           config={config}
