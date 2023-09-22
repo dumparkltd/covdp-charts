@@ -1,5 +1,5 @@
 /*
- * PathVaccineSupply
+ * PathPopulationGroupsMedian
  *
  * This is the first thing users see of our App, at the '/' route
  */
@@ -83,7 +83,7 @@ const getChartData = ({
   return countriesData;
 };
 
-export function PathPopulationGroups({
+export function PathPopulationGroupsMedian({
   onLoadData,
   countries,
   dataReady,
@@ -116,7 +116,7 @@ export function PathPopulationGroups({
     <article>
       <Helmet>
         <title>{config && config.key}</title>
-        <meta name="description" content="PathPopulationGroups" />
+        <meta name="description" content="PathPopulationGroupsMedian" />
       </Helmet>
       <div>
         <ChartBeeswarm
@@ -129,7 +129,7 @@ export function PathPopulationGroups({
           highlight={highlight}
           config={config}
           groups={CATEGORIES.INCOME_SHORT}
-          showGroupAverage
+          showGroupMedian
           countries={countries}
         />
       </div>
@@ -137,7 +137,7 @@ export function PathPopulationGroups({
   );
 }
 
-PathPopulationGroups.propTypes = {
+PathPopulationGroupsMedian.propTypes = {
   onLoadData: PropTypes.func,
   countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
@@ -168,4 +168,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(injectIntl(PathPopulationGroups));
+)(injectIntl(PathPopulationGroupsMedian));

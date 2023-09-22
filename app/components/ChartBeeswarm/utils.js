@@ -5,7 +5,7 @@ import forceBoundary from 'd3-force-boundary';
 import { DATACOLORS } from 'containers/App/constants';
 import { SIZES } from 'theme';
 
-import { getMedian } from 'utils/charts';
+import { getMedian, getAverage } from 'utils/charts';
 
 export const scaleValue = ({ maxHeight, maxValue }) =>
   d3
@@ -120,6 +120,16 @@ export const getGroupMedians = data => {
     (memo, groupId) => ({
       ...memo,
       [groupId]: getMedian(groups[groupId]),
+    }),
+    {},
+  );
+};
+export const getGroupAverages = data => {
+  const groups = groupBy(data, d => d.group);
+  return Object.keys(groups).reduce(
+    (memo, groupId) => ({
+      ...memo,
+      [groupId]: getAverage(groups[groupId], 'value', 'sizeRaw'),
     }),
     {},
   );

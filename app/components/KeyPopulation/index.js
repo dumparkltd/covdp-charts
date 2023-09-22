@@ -20,8 +20,8 @@ export function KeyPopulation({ scaleSize, minValue }) {
   const size = useContext(ResponsiveContext);
   return (
     <Box
-      direction="row"
-      align="center"
+      direction={isMinSize(size, 'small') ? 'row' : 'column'}
+      align={isMinSize(size, 'small') ? 'center' : 'start'}
       gap="small"
       justify={isMinSize(size, 'medium') ? 'center' : 'start'}
     >
@@ -38,7 +38,7 @@ export function KeyPopulation({ scaleSize, minValue }) {
             <KeyLabel>{pop.label}</KeyLabel>
           </Box>
         ))}
-      {isMinSize(size, 'small') && minValue && (
+      {minValue && (
         <Box
           direction="row"
           gap="xsmall"
@@ -46,7 +46,7 @@ export function KeyPopulation({ scaleSize, minValue }) {
           align="center"
         >
           <Circle sizePx={scaleSize(minValue * 1000000) * 2} />
-          <KeyLabel>{`${minValue} million (and less)`}</KeyLabel>
+          <KeyLabel>{`${minValue} million people (and less)`}</KeyLabel>
         </Box>
       )}
     </Box>

@@ -1,5 +1,5 @@
 /*
- * PathVaccineSupply
+ * PathVaccineSupplyMedian
  *
  * This is the first thing users see of our App, at the '/' route
  */
@@ -13,7 +13,6 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectSaga } from 'utils/injectSaga';
-import { lowerCase } from 'utils/string';
 import saga from 'containers/App/saga';
 import { DATA_RESOURCES, CATEGORIES } from 'containers/App/constants';
 import { loadDataIfNeeded } from 'containers/App/actions';
@@ -24,10 +23,9 @@ import {
 } from 'containers/App/selectors';
 
 import ChartBeeswarm from 'components/ChartBeeswarm';
-
 import { formatNumberLabel } from 'utils/charts';
 
-const DEPENDENCIES = ['countries', 'population-groups'];
+const DEPENDENCIES = ['countries', 'vaccine-supply'];
 
 const getChartData = ({
   countries,
@@ -46,29 +44,28 @@ const getChartData = ({
       countryData[metricColumn].trim !== ''
     ) {
       const index = Object.keys(CATEGORIES.INCOME).indexOf(c[groupByColumn]);
-      const population = c[config.meta[metric].popColumn];
       if (index >= 0) {
         return [
           ...m,
           {
             id: c.iso,
             label: c.name_short,
-            sizeRaw: parseInt(population, 10),
+            sizeRaw: parseInt(c.pop, 10),
             group: c[groupByColumn],
             value: Math.min(parseFloat(countryData[metricColumn]), 100),
             groupIndex: index + 0.5,
             hint: [
               {
-                label: config.meta[metric].hintLabel,
+                label: config.meta[metric].axisLabel,
                 value: formatNumberLabel({
                   value: countryData[metricColumn],
-                  isPercentage: true,
+                  intl,
                 }),
               },
               {
-                label: `Population (${lowerCase(config.meta[metric].label)})`,
+                label: 'Population',
                 value: formatNumberLabel({
-                  value: c[config.meta[metric].popColumn],
+                  value: c.pop,
                   intl,
                 }),
               },
@@ -83,7 +80,7 @@ const getChartData = ({
   return countriesData;
 };
 
-export function PathPopulationGroups({
+export function PathVaccineSupplyMedian({
   onLoadData,
   countries,
   dataReady,
@@ -96,7 +93,7 @@ export function PathPopulationGroups({
     // kick off loading of data
     onLoadData();
   }, []);
-  const config = DATA_RESOURCES.find(r => r.key === 'population-groups');
+  const config = DATA_RESOURCES.find(r => r.key === 'vaccine-supply');
   const { metrics } = config;
   const [metric, setMetric] = useState(config.yDefault);
   const [highlight, setHighlight] = useState(null);
@@ -109,14 +106,14 @@ export function PathPopulationGroups({
       metric,
       config,
       metricColumn: metrics[metric],
-      groupByColumn: 'income_group',
+      groupByColumn: config.groupByColumn,
       intl,
     });
   return (
     <article>
       <Helmet>
         <title>{config && config.key}</title>
-        <meta name="description" content="PathPopulationGroups" />
+        <meta name="description" content="PathVaccineSupplyMedian" />
       </Helmet>
       <div>
         <ChartBeeswarm
@@ -128,8 +125,13 @@ export function PathPopulationGroups({
           setHighlight={setHighlight}
           highlight={highlight}
           config={config}
+          target={{
+            value: 1.4,
+            label: 'WHO target:',
+            label2: '1.4 doses per capita',
+          }}
           groups={CATEGORIES.INCOME_SHORT}
-          showGroupAverage
+          showGroupMedian
           countries={countries}
         />
       </div>
@@ -137,7 +139,7 @@ export function PathPopulationGroups({
   );
 }
 
-PathPopulationGroups.propTypes = {
+PathVaccineSupplyMedian.propTypes = {
   onLoadData: PropTypes.func,
   countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
@@ -147,7 +149,7 @@ PathPopulationGroups.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   countries: state => getDataByKey(state, 'countries'),
-  data: state => getDataByKey(state, 'population-groups'),
+  data: state => getDataByKey(state, 'vaccine-supply'),
   // data: state => getData(state),
   dataReady: state => getDependenciesReady(state, DEPENDENCIES),
 });
@@ -168,4 +170,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(injectIntl(PathPopulationGroups));
+)(injectIntl(PathVaccineSupplyMedian));

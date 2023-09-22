@@ -24,6 +24,7 @@ export const PATHS = {
   // cumulative doses delivered over time by income group: line-chart
   // indicator: del_dose_add_pc
   VAX_SUPPLY: 'vaccine-supply',
+  VAX_SUPPLY_MEDIAN: 'vaccine-supply-median',
   // vaccine supply by income group for each country: beeswarm plots
   // indicators (select one):
   // - secured: secured_vaccines_pc
@@ -39,6 +40,7 @@ export const PATHS = {
   // indicators:
   // - dvr_4wk_td_per
   POP_GROUPS: 'population-groups',
+  POP_GROUPS_MEDIAN: 'population-groups-median',
   // % fully vaccinated by population group and by income group for each country: beeswarm plots
   // indicators:
   // - all people: cov_total_fv
@@ -183,17 +185,14 @@ export const DATA_RESOURCES = [
     },
     maxValue: 10,
     maxSize: 1500000000,
-    minDiamater: 2.6, // 2.2 - 10million
-    minDiamaterSmall: 2, // 2.2 - 10million
+    minDiameter: 2.6, // 2.2 - 10million
+    minDiameterSmall: 2, // 2.2 - 10million
     yDefault: 'secured',
     keyCategories: 'INCOME',
     groupByColumn: 'income_group',
     metricOptions: ['secured', 'received', 'administered'],
     metricOptionLabel: 'Select indicator',
     metricType: 'indicator',
-    medianPosition: {
-      UMIC: 'end',
-    },
     meta: {
       secured: {
         axisLabel: 'Doses secured',
@@ -229,8 +228,8 @@ export const DATA_RESOURCES = [
     groupByColumn: 'income_group',
     maxValue: 108,
     maxSize: 1500000000,
-    minDiamater: 2.6, // 2.2 - 10million
-    minDiamaterSmall: 2, // 2.2 - 10million
+    minDiameter: 2.6, // 2.2 - 10million
+    minDiameterSmall: 2, // 2.2 - 10million
     isPercentage: true,
     yDefault: 'all',
     keyCategories: 'INCOME',
@@ -324,9 +323,5 @@ export const POPULATION_KEY_VALUES = [
   {
     label: '1.5 billion people',
     value: 1500,
-  },
-  {
-    label: '150 million',
-    value: 150,
   },
 ];

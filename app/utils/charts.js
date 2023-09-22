@@ -26,3 +26,13 @@ export const getMedian = (data, attribute) => {
     ? (sortedValues[middle - 1] + sortedValues[middle]) / 2
     : sortedValues[Math.floor(middle)];
 };
+export const getAverage = (data, valAttribute, weightAttribute) => {
+  const [totalValue, totalWeight] = data.reduce(
+    (memo, d) => [
+      memo[0] + d[valAttribute || 'value'] * d[weightAttribute || 'weight'],
+      memo[1] + d[weightAttribute || 'weight'],
+    ],
+    [0, 0],
+  );
+  return Math.round((totalValue / totalWeight) * 10) / 10;
+};

@@ -26,6 +26,7 @@ import NoDataHint from 'components/NoDataHint';
 import KeyCategoryMarkers from 'components/KeyCategoryMarkers';
 import KeyTarget from 'components/KeyTarget';
 import KeyMedian from 'components/KeyMedian';
+import KeyAverage from 'components/KeyAverage';
 import KeyPopulation from 'components/KeyPopulation';
 import Options from 'components/Options';
 import AxisLabel from 'components/AxisLabel';
@@ -42,6 +43,7 @@ import {
   scaleGroup,
   scaleSize,
   getGroupMedians,
+  getGroupAverages,
 } from './utils';
 
 const chartMargins = {
@@ -96,6 +98,7 @@ export function ChartBeeswarm({
   setMouseOver,
   mouseOver,
   showGroupMedian,
+  showGroupAverage,
   groups,
   countries,
 }) {
@@ -126,9 +129,9 @@ export function ChartBeeswarm({
   const chartHeight = getChartHeight(size);
   const maxHeight = chartHeight - margins.top - margins.bottom;
   const maxWidth = chartWidth - margins.left - margins.right;
-  let minDiameter = config.minDiamater || 2.2; // in px scales to 10million
+  let minDiameter = config.minDiameter || 2.2; // in px scales to 10million
   if (!isMinSize(size, 'medium')) {
-    minDiameter = config.minDiamaterSmall || 2; // in px scales to 10million
+    minDiameter = config.minDiameterSmall || 2; // in px scales to 10million
   }
   const maxDiameter = isMinSize(size, 'medium')
     ? Math.min(maxHeight * 0.06, maxWidth * 0.05)
@@ -186,6 +189,10 @@ export function ChartBeeswarm({
   let medians;
   if (showGroupMedian && config.groupByColumn) {
     medians = getGroupMedians(data);
+  }
+  let averages;
+  if (showGroupAverage && config.groupByColumn) {
+    averages = getGroupAverages(data);
   }
 
   const maxOffset =
@@ -378,6 +385,108 @@ export function ChartBeeswarm({
               />
             );
           })}
+        {averages &&
+          Object.keys(averages).map(groupId => {
+            const groupIndex = Object.keys(groups).indexOf(groupId);
+            const x = scaleX(groupIndex + 0.5);
+            return (
+              <LineSeries
+                key={groupId}
+                animation
+                data={[
+                  {
+                    x: x - maxOffset * 1.2,
+                    y: scaleY(averages[groupId]),
+                  },
+                  {
+                    x: x + maxOffset * 1.2,
+                    y: scaleY(averages[groupId]),
+                  },
+                ]}
+                style={{ stroke: '#041733', strokeWidth: 1, opacity: 1 }}
+              />
+            );
+          })}
+        {averages &&
+          isMinSize(size, 'medium') &&
+          Object.keys(averages).map(groupId => {
+            const groupIndex = Object.keys(groups).indexOf(groupId);
+            const x = scaleX(groupIndex + 0.5);
+            return (
+              <LabelSeries
+                key={groupId}
+                animation
+                data={[
+                  {
+                    x: x + maxOffset * 1.2,
+                    y: scaleY(averages[groupId]),
+                    label: formatNumberLabel({
+                      value: averages[groupId],
+                      isPercentage: config.isPercentage,
+                    }),
+                    xOffset: 5,
+                  },
+                ]}
+                style={{
+                  fontFamily: "'aktiv-grotesk', sans-serif",
+                  stroke: '#F6F7FC',
+                  strokeWidth: '6px',
+                  fontSize: 12,
+                  opacity: 1,
+                  maxWidth: '30px',
+                }}
+                labelAnchorX="start"
+                labelAnchorY="middle"
+              />
+            );
+          })}
+        {averages &&
+          Object.keys(averages).map(groupId => {
+            const groupIndex = Object.keys(groups).indexOf(groupId);
+            let x = scaleX(groupIndex + 0.5);
+            let labelAnchorX;
+            let xOffset;
+            if (
+              isMinSize(size, 'small') ||
+              !config.medianPosition ||
+              !config.medianPosition[groupId] ||
+              config.medianPosition[groupId] === 'start'
+            ) {
+              labelAnchorX = 'start';
+              xOffset = isMinSize(size, 'small') ? 5 : 2;
+              x += maxOffset * 1.2;
+            } else {
+              labelAnchorX = config.medianPosition[groupId];
+              xOffset = -2;
+              x -= maxOffset * 1.2;
+            }
+            return (
+              <LabelSeries
+                key={groupId}
+                animation
+                data={[
+                  {
+                    x,
+                    y: scaleY(averages[groupId]),
+                    label: formatNumberLabel({
+                      value: averages[groupId],
+                      isPercentage: config.isPercentage,
+                    }),
+                    xOffset,
+                  },
+                ]}
+                style={{
+                  fontFamily: "'aktiv-grotesk', sans-serif",
+                  fill: '#041733',
+                  fontSize: isMinSize(size, 'small') ? 12 : 11,
+                  opacity: 1,
+                  maxWidth: '30px',
+                }}
+                labelAnchorX={labelAnchorX}
+                labelAnchorY="middle"
+              />
+            );
+          })}
         {target && isMinSize(size, 'medium') && (
           <LabelSeries
             data={[
@@ -488,6 +597,7 @@ export function ChartBeeswarm({
             <KeyCategoryMarkers config={config} includeGroupIDs />
           </Box>
           {medians && <KeyMedian />}
+          {averages && <KeyAverage />}
           {target && <KeyTarget target={target} strokeDasharray={[8, 4]} />}
           {scaleZ && (
             <Box margin={{ top: 'small' }}>
@@ -508,6 +618,7 @@ export function ChartBeeswarm({
             <KeyPopulation scaleSize={scaleZ} minValue={minValue} />
           )}
           {medians && <KeyMedian />}
+          {averages && <KeyAverage />}
         </Box>
       )}
     </Styled>
@@ -526,6 +637,7 @@ ChartBeeswarm.propTypes = {
   highlight: PropTypes.string,
   setHighlight: PropTypes.func,
   showGroupMedian: PropTypes.bool,
+  showGroupAverage: PropTypes.bool,
   countries: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 };
 

@@ -131,7 +131,7 @@ export function PathVaccineSupply({
             label2: '1.4 doses per capita',
           }}
           groups={CATEGORIES.INCOME_SHORT}
-          showGroupMedian
+          showGroupAverage
           countries={countries}
         />
       </div>

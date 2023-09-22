@@ -11,7 +11,9 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import PathVaccineSupply from 'containers/PathVaccineSupply/Loadable';
+import PathVaccineSupplyMedian from 'containers/PathVaccineSupplyMedian/Loadable';
 import PathPopulationGroups from 'containers/PathPopulationGroups/Loadable';
+import PathPopulationGroupsMedian from 'containers/PathPopulationGroupsMedian/Loadable';
 import PathUHC from 'containers/PathUHC/Loadable';
 import PathDosesDelivered from 'containers/PathDosesDelivered/Loadable';
 import PathDosesDeliveredMedian from 'containers/PathDosesDeliveredMedian/Loadable';
@@ -38,7 +40,15 @@ export default function App() {
       </Helmet>
       <Switch>
         <Route path={`/${PATHS.VAX_SUPPLY}`} component={PathVaccineSupply} />
+        <Route
+          path={`/${PATHS.VAX_SUPPLY_MEDIAN}`}
+          component={PathVaccineSupplyMedian}
+        />
         <Route path={`/${PATHS.POP_GROUPS}`} component={PathPopulationGroups} />
+        <Route
+          path={`/${PATHS.POP_GROUPS_MEDIAN}`}
+          component={PathPopulationGroupsMedian}
+        />
         <Route path={`/${PATHS.DOSES_ADMIN}`} component={PathDosesAdmin} />
         <Route path={`/${PATHS.UHC_COVERAGE}`} component={PathUHC} />
         <Route
