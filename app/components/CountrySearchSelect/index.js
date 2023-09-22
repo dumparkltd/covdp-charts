@@ -47,7 +47,8 @@ const ButtonOption = styled(p => <Button plain {...p} />)`
 const ButtonSelected = styled(p => <Button plain {...p} />)`
   fill: transparent;
   cursor: pointer;
-  font-family: 'ABCMonumentBold';
+  font-family: 'aktiv-grotesk', sans-serif;
+  font-weight: 700;
   padding: 3px 2px 3px 6px;
   color: ${({ theme, active }) =>
     active ? theme.global.colors.white : theme.global.colors.black};

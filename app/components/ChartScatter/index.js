@@ -184,7 +184,7 @@ export function ChartScatter({
               },
             ]}
             style={{
-              fontFamily: 'aktiv-grotesk',
+              fontFamily: "'aktiv-grotesk', sans-serif",
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,

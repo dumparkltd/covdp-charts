@@ -72,7 +72,7 @@ const SeriesLabelWrap = styled.div`
   }
 `;
 const SeriesLabel = styled.div`
-  font-family: 'aktiv-grotesk';
+  font-family: 'aktiv-grotesk', sans-serif;
   color: #041733;
   font-size: 13px;
   line-height: 15px;
@@ -347,7 +347,7 @@ export function ChartTimelineGroups({
               },
             ]}
             style={{
-              fontFamily: 'aktiv-grotesk',
+              fontFamily: "'aktiv-grotesk', sans-serif",
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,

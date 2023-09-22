@@ -39,7 +39,8 @@ const ButtonSelectMetricText = styled(p => <Text {...p} />)`
 const ButtonSelectMetric = styled(p => <Button plain {...p} />)`
   fill: transparent;
   cursor: ${({ active }) => active ? 'default' : 'pointer'};
-  font-family: 'ABCMonumentBold';
+  font-family: 'aktiv-grotesk', sans-serif;
+  font-weight: 700;
   padding: 3px 8px;
   color: ${({ theme, active }) =>
     active ? theme.global.colors.white : theme.global.colors.black};
