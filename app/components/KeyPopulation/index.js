@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
+import { intlShape, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, ResponsiveContext } from 'grommet';
 
-import { POPULATION_KEY_VALUES } from 'containers/App/constants';
+// import { POPULATION_KEY_VALUES } from 'containers/App/constants';
 import { isMinSize } from 'utils/responsive';
 import KeyLabel from 'components/KeyLabel';
 
@@ -16,8 +17,30 @@ const Circle = styled.div`
   margin-top: -2px;
 `;
 
-export function KeyPopulation({ scaleSize, minValue }) {
+const roundValue = (value, digits = 2) => {
+  const length = Math.floor(Math.log10(Math.abs(value))) + 1;
+  const factor = 10 ** (length - digits);
+  return Math.ceil(value / factor) * factor;
+};
+
+const formatNumber = (value, intl) => {
+  // billions
+  if (value > 10 ** 9) {
+    return `${intl.formatNumber(value / 10 ** 9)} billion`;
+  }
+  if (value > 10 ** 6) {
+    return `${intl.formatNumber(value / 10 ** 6)} million`;
+  }
+  // if (value > 10 ** 3) {
+  //   return `${intl.formatNumber(value / 10 ** 3)} thousand`;
+  // }
+  return intl.formatNumber(value);
+};
+
+export function KeyPopulation({ scaleSize, minValue, maxValue, intl }) {
   const size = useContext(ResponsiveContext);
+  const min = roundValue(minValue);
+  const max = roundValue(maxValue);
   return (
     <Box
       direction={isMinSize(size, 'small') ? 'row' : 'column'}
@@ -25,19 +48,17 @@ export function KeyPopulation({ scaleSize, minValue }) {
       gap="small"
       justify={isMinSize(size, 'medium') ? 'center' : 'start'}
     >
-      {POPULATION_KEY_VALUES &&
-        POPULATION_KEY_VALUES.map(pop => (
-          <Box
-            key={pop.value}
-            direction="row"
-            gap="xsmall"
-            margin={{ right: isMinSize(size, 'medium') ? 'medium' : 'hair' }}
-            align="center"
-          >
-            <Circle sizePx={scaleSize(pop.value * 1000000) * 2} />
-            <KeyLabel>{pop.label}</KeyLabel>
-          </Box>
-        ))}
+      {maxValue && (
+        <Box
+          direction="row"
+          gap="xsmall"
+          margin={{ right: isMinSize(size, 'medium') ? 'medium' : 'hair' }}
+          align="center"
+        >
+          <Circle sizePx={scaleSize(max) * 2} />
+          <KeyLabel>{`${formatNumber(max, intl)} people`}</KeyLabel>
+        </Box>
+      )}
       {minValue && (
         <Box
           direction="row"
@@ -45,8 +66,8 @@ export function KeyPopulation({ scaleSize, minValue }) {
           margin={{ right: isMinSize(size, 'medium') ? 'medium' : 'hair' }}
           align="center"
         >
-          <Circle sizePx={scaleSize(minValue * 1000000) * 2} />
-          <KeyLabel>{`${minValue} million people (and less)`}</KeyLabel>
+          <Circle sizePx={scaleSize(min) * 2} />
+          <KeyLabel>{`${formatNumber(min, intl)} people (and less)`}</KeyLabel>
         </Box>
       )}
     </Box>
@@ -56,6 +77,8 @@ export function KeyPopulation({ scaleSize, minValue }) {
 KeyPopulation.propTypes = {
   scaleSize: PropTypes.func,
   minValue: PropTypes.number,
+  maxValue: PropTypes.number,
+  intl: intlShape,
 };
 
-export default KeyPopulation;
+export default injectIntl(KeyPopulation);

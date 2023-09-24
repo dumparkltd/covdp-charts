@@ -41,6 +41,7 @@ export const PATHS = {
   // - dvr_4wk_td_per
   POP_GROUPS: 'population-groups',
   POP_GROUPS_MEDIAN: 'population-groups-median',
+  POP_GROUPS_ALT: 'population-groups-alt',
   // % fully vaccinated by population group and by income group for each country: beeswarm plots
   // indicators:
   // - all people: cov_total_fv
@@ -226,7 +227,7 @@ export const DATA_RESOURCES = [
       hcw: 'cov_hcw_fv',
     },
     groupByColumn: 'income_group',
-    maxValue: 108,
+    maxValue: 105,
     maxSize: 1500000000,
     minDiameter: 2.6, // 2.2 - 10million
     minDiameterSmall: 2, // 2.2 - 10million
@@ -317,11 +318,3 @@ export const DATACOLORS = {
   UMIC: '#D67732',
   HIC: '#9B3436',
 };
-
-// in millions
-export const POPULATION_KEY_VALUES = [
-  {
-    label: '1.5 billion people',
-    value: 1500,
-  },
-];

@@ -13,6 +13,7 @@ import { Switch, Route } from 'react-router-dom';
 import PathVaccineSupply from 'containers/PathVaccineSupply/Loadable';
 import PathVaccineSupplyMedian from 'containers/PathVaccineSupplyMedian/Loadable';
 import PathPopulationGroups from 'containers/PathPopulationGroups/Loadable';
+import PathPopulationGroupsAlt from 'containers/PathPopulationGroupsAlt/Loadable';
 import PathPopulationGroupsMedian from 'containers/PathPopulationGroupsMedian/Loadable';
 import PathUHC from 'containers/PathUHC/Loadable';
 import PathDosesDelivered from 'containers/PathDosesDelivered/Loadable';
@@ -48,6 +49,10 @@ export default function App() {
         <Route
           path={`/${PATHS.POP_GROUPS_MEDIAN}`}
           component={PathPopulationGroupsMedian}
+        />
+        <Route
+          path={`/${PATHS.POP_GROUPS_ALT}`}
+          component={PathPopulationGroupsAlt}
         />
         <Route path={`/${PATHS.DOSES_ADMIN}`} component={PathDosesAdmin} />
         <Route path={`/${PATHS.UHC_COVERAGE}`} component={PathUHC} />

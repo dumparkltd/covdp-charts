@@ -197,8 +197,7 @@ export function ChartBeeswarm({
 
   const maxOffset =
     positions && d3.max(positions, p => Math.abs(scaleX(p.groupIndex) - p.x));
-  const minValue =
-    minDiameter && Math.round(scaleZ.invert(minDiameter) / 1000000);
+  const minSize = minDiameter && Math.round(scaleZ.invert(minDiameter));
 
   return (
     <Styled ref={chartRef}>
@@ -614,8 +613,12 @@ export function ChartBeeswarm({
           justify="center"
           direction="row"
         >
-          {scaleZ && minValue && (
-            <KeyPopulation scaleSize={scaleZ} minValue={minValue} />
+          {scaleZ && minSize && (
+            <KeyPopulation
+              scaleSize={scaleZ}
+              minValue={minSize}
+              maxValue={maxSize}
+            />
           )}
           {medians && <KeyMedian />}
           {averages && <KeyAverage />}
