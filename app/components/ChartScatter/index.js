@@ -69,15 +69,6 @@ export function ChartScatter({
   const medianYValue = data && medianY && getMedian(data, 'yValue');
   const medianXValue = data && medianX && getMedian(data, 'xValue');
 
-  // const forceRange = [
-  //   { x: xRange[0], y: yRange[0] },
-  //   { x: xRange[1], y: yRange[1] },
-  // ];
-  // const coverRange = [
-  //   { x: 0, y: yRange[1], y0: 0 },
-  //   { x: xRange[1], y: yRange[1], y0: 0 },
-  //   { x: xRange[1], y: 0, y0: 0 },
-  // ];
   const mouseOverNode = mouseOver && nodes.find(n => n.id === mouseOver);
   const highlightNode = highlight && nodes.find(n => n.id === highlight);
   const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
@@ -191,6 +182,29 @@ export function ChartScatter({
             }}
             labelAnchorX="start"
             labelAnchorY="text-bottom"
+            allowOffsetToBeReversed={false}
+            animation
+          />
+        )}
+        {isMinSize(size, 'medium') && medianXValue && (
+          <LabelSeries
+            data={[
+              {
+                x: medianXValue,
+                y: 100,
+                yOffset: 13,
+                xOffset: 10,
+                label: `Average (median)`,
+              },
+            ]}
+            style={{
+              fontFamily: "'aktiv-grotesk', sans-serif",
+              fill: '#041733',
+              fontSize: 12,
+              opacity: 0.8,
+            }}
+            labelAnchorX="start"
+            labelAnchorY="text-top"
             allowOffsetToBeReversed={false}
             animation
           />
