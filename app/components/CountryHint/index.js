@@ -43,18 +43,21 @@ const Styled = styled(p => (
   }
 `;
 
-const MetricValue = styled(p => <Text size="xsmall" {...p} />)`
-  font-family: 'roboto-mono-bold', monospace;
-`;
 const GroupLabel = styled(p => <Text size="xsmall" {...p} />)`
   font-family: 'aktiv-grotesk', sans-serif;
   font-weight: bold;
 `;
 const MetricLabel = styled(p => <Text size="xsmall" {...p} />)``;
-const MetricValueSecondary = styled(p => <Text size="xxsmall" {...p} />)`
+const MetricLabelSecondary = styled(p => (
+  <MetricLabel size="xxsmall" {...p} />
+))``;
+const MetricValue = styled(p => <Text size="xsmall" {...p} />)`
   font-family: 'roboto-mono-bold', monospace;
 `;
-const MetricLabelSecondary = styled(p => <Text size="xxsmall" {...p} />)``;
+const MetricValueSecondary = styled(p => <MetricValue size="xxsmall" {...p} />)`
+  position: relative;
+  top: 1px;
+`;
 const Title = styled(p => <Text {...p} />)`
   font-family: 'aktiv-grotesk', sans-serif;
   font-weight: 700;
@@ -86,6 +89,8 @@ export function CountryHint({
   onClose,
   hasClose,
   valueGroupTitle,
+  dateSecondary,
+  title,
 }) {
   const size = useContext(ResponsiveContext);
   return (
@@ -96,6 +101,11 @@ export function CountryHint({
             <Title>{country.label}</Title>
           </Box>
         )}
+        {title && (
+          <Box>
+            <Title>{title}</Title>
+          </Box>
+        )}
         {hasClose && (
           <ButtonClose
             onClick={() => onClose()}
@@ -104,7 +114,13 @@ export function CountryHint({
         )}
       </Box>
       {isMinSize(size, 'medium') && (
-        <Box gap="small" margin={{ top: 'xsmall' }}>
+        <Box gap="xsmall" margin={{ top: 'xsmall' }}>
+          {date && (
+            <Box direction="row" gap="xsmall">
+              <MetricLabel>{`${date.label || 'Date'}:`}</MetricLabel>
+              <MetricValue>{date.value}</MetricValue>
+            </Box>
+          )}
           {valueGroupTitle && (
             <Box gap="xxsmall">
               <GroupLabel>{`${valueGroupTitle}:`}</GroupLabel>
@@ -117,16 +133,18 @@ export function CountryHint({
                     <MetricValueSecondary>{value.value}</MetricValueSecondary>
                   </Box>
                 ))}
+              {dateSecondary && (
+                <Box direction="row" gap="xsmall">
+                  <MetricLabelSecondary>
+                    {`${dateSecondary.label || 'Date'}:`}
+                  </MetricLabelSecondary>
+                  <MetricValueSecondary>
+                    {dateSecondary.value}
+                  </MetricValueSecondary>
+                </Box>
+              )}
             </Box>
           )}
-          {!valueGroupTitle &&
-            values &&
-            values.map(value => (
-              <Box key={value.label} direction="row" gap="xsmall">
-                <MetricLabel>{`${value.label}:`}</MetricLabel>
-                <MetricValue>{value.value}</MetricValue>
-              </Box>
-            ))}
           {config && config.metricOptions && (
             <Box>
               <GroupLabel>{`${config.hintMetricOptionLabel}:`}</GroupLabel>
@@ -144,6 +162,14 @@ export function CountryHint({
               </Box>
             </Box>
           )}
+          {!valueGroupTitle &&
+            values &&
+            values.map(value => (
+              <Box key={value.label} direction="row" gap="xsmall">
+                <MetricLabel>{`${value.label}:`}</MetricLabel>
+                <MetricValue>{value.value}</MetricValue>
+              </Box>
+            ))}
           {country &&
             country.hint &&
             asArray(country.hint).map((hint, key) => {
@@ -171,12 +197,6 @@ export function CountryHint({
               <MetricValue>{population}</MetricValue>
             </Box>
           )}
-          {date && (
-            <Box direction="row" gap="xsmall">
-              <MetricLabel>{`${date.label || 'Date'}:`}</MetricLabel>
-              <MetricValue>{date.value}</MetricValue>
-            </Box>
-          )}
         </Box>
       )}
     </Styled>
@@ -189,8 +209,10 @@ CountryHint.propTypes = {
   align: PropTypes.string,
   valueGroupTitle: PropTypes.string,
   date: PropTypes.object,
+  dateSecondary: PropTypes.object,
   values: PropTypes.array,
   population: PropTypes.string,
+  title: PropTypes.string,
   onClose: PropTypes.func,
   hasClose: PropTypes.bool,
 };

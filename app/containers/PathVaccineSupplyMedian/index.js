@@ -56,7 +56,8 @@ const getChartData = ({
             groupIndex: index + 0.5,
             hint: [
               {
-                label: config.meta[metric].axisLabel,
+                label:
+                  config.meta[metric].popupLabel || config.meta[metric].label,
                 value: formatNumberLabel({
                   value: countryData[metricColumn],
                   intl,

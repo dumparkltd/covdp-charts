@@ -45,6 +45,7 @@ const GlobalStyle = createGlobalStyle`
     font-style:normal;
     font-weight:700;
     font-stretch:normal;
+    ascent-override: 100%;
   }
 
 
@@ -53,6 +54,8 @@ const GlobalStyle = createGlobalStyle`
     src: url(${RobotoMonoBold}) format('truetype');
     font-weight: normal;
     font-style: normal;
+    ascent-override: 100%;
+    descent-override: 45%;
   }
   html,
   body {

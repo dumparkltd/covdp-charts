@@ -199,6 +199,7 @@ export function ChartBeeswarm({
     positions && d3.max(positions, p => Math.abs(scaleX(p.groupIndex) - p.x));
   const minSize = minDiameter && Math.round(scaleZ.invert(minDiameter));
 
+  const references = averages || medians;
   return (
     <Styled ref={chartRef}>
       <Box margin={{ bottom: 'large' }}>
@@ -282,8 +283,8 @@ export function ChartBeeswarm({
             strokeDasharray={[8, 4]}
           />
         )}
-        {medians &&
-          Object.keys(medians).map(groupId => {
+        {references &&
+          Object.keys(references).map(groupId => {
             const groupIndex = Object.keys(groups).indexOf(groupId);
             const x = scaleX(groupIndex + 0.5);
             return (
@@ -292,43 +293,47 @@ export function ChartBeeswarm({
                 animation
                 data={[
                   {
-                    x: x - maxOffset * 1.2,
-                    y: scaleY(medians[groupId]),
+                    x: x - maxOffset * 1.1,
+                    y: scaleY(references[groupId]),
                   },
                   {
-                    x: x + maxOffset * 1.2,
-                    y: scaleY(medians[groupId]),
+                    x: x + maxOffset * 1.1,
+                    y: scaleY(references[groupId]),
                   },
                 ]}
                 style={{ stroke: '#041733', strokeWidth: 1, opacity: 1 }}
               />
             );
           })}
-        {medians &&
-          isMinSize(size, 'medium') &&
-          Object.keys(medians).map(groupId => {
+        {references &&
+          Object.keys(references).map(groupId => {
             const groupIndex = Object.keys(groups).indexOf(groupId);
-            const x = scaleX(groupIndex + 0.5);
+            const x = scaleX(groupIndex + 0.5) + maxOffset;
             return (
               <LabelSeries
                 key={groupId}
                 animation
                 data={[
                   {
-                    x: x + maxOffset * 1.2,
-                    y: scaleY(medians[groupId]),
+                    x,
+                    y: scaleY(references[groupId]),
                     label: formatNumberLabel({
-                      value: medians[groupId],
+                      value: references[groupId],
                       isPercentage: config.isPercentage,
+                      digits:
+                        isMinSize(size, 'small') || !config.isPercentage
+                          ? 1
+                          : 0,
                     }),
-                    xOffset: 5,
+                    xOffset: isMinSize(size, 'small') ? 8 : 3,
+                    yOffset: 1,
                   },
                 ]}
                 style={{
                   fontFamily: "'aktiv-grotesk', sans-serif",
                   stroke: '#F6F7FC',
-                  strokeWidth: '6px',
-                  fontSize: 12,
+                  strokeWidth: 2,
+                  fontSize: isMinSize(size, 'small') ? 12 : 11,
                   opacity: 1,
                   maxWidth: '30px',
                 }}
@@ -337,26 +342,10 @@ export function ChartBeeswarm({
               />
             );
           })}
-        {medians &&
-          Object.keys(medians).map(groupId => {
+        {references &&
+          Object.keys(references).map(groupId => {
             const groupIndex = Object.keys(groups).indexOf(groupId);
-            let x = scaleX(groupIndex + 0.5);
-            let labelAnchorX;
-            let xOffset;
-            if (
-              isMinSize(size, 'small') ||
-              !config.medianPosition ||
-              !config.medianPosition[groupId] ||
-              config.medianPosition[groupId] === 'start'
-            ) {
-              labelAnchorX = 'start';
-              xOffset = isMinSize(size, 'small') ? 5 : 2;
-              x += maxOffset * 1.2;
-            } else {
-              labelAnchorX = config.medianPosition[groupId];
-              xOffset = -2;
-              x -= maxOffset * 1.2;
-            }
+            const x = scaleX(groupIndex + 0.5) + maxOffset;
             return (
               <LabelSeries
                 key={groupId}
@@ -364,12 +353,17 @@ export function ChartBeeswarm({
                 data={[
                   {
                     x,
-                    y: scaleY(medians[groupId]),
+                    y: scaleY(references[groupId]),
                     label: formatNumberLabel({
-                      value: medians[groupId],
+                      value: references[groupId],
                       isPercentage: config.isPercentage,
+                      digits:
+                        isMinSize(size, 'small') || !config.isPercentage
+                          ? 1
+                          : 0,
                     }),
-                    xOffset,
+                    xOffset: isMinSize(size, 'small') ? 8 : 3,
+                    yOffset: 1,
                   },
                 ]}
                 style={{
@@ -379,109 +373,7 @@ export function ChartBeeswarm({
                   opacity: 1,
                   maxWidth: '30px',
                 }}
-                labelAnchorX={labelAnchorX}
-                labelAnchorY="middle"
-              />
-            );
-          })}
-        {averages &&
-          Object.keys(averages).map(groupId => {
-            const groupIndex = Object.keys(groups).indexOf(groupId);
-            const x = scaleX(groupIndex + 0.5);
-            return (
-              <LineSeries
-                key={groupId}
-                animation
-                data={[
-                  {
-                    x: x - maxOffset * 1.2,
-                    y: scaleY(averages[groupId]),
-                  },
-                  {
-                    x: x + maxOffset * 1.2,
-                    y: scaleY(averages[groupId]),
-                  },
-                ]}
-                style={{ stroke: '#041733', strokeWidth: 1, opacity: 1 }}
-              />
-            );
-          })}
-        {averages &&
-          isMinSize(size, 'medium') &&
-          Object.keys(averages).map(groupId => {
-            const groupIndex = Object.keys(groups).indexOf(groupId);
-            const x = scaleX(groupIndex + 0.5);
-            return (
-              <LabelSeries
-                key={groupId}
-                animation
-                data={[
-                  {
-                    x: x + maxOffset * 1.2,
-                    y: scaleY(averages[groupId]),
-                    label: formatNumberLabel({
-                      value: averages[groupId],
-                      isPercentage: config.isPercentage,
-                    }),
-                    xOffset: 5,
-                  },
-                ]}
-                style={{
-                  fontFamily: "'aktiv-grotesk', sans-serif",
-                  stroke: '#F6F7FC',
-                  strokeWidth: '6px',
-                  fontSize: 12,
-                  opacity: 1,
-                  maxWidth: '30px',
-                }}
                 labelAnchorX="start"
-                labelAnchorY="middle"
-              />
-            );
-          })}
-        {averages &&
-          Object.keys(averages).map(groupId => {
-            const groupIndex = Object.keys(groups).indexOf(groupId);
-            let x = scaleX(groupIndex + 0.5);
-            let labelAnchorX;
-            let xOffset;
-            if (
-              isMinSize(size, 'small') ||
-              !config.medianPosition ||
-              !config.medianPosition[groupId] ||
-              config.medianPosition[groupId] === 'start'
-            ) {
-              labelAnchorX = 'start';
-              xOffset = isMinSize(size, 'small') ? 5 : 2;
-              x += maxOffset * 1.2;
-            } else {
-              labelAnchorX = config.medianPosition[groupId];
-              xOffset = -2;
-              x -= maxOffset * 1.2;
-            }
-            return (
-              <LabelSeries
-                key={groupId}
-                animation
-                data={[
-                  {
-                    x,
-                    y: scaleY(averages[groupId]),
-                    label: formatNumberLabel({
-                      value: averages[groupId],
-                      isPercentage: config.isPercentage,
-                    }),
-                    xOffset,
-                  },
-                ]}
-                style={{
-                  fontFamily: "'aktiv-grotesk', sans-serif",
-                  fill: '#041733',
-                  fontSize: isMinSize(size, 'small') ? 12 : 11,
-                  opacity: 1,
-                  maxWidth: '30px',
-                }}
-                labelAnchorX={labelAnchorX}
                 labelAnchorY="middle"
               />
             );
@@ -600,7 +492,11 @@ export function ChartBeeswarm({
           {target && <KeyTarget target={target} strokeDasharray={[8, 4]} />}
           {scaleZ && (
             <Box margin={{ top: 'small' }}>
-              <KeyPopulation scaleSize={scaleZ} minValue={minValue} />
+              <KeyPopulation
+                scaleSize={scaleZ}
+                minValue={minSize}
+                maxValue={maxSize}
+              />
             </Box>
           )}
         </Box>

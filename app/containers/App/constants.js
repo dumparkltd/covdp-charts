@@ -196,23 +196,26 @@ export const DATA_RESOURCES = [
     metricType: 'indicator',
     meta: {
       secured: {
+        label: 'Doses secured',
         axisLabel: 'Doses secured',
         axisLabelAdditional: '(per capita)',
-        label: 'Doses secured',
+        popupLabel: 'Doses secured (per capita)',
         updated: '08/31/2022',
         sourceURL:
           'https://docs.google.com/spreadsheets/d/1aR4L0VStsBrY37aRKTjlUwjQuPS3hDwdRyTwGInkRyE/edit?usp=sharing',
         source: 'IMF/WHO vaccine supply tracker',
       },
       received: {
+        label: 'Doses received',
         axisLabel: 'Doses received',
         axisLabelAdditional: '(per capita)',
-        label: 'Doses received',
+        popupLabel: 'Doses received (per capita)',
       },
       administered: {
+        label: 'Doses administered',
         axisLabel: 'Doses administered',
         axisLabelAdditional: '(per capita)',
-        label: 'Doses administered',
+        popupLabel: 'Doses administered (per capita)',
       },
     },
     xAxisLabel: 'Country Income Groups',
@@ -237,11 +240,6 @@ export const DATA_RESOURCES = [
     metricOptions: ['all', 'old', 'hcw'],
     metricOptionLabel: 'Select group',
     metricType: 'group',
-    medianPosition: {
-      UMIC: 'end',
-      LMIC: 'end',
-      LIC: 'end',
-    },
     meta: {
       all: {
         axisLabel: 'Complete primary series',

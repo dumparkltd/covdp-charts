@@ -34,7 +34,7 @@ import CountryHint from 'components/CountryHint';
 import Options from 'components/Options';
 
 import { isMinSize } from 'utils/responsive';
-import { getHintAlign } from 'utils/charts';
+import { getHintAlign, formatNumberLabel } from 'utils/charts';
 
 import {
   mapNodes,
@@ -42,7 +42,6 @@ import {
   groupNodes,
   getChartHeight,
   getTickValuesX,
-  getHintValues,
 } from './utils';
 
 const chartMargins = {
@@ -377,6 +376,7 @@ export function ChartTimelineGroups({
             }}
           >
             <CountryHint
+              title={mouseOver.label}
               align={hintAlign}
               date={{
                 label: config.xAxisLabel,
@@ -385,14 +385,14 @@ export function ChartTimelineGroups({
                   month: 'long',
                 }),
               }}
-              valueGroupTitle={`${config.yAxisLabel} ${
-                config.yAxisLabelAdditional
-              }`}
-              values={getHintValues({
-                hint: mouseOver,
-                metrics: config.metrics,
-                metric,
-              })}
+              values={[
+                {
+                  label: `${config.yAxisLabel} ${config.yAxisLabelAdditional}`,
+                  value: formatNumberLabel({
+                    value: mouseOver[config.metrics[metric]],
+                  }),
+                },
+              ]}
             />
           </Hint>
         )}

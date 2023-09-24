@@ -20,13 +20,11 @@ import { getDataByKey, getDependenciesReady } from 'containers/App/selectors';
 
 import ChartTimelineGroups from 'components/ChartTimelineGroups';
 
-const getChartData = ({ data, xColumn, yColumn, yColumnLower, yColumnUpper }) =>
+const getChartData = ({ data, xColumn, yColumn }) =>
   data.map(d => ({
     ...d,
     xValue: d[xColumn],
     yValue: parseFloat(d[yColumn]),
-    yValueUpper: parseFloat(d[yColumnUpper]),
-    yValueLower: parseFloat(d[yColumnLower]),
   }));
 
 const DEPENDENCIES = ['doses-delivered'];
@@ -50,8 +48,6 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
       data,
       xColumn: 'datetime',
       yColumn: metrics[metric],
-      yColumnLower: metric === 'median' ? metrics.lower : null,
-      yColumnUpper: metric === 'median' ? metrics.upper : null,
     });
   return (
     <article>

@@ -42,6 +42,7 @@ const ButtonSelectMetric = styled(p => <Button plain {...p} />)`
   font-family: 'aktiv-grotesk', sans-serif;
   font-weight: 700;
   padding: 3px 8px;
+  text-align: center;
   color: ${({ theme, active }) =>
     active ? theme.global.colors.white : theme.global.colors.black};
   background-color: ${({ theme, active }) =>
