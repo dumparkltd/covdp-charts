@@ -177,6 +177,7 @@ export function ChartScatter({
             ]}
             style={{
               fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 400,
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,
@@ -203,6 +204,7 @@ export function ChartScatter({
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,
+              fontWeight: 400,
             }}
             labelAnchorX="start"
             labelAnchorY="text-top"

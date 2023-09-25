@@ -66,7 +66,10 @@ const getChartData = ({
                 }),
               },
               {
-                label: `Population (${lowerCase(config.meta[metric].label)})`,
+                label:
+                  metric === 'all'
+                    ? 'Population'
+                    : `Population (${lowerCase(config.meta[metric].label)})`,
                 value: formatNumberLabel({
                   value: c[config.meta[metric].popColumn],
                   intl,

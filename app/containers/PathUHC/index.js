@@ -33,10 +33,10 @@ const getChartData = ({ countries, data, yColumn, xColumn, colorByColumn }) => {
       const countryMetricData = data.find(d => d.iso === country.iso);
       if (
         countryMetricData &&
-        countryMetricData.cov_total_a1d_2021 &&
-        countryMetricData.cov_total_a1d_2021.trim !== '' &&
-        countryMetricData.cov_total_a1d_2022 &&
-        countryMetricData.cov_total_a1d_2022.trim !== '' &&
+        countryMetricData.cov_tot_a1d_2021 &&
+        countryMetricData.cov_tot_a1d_2021.trim !== '' &&
+        countryMetricData.cov_tot_a1d_2022 &&
+        countryMetricData.cov_tot_a1d_2022.trim !== '' &&
         countryMetricData[xColumn] &&
         countryMetricData[xColumn].trim !== ''
       ) {
@@ -59,11 +59,11 @@ const getChartData = ({ countries, data, yColumn, xColumn, colorByColumn }) => {
                   value: parseFloat(countryMetricData[xColumn]),
                 }),
                 one_dose_2021: formatNumberLabel({
-                  value: countryMetricData.cov_total_a1d_2021,
+                  value: countryMetricData.cov_tot_a1d_2021,
                   isPercentage: true,
                 }),
                 one_dose_2022: formatNumberLabel({
-                  value: countryMetricData.cov_total_a1d_2022,
+                  value: countryMetricData.cov_tot_a1d_2022,
                   isPercentage: true,
                 }),
               },

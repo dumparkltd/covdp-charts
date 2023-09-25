@@ -348,6 +348,7 @@ export function ChartTimelineGroups({
             ]}
             style={{
               fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 400,
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,

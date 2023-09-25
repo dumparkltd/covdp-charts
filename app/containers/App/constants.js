@@ -34,7 +34,7 @@ export const PATHS = {
   // % at least one dose vs UHC service coverage index for each country: scatter plot
   // indicators:
   // - uhc_sci
-  // - cov_total_a1d
+  // - cov_tot_a1d
   DOSES_ADMIN: 'doses-administered',
   // daily doses administered over time for each country: line-chart
   // indicators:
@@ -52,14 +52,14 @@ export const PATHS = {
 export const DATA_RESOURCES = [
   {
     key: 'countries',
-    file: 'countries.csv',
+    file: 'countries-20230923.csv',
     pk: 'iso',
     name: 'name_short',
     categories: {
-      region: 'who_region',
+      region: 'region_who',
       income: 'income_group',
-      covax: 'covax_status',
-      csc: 'csc_status',
+      covax: 'status_covax',
+      csc: 'status_csc',
     },
     metrics: {
       pop: 'pop',
@@ -69,7 +69,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-delivered',
-    file: 'doses-delivered.csv',
+    file: 'doses-delivered-20230923.csv',
     xAxisLabel: 'Time',
     yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
@@ -81,7 +81,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-delivered-median',
-    file: 'doses-delivered.csv',
+    file: 'doses-delivered-20230923.csv',
     xAxisLabel: 'Time',
     yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
@@ -140,13 +140,13 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'uhc-coverage',
-    file: 'uhc-coverage.csv',
+    file: 'uhc-coverage-20230923.csv',
     country_fk: 'iso',
     type: 'scatter',
     metrics: {
       uhc: 'uhc_sci',
-      one_dose_2021: 'cov_total_a1d_2021',
-      one_dose_2022: 'cov_total_a1d_2022',
+      one_dose_2021: 'cov_tot_a1d_2021',
+      one_dose_2022: 'cov_tot_a1d_2022',
     },
     xDefault: 'uhc',
     yDefault: 'one_dose_2021',
@@ -177,12 +177,12 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'vaccine-supply',
-    file: 'vaccine-supply.csv',
+    file: 'vaccine-supply-20230923.csv',
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
       received: 'del_dose_add_pc',
-      administered: 'adm_td_add_pc',
+      administered: 'adm_tot_td_add_pc',
     },
     maxValue: 10,
     maxSize: 1500000000,
@@ -222,12 +222,12 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'population-groups',
-    file: 'population-groups.csv',
+    file: 'population-groups-20230923.csv',
     country_fk: 'iso',
     metrics: {
-      all: 'cov_total_fv',
-      old: 'cov_old_fv',
-      hcw: 'cov_hcw_fv',
+      all: 'cov_tot_cps',
+      old: 'cov_old_cps',
+      hcw: 'cov_hcw_cps',
     },
     groupByColumn: 'income_group',
     maxValue: 105,
@@ -238,28 +238,31 @@ export const DATA_RESOURCES = [
     yDefault: 'all',
     keyCategories: 'INCOME',
     metricOptions: ['all', 'old', 'hcw'],
-    metricOptionLabel: 'Select group',
+    metricOptionLabel: 'Select population group',
     metricType: 'group',
     meta: {
       all: {
         axisLabel: 'Complete primary series',
         axisLabelAdditional: '(% of group)',
-        hintLabel: 'Complete primary series (% of all people)',
-        label: 'All people',
+        hintLabel: 'Complete primary series (% of total population)',
+        label: 'Total population',
+        popupLabel: 'Total population',
         popColumn: 'pop',
       },
       old: {
         axisLabel: 'Complete primary series',
         axisLabelAdditional: '(% of group)',
-        hintLabel: 'Complete primary series (% of older adults)',
-        label: 'Older adults',
-        popColumn: 'pop_older',
+        hintLabel: 'Complete primary series (% of older people)',
+        label: 'Older people',
+        popupLabel: 'Population (older people)',
+        popColumn: 'pop_old',
       },
       hcw: {
         axisLabel: 'Complete primary series',
         axisLabelAdditional: '(% of group)',
-        hintLabel: 'Complete primary series (% of healthcare workers)',
-        label: 'Healthcare workers',
+        hintLabel: 'Complete primary series (% of health and care workers)',
+        label: 'Health and care workers',
+        popupLabel: 'Population (health and care workers)',
         popColumn: 'pop_hcw',
       },
     },

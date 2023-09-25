@@ -11,14 +11,14 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import PathVaccineSupply from 'containers/PathVaccineSupply/Loadable';
-import PathVaccineSupplyMedian from 'containers/PathVaccineSupplyMedian/Loadable';
 import PathPopulationGroups from 'containers/PathPopulationGroups/Loadable';
-import PathPopulationGroupsAlt from 'containers/PathPopulationGroupsAlt/Loadable';
-import PathPopulationGroupsMedian from 'containers/PathPopulationGroupsMedian/Loadable';
 import PathUHC from 'containers/PathUHC/Loadable';
 import PathDosesDelivered from 'containers/PathDosesDelivered/Loadable';
-import PathDosesDeliveredMedian from 'containers/PathDosesDeliveredMedian/Loadable';
 import PathDosesAdmin from 'containers/PathDosesAdmin/Loadable';
+// import PathVaccineSupplyMedian from 'containers/PathVaccineSupplyMedian/Loadable';
+// import PathPopulationGroupsAlt from 'containers/PathPopulationGroupsAlt/Loadable';
+// import PathPopulationGroupsMedian from 'containers/PathPopulationGroupsMedian/Loadable';
+// import PathDosesDeliveredMedian from 'containers/PathDosesDeliveredMedian/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 import { PATHS } from './constants';
@@ -41,28 +41,12 @@ export default function App() {
       </Helmet>
       <Switch>
         <Route path={`/${PATHS.VAX_SUPPLY}`} component={PathVaccineSupply} />
-        <Route
-          path={`/${PATHS.VAX_SUPPLY_MEDIAN}`}
-          component={PathVaccineSupplyMedian}
-        />
         <Route path={`/${PATHS.POP_GROUPS}`} component={PathPopulationGroups} />
-        <Route
-          path={`/${PATHS.POP_GROUPS_MEDIAN}`}
-          component={PathPopulationGroupsMedian}
-        />
-        <Route
-          path={`/${PATHS.POP_GROUPS_ALT}`}
-          component={PathPopulationGroupsAlt}
-        />
         <Route path={`/${PATHS.DOSES_ADMIN}`} component={PathDosesAdmin} />
         <Route path={`/${PATHS.UHC_COVERAGE}`} component={PathUHC} />
         <Route
           path={`/${PATHS.DOSES_DELIVERED}`}
           component={PathDosesDelivered}
-        />
-        <Route
-          path={`/${PATHS.DOSES_DELIVERED_MEDIAN}`}
-          component={PathDosesDeliveredMedian}
         />
         <Route path="" component={NotFoundPage} />
       </Switch>

@@ -17,7 +17,7 @@ export function KeyAverage() {
           />
         </svg>
       </Box>
-      <KeyLabel>Group averages (weighted)</KeyLabel>
+      <KeyLabel>Country group averages</KeyLabel>
     </Box>
   );
 }
