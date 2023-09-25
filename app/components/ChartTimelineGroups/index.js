@@ -71,7 +71,7 @@ const SeriesLabelWrap = styled.div`
   }
 `;
 const SeriesLabel = styled.div`
-  font-family: 'aktiv-grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   color: #041733;
   font-size: 13px;
   line-height: 15px;
@@ -213,7 +213,8 @@ export function ChartTimelineGroups({
         style={{
           fill: 'transparent',
           cursor: 'pointer',
-          fontFamily: 'roboto-mono-bold',
+          fontFamily: 'Roboto Mono',
+          fontWeight: 700,
         }}
         onMouseLeave={() => {
           if (setMouseOver) setMouseOver(null);
@@ -346,7 +347,7 @@ export function ChartTimelineGroups({
               },
             ]}
             style={{
-              fontFamily: "'aktiv-grotesk', sans-serif",
+              fontFamily: "'DM Sans', sans-serif",
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,

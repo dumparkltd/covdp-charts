@@ -155,7 +155,8 @@ export function ChartTimelinePeaks({
         style={{
           fill: 'transparent',
           // cursor: 'pointer',
-          fontFamily: 'roboto-mono-bold',
+          fontFamily: 'Roboto Mono',
+          fontWeight: 700,
         }}
         onMouseLeave={() => setMouseOver(null)}
         onClick={() => {

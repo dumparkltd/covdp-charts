@@ -228,7 +228,8 @@ export function ChartBeeswarm({
         style={{
           fill: 'transparent',
           cursor: 'pointer',
-          fontFamily: 'roboto-mono-bold',
+          fontFamily: 'Roboto Mono',
+          fontWeight: 700,
         }}
         onMouseLeave={() => setMouseOver(null)}
         onClick={() => {
@@ -330,7 +331,7 @@ export function ChartBeeswarm({
                   },
                 ]}
                 style={{
-                  fontFamily: "'aktiv-grotesk', sans-serif",
+                  fontFamily: "'DM Sans', sans-serif",
                   stroke: '#F6F7FC',
                   strokeWidth: 2,
                   fontSize: isMinSize(size, 'small') ? 12 : 11,
@@ -367,11 +368,12 @@ export function ChartBeeswarm({
                   },
                 ]}
                 style={{
-                  fontFamily: "'aktiv-grotesk', sans-serif",
+                  fontFamily: "'DM Sans', sans-serif",
                   fill: '#041733',
                   fontSize: isMinSize(size, 'small') ? 12 : 11,
                   opacity: 1,
                   maxWidth: '30px',
+                  fontWeight: 400,
                 }}
                 labelAnchorX="start"
                 labelAnchorY="middle"
@@ -389,11 +391,12 @@ export function ChartBeeswarm({
               },
             ]}
             style={{
-              fontFamily: "'aktiv-grotesk', sans-serif",
+              fontFamily: "'DM Sans', sans-serif",
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,
               maxWidth: '30px',
+              fontWeight: 400,
             }}
             labelAnchorX="end"
             labelAnchorY="text-bottom"
@@ -411,11 +414,12 @@ export function ChartBeeswarm({
               },
             ]}
             style={{
-              fontFamily: "'aktiv-grotesk', sans-serif",
+              fontFamily: "'DM Sans', sans-serif",
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,
               maxWidth: '30px',
+              fontWeight: 400,
             }}
             labelAnchorX="end"
             labelAnchorY="text-bottom"

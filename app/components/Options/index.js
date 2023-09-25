@@ -39,7 +39,7 @@ const ButtonSelectMetricText = styled(p => <Text {...p} />)`
 const ButtonSelectMetric = styled(p => <Button plain {...p} />)`
   fill: transparent;
   cursor: ${({ active }) => active ? 'default' : 'pointer'};
-  font-family: 'aktiv-grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   padding: 3px 8px;
   text-align: center;

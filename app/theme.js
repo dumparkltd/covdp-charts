@@ -150,7 +150,7 @@ const theme = {
       },
     },
     font: {
-      family: 'aktiv-grotesk',
+      family: 'DM Sans',
     },
     colors: {
       black: '#041733',

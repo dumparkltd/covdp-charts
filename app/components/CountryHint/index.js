@@ -44,7 +44,7 @@ const Styled = styled(p => (
 `;
 
 const GroupLabel = styled(p => <Text size="xsmall" {...p} />)`
-  font-family: 'aktiv-grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: bold;
 `;
 const MetricLabel = styled(p => <Text size="xsmall" {...p} />)``;
@@ -52,14 +52,15 @@ const MetricLabelSecondary = styled(p => (
   <MetricLabel size="xxsmall" {...p} />
 ))``;
 const MetricValue = styled(p => <Text size="xsmall" {...p} />)`
-  font-family: 'roboto-mono-bold', monospace;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
 `;
 const MetricValueSecondary = styled(p => <MetricValue size="xxsmall" {...p} />)`
   position: relative;
   top: 1px;
 `;
 const Title = styled(p => <Text {...p} />)`
-  font-family: 'aktiv-grotesk', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: ${({ theme }) => theme.text.small.size};
   line-height: ${({ theme }) => theme.text.small.height};

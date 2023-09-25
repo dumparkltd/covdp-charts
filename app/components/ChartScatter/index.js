@@ -93,7 +93,8 @@ export function ChartScatter({
         style={{
           fill: 'transparent',
           cursor: 'pointer',
-          fontFamily: "'roboto-mono-bold', monospace",
+          fontFamily: "'Roboto Mono', monospace",
+          fontWeight: 700,
         }}
         onMouseLeave={() => setMouseOver(null)}
         onClick={() => {
@@ -175,7 +176,7 @@ export function ChartScatter({
               },
             ]}
             style={{
-              fontFamily: "'aktiv-grotesk', sans-serif",
+              fontFamily: "'DM Sans', sans-serif",
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,
@@ -198,7 +199,7 @@ export function ChartScatter({
               },
             ]}
             style={{
-              fontFamily: "'aktiv-grotesk', sans-serif",
+              fontFamily: "'DM Sans', sans-serif",
               fill: '#041733',
               fontSize: 12,
               opacity: 0.8,

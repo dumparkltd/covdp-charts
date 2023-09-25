@@ -1,61 +1,43 @@
 import { createGlobalStyle } from 'styled-components';
 
-import RobotoMonoBold from './fonts/RobotoMono-Bold.ttf';
-// import RobotoMonoBoldItalic from './fonts/RobotoMono-BoldItalic.ttf';
-// import RobotoMonoItalic from './fonts/RobotoMono-Italic.ttf';
-// import RobotoMono from './fonts/RobotoMono-Regular.ttf';
+import DMSansTTF from './fonts/dm-sans-v14-latin-regular.ttf';
+import DMSansBoldTTF from './fonts/dm-sans-v14-latin-700.ttf';
+import DMSansWOFF from './fonts/dm-sans-v14-latin-regular.woff2';
+import DMSansBoldWOFF from './fonts/dm-sans-v14-latin-700.woff2';
+import RobotoMonoBoldTTF from './fonts/roboto-mono-v23-latin-700.ttf';
+import RobotoMonoBoldWOFF from './fonts/roboto-mono-v23-latin-700.woff2';
 
 const GlobalStyle = createGlobalStyle`
-  /*
-  * The Typekit service used to deliver this font or fonts for use on websites
-  * is provided by Adobe and is subject to these Terms of Use
-  * http://www.adobe.com/products/eulas/tou_typekit. For font license
-  * information, see the list below.
-  *
-  * aktiv-grotesk:
-  *   - http://typekit.com/eulas/000000000000000077359d4f
-  *   - http://typekit.com/eulas/000000000000000077359d51
-  *   - http://typekit.com/eulas/000000000000000077359d55
-  *   - http://typekit.com/eulas/000000000000000077359d58
-  *   - http://typekit.com/eulas/000000000000000077359d5e
-  *   - http://typekit.com/eulas/000000000000000077359d5f
-  *
-  * © 2009-2023 Adobe Systems Incorporated. All Rights Reserved.
-  */
-  /*{"last_published":"2023-09-14 22:51:59 UTC"}*/
 
-  @import url("https://p.typekit.net/p.css?s=1&k=lty6guh&ht=tk&f=14032.14033.14034.14035.14038.14039.28900.28901.28904.28905&a=113780656&app=typekit&e=css");
-
+  /* roboto-mono-700 - latin */
   @font-face {
-    font-family:"aktiv-grotesk";
-    src:url("https://use.typekit.net/af/ab3e12/000000000000000077359d4f/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff2"),
-    url("https://use.typekit.net/af/ab3e12/000000000000000077359d4f/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("woff"),
-    url("https://use.typekit.net/af/ab3e12/000000000000000077359d4f/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3") format("opentype");
-    font-display:auto;
-    font-style:normal;
-    font-weight:400;
-    font-stretch:normal;
-  }
-  @font-face {
-    font-family:"aktiv-grotesk";
-    src:url("https://use.typekit.net/af/a798a9/000000000000000077359d55/30/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff2"),
-    url("https://use.typekit.net/af/a798a9/000000000000000077359d55/30/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff"),
-    url("https://use.typekit.net/af/a798a9/000000000000000077359d55/30/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("opentype");
-    font-display:auto;
-    font-style:normal;
-    font-weight:700;
-    font-stretch:normal;
-    ascent-override: 100%;
-  }
-
-
-  @font-face {
-    font-family: 'roboto-mono-bold';
-    src: url(${RobotoMonoBold}) format('truetype');
-    font-weight: normal;
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Roboto Mono';
     font-style: normal;
-    ascent-override: 100%;
-    descent-override: 45%;
+    font-weight: 700;
+    descent-override: 40%;
+    src: url(${RobotoMonoBoldWOFF}) format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+         url(${RobotoMonoBoldTTF}) format('truetype'); /* Chrome 4+, Firefox 3.5+, IE 9+, Safari 3.1+, iOS 4.2+, Android Browser 2.2+ */
+  }
+  /* dm-sans-regular - latin */
+  @font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 400;
+    descent-override: 35%;
+    src: url(${DMSansWOFF}) format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+         url(${DMSansTTF}) format('truetype'); /* Chrome 4+, Firefox 3.5+, IE 9+, Safari 3.1+, iOS 4.2+, Android Browser 2.2+ */
+  }
+  /* dm-sans-700 - latin */
+  @font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 700;
+    descent-override: 35%;
+    src: url(${DMSansBoldWOFF}) format('woff2'), /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+         url(${DMSansBoldTTF}) format('truetype'); /* Chrome 4+, Firefox 3.5+, IE 9+, Safari 3.1+, iOS 4.2+, Android Browser 2.2+ */
   }
   html,
   body {
@@ -65,7 +47,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'aktiv-grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: #041733;
   }
 
