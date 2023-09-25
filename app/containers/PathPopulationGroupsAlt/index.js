@@ -127,10 +127,7 @@ export function PathPopulationGroupsAlt({
           mouseOver={mouseOver}
           setHighlight={setHighlight}
           highlight={highlight}
-          config={{
-            ...config,
-            maxSize: null,
-          }}
+          config={config}
           groups={CATEGORIES.INCOME_SHORT}
           showGroupAverage
           countries={countries}
