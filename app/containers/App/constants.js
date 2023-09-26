@@ -197,9 +197,10 @@ export const DATA_RESOURCES = [
     meta: {
       secured: {
         label: 'Doses secured',
+        labelAdditional: 'August 2022',
         axisLabel: 'Doses secured',
         axisLabelAdditional: '(per capita)',
-        popupLabel: 'Doses secured (per capita)',
+        popupLabel: 'Doses secured (per capita, August 2022)',
         updated: '08/31/2022',
         sourceURL:
           'https://docs.google.com/spreadsheets/d/1aR4L0VStsBrY37aRKTjlUwjQuPS3hDwdRyTwGInkRyE/edit?usp=sharing',
@@ -207,15 +208,17 @@ export const DATA_RESOURCES = [
       },
       received: {
         label: 'Doses received',
+        labelAdditional: 'September 2023',
         axisLabel: 'Doses received',
         axisLabelAdditional: '(per capita)',
-        popupLabel: 'Doses received (per capita)',
+        popupLabel: 'Doses received (per capita, September 2023)',
       },
       administered: {
         label: 'Doses administered',
+        labelAdditional: 'September 2023',
         axisLabel: 'Doses administered',
         axisLabelAdditional: '(per capita)',
-        popupLabel: 'Doses administered (per capita)',
+        popupLabel: 'Doses administered (per capita, September 2023)',
       },
     },
     xAxisLabel: 'Country Income Groups',

@@ -20,6 +20,8 @@ const LabelChartOption = styled(p => <Text {...p} />)`
 `;
 
 const ButtonSelectMetricText = styled(p => <Text {...p} />)`
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
   font-size: ${({ theme }) => theme.text.xsmall.size};
   line-height: ${({ theme }) => theme.text.xsmall.height};
   @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
@@ -35,12 +37,28 @@ const ButtonSelectMetricText = styled(p => <Text {...p} />)`
     line-height: ${({ theme }) => theme.text.large.height};
   }
 `;
+const ButtonSelectMetricTextSecondary = styled(p => <Text {...p} />)`
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: ${({ theme }) => theme.text.xxsmall.size};
+  line-height: ${({ theme }) => theme.text.xxsmall.height};
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
+    font-size: ${({ theme }) => theme.text.xxsmall.size};
+    line-height: ${({ theme }) => theme.text.xxsmall.height};
+  }
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.medium}) {
+    font-size: ${({ theme }) => theme.text.xsmall.size};
+    line-height: ${({ theme }) => theme.text.xsmall.height};
+  }
+  @media (min-width: ${({ theme }) => theme.breakpointsMin.large}) {
+    font-size: ${({ theme }) => theme.text.small.size};
+    line-height: ${({ theme }) => theme.text.small.height};
+  }
+`;
 // prettier-ignore
 const ButtonSelectMetric = styled(p => <Button plain {...p} />)`
   fill: transparent;
   cursor: ${({ active }) => active ? 'default' : 'pointer'};
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 700;
   padding: 3px 8px;
   text-align: center;
   color: ${({ theme, active }) =>
@@ -81,7 +99,7 @@ export function Options({
       direction={wrap ? 'column' : 'row'}
       gap={wrap ? 'medium' : null}
       justify={wrap ? 'start' : 'between'}
-      align={wrap ? 'start' : 'end'}
+      align={wrap ? 'start' : 'start'}
     >
       {!config.metricOptions && <Box />}
       {config.metricOptions && (
@@ -101,6 +119,11 @@ export function Options({
                   <ButtonSelectMetricText>
                     {config.meta[option].label}
                   </ButtonSelectMetricText>
+                  {config.meta[option].labelAdditional && (
+                    <ButtonSelectMetricTextSecondary>
+                      {`(${config.meta[option].labelAdditional})`}
+                    </ButtonSelectMetricTextSecondary>
+                  )}
                 </Box>
               </ButtonSelectMetric>
             ))}
