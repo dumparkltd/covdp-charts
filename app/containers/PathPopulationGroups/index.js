@@ -52,7 +52,7 @@ const getChartData = ({
           ...m,
           {
             id: c.iso,
-            label: c.name_short,
+            label: c.name_long,
             sizeRaw: parseInt(population, 10),
             group: c[groupByColumn],
             value: Math.min(parseFloat(countryData[metricColumn]), 100),

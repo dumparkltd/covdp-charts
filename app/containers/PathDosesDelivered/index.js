@@ -64,7 +64,7 @@ export function PathDosesDelivered({ onLoadData, dataReady, data }) {
             label: 'WHO target: 1.4 doses per capita',
           }}
           seriesColumn="income_group"
-          seriesLabels={CATEGORIES.INCOME_GROUP}
+          seriesLabels={CATEGORIES.INCOME}
           seriesLabelsPosition={
             metric === 'median' ? config.labelPositions : null
           }

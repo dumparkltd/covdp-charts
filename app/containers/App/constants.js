@@ -52,9 +52,9 @@ export const PATHS = {
 export const DATA_RESOURCES = [
   {
     key: 'countries',
-    file: 'countries-20230923.csv',
+    file: 'countries-20230926.csv',
     pk: 'iso',
-    name: 'name_short',
+    name: 'name_long',
     categories: {
       region: 'region_who',
       income: 'income_group',
@@ -69,7 +69,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-delivered',
-    file: 'doses-delivered-20230923.csv',
+    file: 'doses-delivered-20230926.csv',
     xAxisLabel: 'Time',
     yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
@@ -81,7 +81,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-delivered-median',
-    file: 'doses-delivered-20230923.csv',
+    file: 'doses-delivered-20230926.csv',
     xAxisLabel: 'Time',
     yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
@@ -112,7 +112,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-administered',
-    file: 'doses-administered-weekly.csv',
+    file: 'doses-administered-weekly-20230926.csv',
     country_fk: 'iso',
     metrics: {
       doses: 'dvr_4wk_td_per',
@@ -140,7 +140,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'uhc-coverage',
-    file: 'uhc-coverage-20230923.csv',
+    file: 'uhc-coverage-20230926.csv',
     country_fk: 'iso',
     type: 'scatter',
     metrics: {
@@ -163,12 +163,12 @@ export const DATA_RESOURCES = [
         label: 'UHC Index (2021)',
       },
       one_dose_2021: {
-        date: '06/2021',
-        label: 'June 2021',
+        date: '08/2021',
+        label: 'August 2021',
       },
       one_dose_2022: {
-        date: '06/2022',
-        label: 'June 2022',
+        date: '08/2022',
+        label: 'August 2022',
       },
     },
     xAxisLabel: 'Universal Health Coverage index (2021)',
@@ -177,7 +177,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'vaccine-supply',
-    file: 'vaccine-supply-20230923.csv',
+    file: 'vaccine-supply-20230926.csv',
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
@@ -222,7 +222,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'population-groups',
-    file: 'population-groups-20230923.csv',
+    file: 'population-groups-20230926.csv',
     country_fk: 'iso',
     metrics: {
       all: 'cov_tot_cps',
@@ -284,18 +284,6 @@ export const CATEGORIES = {
     UMIC: 'Upper Middle Income Countries',
     LMIC: 'Lower Middle Income Countries',
     LIC: 'Low Income Countries',
-  },
-  INCOME_GROUP: {
-    HIC: 'High Income Country Group',
-    UMIC: 'Upper Middle Income Country Group',
-    LMIC: 'Lower Middle Income Country Group',
-    LIC: 'Low Income Country Group',
-  },
-  INCOME_GROUP_SHORT: {
-    HIC: 'High Income Group',
-    UMIC: 'Upper Middle Income Group',
-    LMIC: 'Lower Middle Income Group',
-    LIC: 'Low Income Group',
   },
   INCOME_SHORT: {
     HIC: 'High Income',

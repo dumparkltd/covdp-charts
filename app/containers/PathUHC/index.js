@@ -52,7 +52,7 @@ const getChartData = ({ countries, data, yColumn, xColumn, colorByColumn }) => {
             xValue:
               Math.round(parseFloat(countryMetricData[xColumn]) * 100) / 100, // x-axis
             yValue: parseFloat(countryMetricData[yColumn]), // y-axis
-            label: country.name_short,
+            label: country.name_long,
             hint: {
               metrics: {
                 uhc: formatNumberLabel({
