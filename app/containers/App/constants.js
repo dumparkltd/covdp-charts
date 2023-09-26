@@ -77,7 +77,7 @@ export const DATA_RESOURCES = [
     metrics: {
       mean: 'del_dose_add_pc',
     },
-    keyCategories: 'INCOME_GROUP',
+    keyCategories: 'INCOME',
   },
   {
     key: 'doses-delivered-median',
@@ -92,7 +92,7 @@ export const DATA_RESOURCES = [
       lower: 'del_dose_add_pc_0.25',
       upper: 'del_dose_add_pc_0.75',
     },
-    keyCategories: 'INCOME_GROUP',
+    keyCategories: 'INCOME',
     labelPositions: {
       HIC: 'center',
       UMIC: 'top',
