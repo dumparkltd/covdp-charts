@@ -52,9 +52,9 @@ export const PATHS = {
 export const DATA_RESOURCES = [
   {
     key: 'countries',
-    file: 'countries-20230926.csv',
+    file: 'countries-20230927.csv',
     pk: 'iso',
-    name: 'name_long',
+    name: 'name',
     categories: {
       region: 'region_who',
       income: 'income_group',
@@ -69,7 +69,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-delivered',
-    file: 'doses-delivered-20230926.csv',
+    file: 'doses-delivered-20230927.csv',
     xAxisLabel: 'Time',
     yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
@@ -78,41 +78,10 @@ export const DATA_RESOURCES = [
       mean: 'del_dose_add_pc',
     },
     keyCategories: 'INCOME',
-  },
-  {
-    key: 'doses-delivered-median',
-    file: 'doses-delivered-20230926.csv',
-    xAxisLabel: 'Time',
-    yAxisLabel: 'Doses received',
-    yAxisLabelAdditional: '(per capita)',
-    group_fk: 'income_group',
-    metrics: {
-      mean: 'del_dose_add_pc',
-      median: 'del_dose_add_pc_0.5',
-      lower: 'del_dose_add_pc_0.25',
-      upper: 'del_dose_add_pc_0.75',
-    },
-    keyCategories: 'INCOME',
-    labelPositions: {
-      HIC: 'center',
-      UMIC: 'top',
-      LMIC: 'bottom',
-      LIC: 'center',
-    },
-    metricOptions: ['mean', 'median'],
-    metricOptionLabel: 'Select country group average',
-    meta: {
-      mean: {
-        label: 'Weighted (by population)',
-      },
-      median: {
-        label: 'Median (middle value)',
-      },
-    },
   },
   {
     key: 'doses-administered',
-    file: 'doses-administered-weekly-20230926.csv',
+    file: 'doses-administered-weekly-20230927.csv',
     country_fk: 'iso',
     metrics: {
       doses: 'dvr_4wk_td_per',
@@ -120,13 +89,15 @@ export const DATA_RESOURCES = [
     keyCategories: 'INCOME',
     hint: [
       {
-        label: 'Peak daily vaccination rate (% of population)',
+        label: 'Peak daily vaccination rate',
+        labelAdditional: '% of population',
         column: 'dvr_4wk_td_per',
         unit: '%',
         roundDigits: 2,
       },
       {
-        label: 'Peak daily doses administered (4-week average)',
+        label: 'Peak daily doses administered',
+        labelAdditional: '4-week average',
         column: 'dvr_4wk_td',
         roundDigits: 0,
       },
@@ -140,7 +111,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'uhc-coverage',
-    file: 'uhc-coverage-20230926.csv',
+    file: 'uhc-coverage-20230927.csv',
     country_fk: 'iso',
     type: 'scatter',
     metrics: {
@@ -163,12 +134,10 @@ export const DATA_RESOURCES = [
         label: 'UHC Index (2021)',
       },
       one_dose_2021: {
-        date: '08/2021',
-        label: 'August 2021',
+        label: 'June 2021',
       },
       one_dose_2022: {
-        date: '08/2022',
-        label: 'August 2022',
+        label: 'June 2022',
       },
     },
     xAxisLabel: 'Universal Health Coverage index (2021)',
@@ -177,7 +146,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'vaccine-supply',
-    file: 'vaccine-supply-20230926.csv',
+    file: 'vaccine-supply-20230927.csv',
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
@@ -197,10 +166,10 @@ export const DATA_RESOURCES = [
     meta: {
       secured: {
         label: 'Doses secured',
-        labelAdditional: 'August 2022',
         axisLabel: 'Doses secured',
         axisLabelAdditional: '(per capita)',
-        popupLabel: 'Doses secured (per capita, August 2022)',
+        hintLabel: 'Doses secured (per capita)',
+        hintLabelAdditional: 'August 2022',
         updated: '08/31/2022',
         sourceURL:
           'https://docs.google.com/spreadsheets/d/1aR4L0VStsBrY37aRKTjlUwjQuPS3hDwdRyTwGInkRyE/edit?usp=sharing',
@@ -208,24 +177,24 @@ export const DATA_RESOURCES = [
       },
       received: {
         label: 'Doses received',
-        labelAdditional: 'September 2023',
         axisLabel: 'Doses received',
         axisLabelAdditional: '(per capita)',
-        popupLabel: 'Doses received (per capita, September 2023)',
+        hintLabel: 'Doses received (per capita)',
+        hintLabelAdditional: 'September 2023',
       },
       administered: {
         label: 'Doses administered',
-        labelAdditional: 'September 2023',
         axisLabel: 'Doses administered',
         axisLabelAdditional: '(per capita)',
-        popupLabel: 'Doses administered (per capita, September 2023)',
+        hintLabel: 'Doses administered (per capita)',
+        hintLabelAdditional: 'September 2023',
       },
     },
     xAxisLabel: 'Country Income Groups',
   },
   {
     key: 'population-groups',
-    file: 'population-groups-20230926.csv',
+    file: 'population-groups-20230927.csv',
     country_fk: 'iso',
     metrics: {
       all: 'cov_tot_cps',
@@ -247,7 +216,8 @@ export const DATA_RESOURCES = [
       all: {
         axisLabel: 'Complete primary series',
         axisLabelAdditional: '(% of group)',
-        hintLabel: 'Complete primary series (% of total population)',
+        hintLabel: 'Complete primary series',
+        hintLabelAdditional: '% of total population',
         label: 'Total population',
         popupLabel: 'Total population',
         popColumn: 'pop',
@@ -255,17 +225,21 @@ export const DATA_RESOURCES = [
       old: {
         axisLabel: 'Complete primary series',
         axisLabelAdditional: '(% of group)',
-        hintLabel: 'Complete primary series (% of older people)',
+        hintLabel: 'Complete primary series',
+        hintLabelAdditional: '% of older people',
         label: 'Older people',
-        popupLabel: 'Population (older people)',
+        popupLabel: 'Population',
+        popupLabelAdditional: 'Older people',
         popColumn: 'pop_old',
       },
       hcw: {
         axisLabel: 'Complete primary series',
         axisLabelAdditional: '(% of group)',
-        hintLabel: 'Complete primary series (% of health and care workers)',
+        hintLabel: 'Complete primary series',
+        hintLabelAdditional: '% of health and care workers',
         label: 'Health and care workers',
-        popupLabel: 'Population (health and care workers)',
+        popupLabel: 'Population',
+        popupLabelAdditional: 'Health and care workers',
         popColumn: 'pop_hcw',
       },
     },

@@ -13,7 +13,6 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 
 import { useInjectSaga } from 'utils/injectSaga';
-import { lowerCase } from 'utils/string';
 import saga from 'containers/App/saga';
 import { DATA_RESOURCES, CATEGORIES } from 'containers/App/constants';
 import { loadDataIfNeeded } from 'containers/App/actions';
@@ -52,7 +51,7 @@ const getChartData = ({
           ...m,
           {
             id: c.iso,
-            label: c.name_long,
+            label: c.name,
             sizeRaw: parseInt(population, 10),
             group: c[groupByColumn],
             value: Math.min(parseFloat(countryData[metricColumn]), 100),
@@ -60,15 +59,15 @@ const getChartData = ({
             hint: [
               {
                 label: config.meta[metric].hintLabel,
+                labelAdditional: config.meta[metric].hintLabelAdditional,
                 value: formatNumberLabel({
                   value: countryData[metricColumn],
                   isPercentage: true,
                 }),
               },
               {
-                label:
-                  config.meta[metric].popupLabel ||
-                  `Population (${lowerCase(config.meta[metric].label)})`,
+                label: config.meta[metric].popupLabel,
+                labelAdditional: config.meta[metric].popupLabelAdditional,
                 value: formatNumberLabel({
                   value: c[config.meta[metric].popColumn],
                   intl,

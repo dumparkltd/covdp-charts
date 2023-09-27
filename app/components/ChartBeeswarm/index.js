@@ -171,7 +171,7 @@ export function ChartBeeswarm({
   let highlightAlt;
   if (highlight && !highlightNode && countries) {
     highlightAlt = countries.find(c => c.iso === highlight);
-    highlightAlt.label = highlightAlt.name_long;
+    highlightAlt.label = highlightAlt.name;
   }
   const hintNode = highlightNode || mouseOverNode;
   const hintAlign =

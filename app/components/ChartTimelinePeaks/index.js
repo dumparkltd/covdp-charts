@@ -295,13 +295,16 @@ export function ChartTimelinePeaks({
               population={intl.formatNumber(hintSeries.pop)}
               values={
                 config &&
-                config.hint.map(({ label, column, unit, roundDigits }) => ({
-                  label,
-                  value: `${intl.formatNumber(
-                    Math.round(hintSeries.max[column] * 10 ** roundDigits) /
-                      10 ** roundDigits,
-                  )}${unit || ''}`,
-                }))
+                config.hint.map(
+                  ({ label, labelAdditional, column, unit, roundDigits }) => ({
+                    label,
+                    labelAdditional,
+                    value: `${intl.formatNumber(
+                      Math.round(hintSeries.max[column] * 10 ** roundDigits) /
+                        10 ** roundDigits,
+                    )}${unit || ''}`,
+                  }),
+                )
               }
             />
           </Hint>

@@ -49,7 +49,7 @@ const getChartData = ({
           ...m,
           {
             id: c.iso,
-            label: c.name_long,
+            label: c.name,
             sizeRaw: parseInt(c.pop, 10),
             group: c[groupByColumn],
             value: Math.min(parseFloat(countryData[metricColumn]), 100),
@@ -57,7 +57,8 @@ const getChartData = ({
             hint: [
               {
                 label:
-                  config.meta[metric].popupLabel || config.meta[metric].label,
+                  config.meta[metric].hintLabel || config.meta[metric].label,
+                labelAdditional: config.meta[metric].hintLabelAdditional,
                 value: formatNumberLabel({
                   value: countryData[metricColumn],
                   intl,

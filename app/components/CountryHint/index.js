@@ -45,8 +45,8 @@ const Styled = styled(p => (
 
 const GroupLabel = styled(p => <Text size="xsmall" {...p} />)`
   font-family: 'DM Sans', sans-serif;
-  font-weight: bold;
 `;
+// font-weight: bold;
 const MetricLabel = styled(p => <Text size="xsmall" {...p} />)``;
 const MetricLabelSecondary = styled(p => (
   <MetricLabel size="xxsmall" {...p} />
@@ -55,10 +55,9 @@ const MetricValue = styled(p => <Text size="xsmall" {...p} />)`
   font-family: 'Roboto Mono', monospace;
   font-weight: 700;
 `;
-const MetricValueSecondary = styled(p => <MetricValue size="xxsmall" {...p} />)`
-  position: relative;
-  top: 1px;
-`;
+const MetricValueSecondary = styled(p => (
+  <MetricValue size="xxsmall" {...p} />
+))``;
 const Title = styled(p => <Text {...p} />)`
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
@@ -89,8 +88,6 @@ export function CountryHint({
   population,
   onClose,
   hasClose,
-  valueGroupTitle,
-  dateSecondary,
   title,
 }) {
   const size = useContext(ResponsiveContext);
@@ -122,32 +119,8 @@ export function CountryHint({
               <MetricValue>{date.value}</MetricValue>
             </Box>
           )}
-          {valueGroupTitle && (
-            <Box gap="xxsmall">
-              <GroupLabel>{`${valueGroupTitle}:`}</GroupLabel>
-              {values &&
-                values.map(value => (
-                  <Box key={value.label} direction="row" gap="xsmall">
-                    <MetricLabelSecondary>{`${
-                      value.label
-                    }:`}</MetricLabelSecondary>
-                    <MetricValueSecondary>{value.value}</MetricValueSecondary>
-                  </Box>
-                ))}
-              {dateSecondary && (
-                <Box direction="row" gap="xsmall">
-                  <MetricLabelSecondary>
-                    {`${dateSecondary.label || 'Date'}:`}
-                  </MetricLabelSecondary>
-                  <MetricValueSecondary>
-                    {dateSecondary.value}
-                  </MetricValueSecondary>
-                </Box>
-              )}
-            </Box>
-          )}
           {config && config.metricOptions && (
-            <Box>
+            <Box margin={{ bottom: 'xxsmall' }}>
               <GroupLabel>{`${config.hintMetricOptionLabel}:`}</GroupLabel>
               <Box margin={{ top: 'xxsmall' }} gap="hair">
                 {config.metricOptions.map(o => (
@@ -163,12 +136,20 @@ export function CountryHint({
               </Box>
             </Box>
           )}
-          {!valueGroupTitle &&
-            values &&
-            values.map(value => (
-              <Box key={value.label} direction="row" gap="xsmall">
-                <MetricLabel>{`${value.label}:`}</MetricLabel>
-                <MetricValue>{value.value}</MetricValue>
+          {values &&
+            values.map((value, key) => (
+              <Box key={value.key || key}>
+                <Box direction="row" gap="xsmall">
+                  <MetricLabel>{`${value.label}:`}</MetricLabel>
+                  <MetricValue>{value.value}</MetricValue>
+                </Box>
+                {value.labelAdditional && (
+                  <Box>
+                    <MetricLabelSecondary style={{ opacity: 0.8 }}>
+                      {value.labelAdditional}
+                    </MetricLabelSecondary>
+                  </Box>
+                )}
               </Box>
             ))}
           {country &&
@@ -176,9 +157,18 @@ export function CountryHint({
             asArray(country.hint).map((hint, key) => {
               if (hint.label && hint.value) {
                 return (
-                  <Box key={hint.key || key} direction="row" gap="xsmall">
-                    <MetricLabel>{`${hint.label}:`}</MetricLabel>
-                    <MetricValue>{hint.value}</MetricValue>
+                  <Box key={hint.key || key}>
+                    <Box direction="row" gap="xsmall">
+                      <MetricLabel>{`${hint.label}:`}</MetricLabel>
+                      <MetricValue>{hint.value}</MetricValue>
+                    </Box>
+                    {hint.labelAdditional && (
+                      <Box>
+                        <MetricLabelSecondary style={{ opacity: 0.8 }}>
+                          {hint.labelAdditional}
+                        </MetricLabelSecondary>
+                      </Box>
+                    )}
                   </Box>
                 );
               }
@@ -208,9 +198,7 @@ CountryHint.propTypes = {
   country: PropTypes.object,
   config: PropTypes.object,
   align: PropTypes.string,
-  valueGroupTitle: PropTypes.string,
   date: PropTypes.object,
-  dateSecondary: PropTypes.object,
   values: PropTypes.array,
   population: PropTypes.string,
   title: PropTypes.string,

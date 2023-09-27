@@ -31,7 +31,7 @@ export const groupNodes = ({ nodes, countries }) => {
             color: DATACOLORS[country.income_group],
             data: countryMetricData,
             max: countryMetricData[maxIndex],
-            label: country.name_long,
+            label: country.name,
           },
         ];
       }
