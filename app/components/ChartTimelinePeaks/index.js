@@ -23,7 +23,7 @@ import CountryHint from 'components/CountryHint';
 import AxisLabel from 'components/AxisLabel';
 
 import { isMinSize } from 'utils/responsive';
-import { getHintAlign } from 'utils/charts';
+import { getHintAlign, getHintAlignVertical } from 'utils/charts';
 
 import { mapNodes, groupNodes, getChartHeight, getTickValuesX } from './utils';
 
@@ -96,13 +96,14 @@ export function ChartTimelinePeaks({
   const yMax1 = data && d3.max(seriesNodes, s => d3.max(s.data, d => d.y));
   const xMin = xRange[0] - monthInMS;
   const xMax = xRange[1] + monthInMS;
+  const yMin = 0;
   const yMax = Math.ceil(yMax1) + 0.2;
   // prettier-ignore
   const axisNodes = data
     ? [
       { x: xMin, y: yMax },
-      { x: xMin, y: 0 },
-      { x: xMax, y: 0 },
+      { x: xMin, y: yMin },
+      { x: xMax, y: yMin },
     ]
     : [
       { x: 0, y: 100 },
@@ -133,7 +134,9 @@ export function ChartTimelinePeaks({
   const hintNode = highlightNode || mouseOverNode;
   const hintAlign =
     hintNode && getHintAlign({ xPosition: hintNode.x, xMin, xMax });
-
+  const hintAlignVertical =
+    hintNode &&
+    getHintAlignVertical({ yPosition: hintNode.y, yMin, yMax, threshold: 0.6 });
   const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
 
   return (
@@ -274,7 +277,7 @@ export function ChartTimelinePeaks({
         {isMinSize(size, 'medium') && hintNode && (
           <Hint
             align={{
-              vertical: 'top',
+              vertical: hintAlignVertical,
               horizontal: hintAlign,
             }}
             value={hintNode}
@@ -288,6 +291,7 @@ export function ChartTimelinePeaks({
               hasClose={!!highlight}
               country={hintSeries}
               align={hintAlign}
+              alignVertical={hintAlignVertical}
               date={{
                 label: config.dateLabel,
                 value: intl.formatDate(new Date(hintSeries.max.date)),

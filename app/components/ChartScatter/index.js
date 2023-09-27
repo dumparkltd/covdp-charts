@@ -23,7 +23,7 @@ import KeyTarget from 'components/KeyTarget';
 import AxisLabel from 'components/AxisLabel';
 
 import { isMinSize } from 'utils/responsive';
-import { getMedian } from 'utils/charts';
+import { getMedian, getHintAlign, getHintAlignVertical } from 'utils/charts';
 
 import { mapNodes, getChartHeight } from './utils';
 
@@ -72,7 +72,23 @@ export function ChartScatter({
   const mouseOverNode = mouseOver && nodes.find(n => n.id === mouseOver);
   const highlightNode = highlight && nodes.find(n => n.id === highlight);
   const margins = isMinSize(size, 'medium') ? chartMargins : chartMarginsSmall;
-
+  const hintNode = highlightNode || mouseOverNode;
+  const hintAlign =
+    hintNode &&
+    getHintAlign({
+      xPosition: hintNode.x,
+      xMin: 0,
+      xMax: 100,
+      threshold: 0.33,
+    });
+  const hintAlignVertical =
+    hintNode &&
+    getHintAlignVertical({
+      yPosition: hintNode.y,
+      yMin: 0,
+      yMax: 100,
+      threshold: 0.85,
+    });
   return (
     <Styled>
       <Box margin={{ bottom: 'medium' }}>
@@ -234,10 +250,13 @@ export function ChartScatter({
             }}
           />
         )}
-        {isMinSize(size, 'medium') && (highlightNode || mouseOverNode) && (
+        {isMinSize(size, 'medium') && hintNode && (
           <Hint
-            align={{ vertical: 'top', horizontal: 'left' }}
-            value={highlightNode || mouseOverNode}
+            align={{
+              vertical: hintAlignVertical,
+              horizontal: hintAlign,
+            }}
+            value={hintNode}
             style={{
               pointerEvents: 'none',
               margin: '15px 0',
@@ -246,7 +265,9 @@ export function ChartScatter({
             <CountryHint
               onClose={() => setHighlight(null)}
               hasClose={!!highlight}
-              country={highlightNode || mouseOverNode}
+              country={hintNode}
+              align={hintAlign}
+              alignVertical={hintAlignVertical}
               config={config}
             />
           </Hint>
@@ -254,7 +275,7 @@ export function ChartScatter({
       </FlexibleWidthXYPlot>
       <AxisLabel axis="x" config={config} chartMargins={margins} />
       <Box margin={{ left: `${margins.left}px` }}>
-        <Box margin={{ top: 'medium' }}>
+        <Box margin={{ top: 'small' }}>
           <KeyCategoryMarkers config={config} />
         </Box>
         {!isMinSize(size, 'medium') && medianYValue && (

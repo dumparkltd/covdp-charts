@@ -19,26 +19,22 @@ const Styled = styled(p => (
   &:after {
     position: absolute;
     content: '';
-    top: 100%;
+    top: ${({ alignHintVertical }) => (alignHintVertical === 'top' ? '100%' : 'auto')};
+    bottom: ${({ alignHintVertical }) => (alignHintVertical === 'bottom' ? '100%' : 'auto')};
     right: ${({ alignHint }) => (alignHint === 'left' ? 0 : 'auto')};
     left: ${({ alignHint }) => (alignHint === 'right' ? 0 : 'auto')};
     width: 0;
     height: 7px;
     border-left: 4px solid
       ${({ alignHint }) => (alignHint === 'right' ? '#041733' : 'transparent')};
-    border-bottom: 4px solid transparent;
     border-right: 4px solid
       ${({ alignHint }) => (alignHint === 'left' ? '#041733' : 'transparent')};
-    border-top: 4px solid #041733;
+    border-top: ${({ alignHintVertical }) => (alignHintVertical === 'bottom' ? '4px solid transparent' : '4px solid #041733')}; ;
+    border-bottom: ${({ alignHintVertical }) => (alignHintVertical === 'top' ? '4px solid transparent' : '4px solid #041733')}; ;
+
     @media (min-width: ${({ theme }) => theme.breakpointsMin.small}) {
       height: 10px;
-      border-left: 6px solid
-        ${({ alignHint }) =>
-    alignHint === 'right' ? '#041733' : 'transparent'};
-      border-bottom: 6px solid transparent;
-      border-right: 6px solid
-        ${({ alignHint }) => (alignHint === 'left' ? '#041733' : 'transparent')};
-      border-top: 6px solid #041733;
+      border-width: 6px;
     }
   }
 `;
@@ -89,10 +85,15 @@ export function CountryHint({
   onClose,
   hasClose,
   title,
+  alignVertical = 'top',
 }) {
   const size = useContext(ResponsiveContext);
   return (
-    <Styled alignHint={align} hasClose={hasClose}>
+    <Styled
+      alignHint={align}
+      alignHintVertical={alignVertical}
+      hasClose={hasClose}
+    >
       <Box direction="row" justify="between" align="center" gap="xsmall">
         {country && country.label && (
           <Box>
@@ -198,6 +199,7 @@ CountryHint.propTypes = {
   country: PropTypes.object,
   config: PropTypes.object,
   align: PropTypes.string,
+  alignVertical: PropTypes.string,
   date: PropTypes.object,
   values: PropTypes.array,
   population: PropTypes.string,

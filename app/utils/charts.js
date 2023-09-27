@@ -3,6 +3,16 @@ export const getHintAlign = ({ xPosition, xMin, xMax, threshold = 0.4 }) => {
   return xRatio < threshold ? 'right' : 'left';
 };
 
+export const getHintAlignVertical = ({
+  yPosition,
+  yMin,
+  yMax,
+  threshold = 0.8,
+}) => {
+  const yRatio = (yPosition - yMin) / (yMax - yMin);
+  return yRatio < threshold ? 'top' : 'bottom';
+};
+
 export const formatNumberLabel = ({
   value,
   isPercentage,

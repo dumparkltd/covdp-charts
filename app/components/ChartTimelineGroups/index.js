@@ -172,7 +172,7 @@ export function ChartTimelineGroups({
   const xMax = isMinSize(size, 'medium')
     ? xRange[1] + monthInMS
     : xRange[1] + 2 * monthInMS;
-  const yMax = Math.ceil(yRange[1]) + 0.2;
+  const yMax = Math.ceil(yRange[1] * 2) / 2 + 0.3;
   // prettier-ignore
   const axisNodes = data
     ? [

@@ -33,7 +33,11 @@ import AxisLabel from 'components/AxisLabel';
 // import { CATEGORIES } from 'containers/App/constants';
 
 import { isMinSize } from 'utils/responsive';
-import { getHintAlign, formatNumberLabel } from 'utils/charts';
+import {
+  getHintAlign,
+  getHintAlignVertical,
+  formatNumberLabel,
+} from 'utils/charts';
 
 import {
   mapNodes,
@@ -181,6 +185,14 @@ export function ChartBeeswarm({
       xMin: 0,
       xMax: maxWidth * (maxX / (maxX + spaceRightFinal)),
     });
+  const hintAlignVertical =
+    hintNode &&
+    getHintAlignVertical({
+      yPosition: hintNode.y,
+      yMin: 0,
+      yMax: maxHeight,
+      threshold: 0.9,
+    });
   const tickValuesY = getTickValuesY({
     maxValue,
     scaleY,
@@ -200,9 +212,10 @@ export function ChartBeeswarm({
   const minSize = minDiameter && Math.round(scaleZ.invert(minDiameter));
 
   const references = averages || medians;
+
   return (
     <Styled ref={chartRef}>
-      <Box margin={{ bottom: 'large' }}>
+      <Box margin={{ bottom: 'medium' }}>
         <Options
           metric={metric}
           setMetric={setMetric}
@@ -467,13 +480,13 @@ export function ChartBeeswarm({
         {hintNode && (
           <Hint
             align={{
-              vertical: 'top',
+              vertical: hintAlignVertical,
               horizontal: hintAlign,
             }}
             value={hintNode}
             style={{
               pointerEvents: 'all',
-              margin: '15px 0',
+              margin: `${Math.round(hintNode.size) + 12}px 0`,
             }}
           >
             <CountryHint
@@ -481,6 +494,7 @@ export function ChartBeeswarm({
               hasClose={!!highlight}
               country={hintNode}
               align={hintAlign}
+              alignVertical={hintAlignVertical}
             />
           </Hint>
         )}
@@ -494,7 +508,7 @@ export function ChartBeeswarm({
           {medians && <KeyMedian />}
           {averages && <KeyAverage />}
           {target && <KeyTarget target={target} strokeDasharray={[8, 4]} />}
-          {scaleZ && (
+          {scaleZ && maxSize && minSize && (
             <Box margin={{ top: 'small' }}>
               <KeyPopulation
                 scaleSize={scaleZ}
@@ -513,7 +527,7 @@ export function ChartBeeswarm({
           justify="center"
           direction="row"
         >
-          {scaleZ && minSize && (
+          {scaleZ && minSize && maxSize && (
             <KeyPopulation
               scaleSize={scaleZ}
               minValue={minSize}

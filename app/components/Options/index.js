@@ -87,11 +87,7 @@ export function Options({
 }) {
   const size = useContext(ResponsiveContext);
   let wrap = false;
-  if (
-    config.metricOptions &&
-    !isMinSize(size, 'medium') &&
-    config.metricOptions.length > 2
-  ) {
+  if (!isMinSize(size, 'medium')) {
     wrap = true;
   }
   return (
@@ -99,9 +95,8 @@ export function Options({
       direction={wrap ? 'column' : 'row'}
       gap={wrap ? 'medium' : null}
       justify={wrap ? 'start' : 'between'}
-      align={wrap ? 'start' : 'start'}
+      align={wrap ? 'start' : 'end'}
     >
-      {!config.metricOptions && <Box />}
       {config.metricOptions && (
         <Box gap="hair">
           <LabelChartOption>{config.metricOptionLabel}</LabelChartOption>
