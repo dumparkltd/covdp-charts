@@ -87,14 +87,16 @@ export function Options({
 }) {
   const size = useContext(ResponsiveContext);
   let wrap = false;
+  let justify = config.metricOptions ? 'between' : 'end';
   if (!isMinSize(size, 'medium')) {
     wrap = true;
+    justify = 'start';
   }
   return (
     <Box
       direction={wrap ? 'column' : 'row'}
       gap={wrap ? 'medium' : null}
-      justify={wrap ? 'start' : 'between'}
+      justify={justify}
       align={wrap ? 'start' : 'end'}
     >
       {config.metricOptions && (

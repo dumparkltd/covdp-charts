@@ -191,7 +191,7 @@ export function ChartBeeswarm({
       yPosition: hintNode.y,
       yMin: 0,
       yMax: maxHeight,
-      threshold: 0.9,
+      threshold: 0.84,
     });
   const tickValuesY = getTickValuesY({
     maxValue,
