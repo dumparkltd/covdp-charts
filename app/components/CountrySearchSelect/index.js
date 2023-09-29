@@ -211,7 +211,7 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
                 ))}
               {(!optionsFiltered || optionsFiltered.length === 0) && (
                 <Box pad="small">
-                  <Hint color="textSecondary">No countries or areas found</Hint>
+                  <Hint color="textSecondary">No countries found</Hint>
                 </Box>
               )}
             </Box>
@@ -244,7 +244,7 @@ export function CountrySearchSelect({ selected, onSelect, options }) {
               ))}
             {(!optionsFiltered || optionsFiltered.length === 0) && (
               <Box pad="small">
-                <Hint color="textSecondary">No countries or areas found</Hint>
+                <Hint color="textSecondary">No countries found</Hint>
               </Box>
             )}
           </Box>
