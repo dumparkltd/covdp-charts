@@ -311,7 +311,7 @@ export function ChartBeeswarm({
                     y: scaleY(references[groupId]),
                   },
                   {
-                    x: x + maxOffset * 1.1,
+                    x: x + maxOffset * 1.3,
                     y: scaleY(references[groupId]),
                   },
                 ]}
@@ -322,7 +322,10 @@ export function ChartBeeswarm({
         {references &&
           Object.keys(references).map(groupId => {
             const groupIndex = Object.keys(groups).indexOf(groupId);
-            const x = scaleX(groupIndex + 0.5) + maxOffset;
+            const alignLeft = groupId === 'LIC' && !isMinSize(size, 'small');
+            const x = alignLeft
+              ? scaleX(groupIndex + 0.5) - maxOffset * 1.3
+              : scaleX(groupIndex + 0.5) + maxOffset * 1.3;
             return (
               <LabelSeries
                 key={groupId}
@@ -351,7 +354,7 @@ export function ChartBeeswarm({
                   opacity: 1,
                   maxWidth: '30px',
                 }}
-                labelAnchorX="start"
+                labelAnchorX={alignLeft ? 'end' : 'start'}
                 labelAnchorY="middle"
               />
             );
@@ -359,7 +362,10 @@ export function ChartBeeswarm({
         {references &&
           Object.keys(references).map(groupId => {
             const groupIndex = Object.keys(groups).indexOf(groupId);
-            const x = scaleX(groupIndex + 0.5) + maxOffset;
+            const alignLeft = groupId === 'LIC' && !isMinSize(size, 'small');
+            const x = alignLeft
+              ? scaleX(groupIndex + 0.5) - maxOffset * 1.3
+              : scaleX(groupIndex + 0.5) + maxOffset * 1.3;
             return (
               <LabelSeries
                 key={groupId}
@@ -376,7 +382,7 @@ export function ChartBeeswarm({
                           ? 1
                           : 0,
                     }),
-                    xOffset: isMinSize(size, 'small') ? 8 : 3,
+                    xOffset: isMinSize(size, 'small') ? 4 : 1,
                     yOffset: 1,
                   },
                 ]}
@@ -388,7 +394,7 @@ export function ChartBeeswarm({
                   maxWidth: '30px',
                   fontWeight: 400,
                 }}
-                labelAnchorX="start"
+                labelAnchorX={alignLeft ? 'end' : 'start'}
                 labelAnchorY="middle"
               />
             );
