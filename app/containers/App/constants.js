@@ -20,11 +20,9 @@ export const DATA_URL = '//covdp-data.web.app/data';
 
 export const PATHS = {
   DOSES_DELIVERED: 'doses-delivered',
-  DOSES_DELIVERED_MEDIAN: 'doses-delivered-median',
   // cumulative doses delivered over time by income group: line-chart
   // indicator: del_dose_add_pc
   VAX_SUPPLY: 'vaccine-supply',
-  VAX_SUPPLY_MEDIAN: 'vaccine-supply-median',
   // vaccine supply by income group for each country: beeswarm plots
   // indicators (select one):
   // - secured: secured_vaccines_pc
@@ -40,8 +38,6 @@ export const PATHS = {
   // indicators:
   // - dvr_4wk_td_per
   POP_GROUPS: 'population-groups',
-  POP_GROUPS_MEDIAN: 'population-groups-median',
-  POP_GROUPS_ALT: 'population-groups-alt',
   // % fully vaccinated by population group and by income group for each country: beeswarm plots
   // indicators:
   // - all people: cov_total_fv
@@ -69,7 +65,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'doses-delivered',
-    file: 'doses-delivered-20230927.csv',
+    file: 'doses-delivered-20230929.csv',
     xAxisLabel: 'Time',
     yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
@@ -146,7 +142,7 @@ export const DATA_RESOURCES = [
   },
   {
     key: 'vaccine-supply',
-    file: 'vaccine-supply-20230927.csv',
+    file: 'vaccine-supply-20230929.csv',
     country_fk: 'iso',
     metrics: {
       secured: 'secured_vaccines_pc',
