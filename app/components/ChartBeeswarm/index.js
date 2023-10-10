@@ -297,6 +297,66 @@ export function ChartBeeswarm({
             strokeDasharray={[8, 4]}
           />
         )}
+        {target && isMinSize(size, 'medium') && (
+          <LabelSeries
+            data={[
+              {
+                x: maxWidth,
+                y: scaleY(target.value),
+                yOffset: target.label2 ? -20 : -8,
+                label: target.label,
+              },
+            ]}
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fill: '#041733',
+              fontSize: 12,
+              opacity: 0.8,
+              maxWidth: '30px',
+              fontWeight: 400,
+            }}
+            labelAnchorX="end"
+            labelAnchorY="text-bottom"
+            allowOffsetToBeReversed={false}
+          />
+        )}
+        {isMinSize(size, 'medium') && target && target.label2 && (
+          <LabelSeries
+            data={[
+              {
+                x: maxWidth,
+                y: scaleY(target.value),
+                yOffset: -8,
+                label: target.label2,
+              },
+            ]}
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fill: '#041733',
+              fontSize: 12,
+              opacity: 0.8,
+              maxWidth: '30px',
+              fontWeight: 400,
+            }}
+            labelAnchorX="end"
+            labelAnchorY="text-bottom"
+            allowOffsetToBeReversed={false}
+          />
+        )}
+        {positions && (
+          <MarkSeries
+            data={positions}
+            sizeType="literal"
+            fillType="literal"
+            strokeType="literal"
+            onNearestXY={node => {
+              // console.log(node);
+              if (isMinSize(size, 'small')) {
+                setMouseOver(node.id);
+              }
+            }}
+          />
+        )}
         {references &&
           Object.keys(references).map(groupId => {
             const groupIndex = Object.keys(groups).indexOf(groupId);
@@ -399,66 +459,6 @@ export function ChartBeeswarm({
               />
             );
           })}
-        {target && isMinSize(size, 'medium') && (
-          <LabelSeries
-            data={[
-              {
-                x: maxWidth,
-                y: scaleY(target.value),
-                yOffset: target.label2 ? -20 : -8,
-                label: target.label,
-              },
-            ]}
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fill: '#041733',
-              fontSize: 12,
-              opacity: 0.8,
-              maxWidth: '30px',
-              fontWeight: 400,
-            }}
-            labelAnchorX="end"
-            labelAnchorY="text-bottom"
-            allowOffsetToBeReversed={false}
-          />
-        )}
-        {isMinSize(size, 'medium') && target && target.label2 && (
-          <LabelSeries
-            data={[
-              {
-                x: maxWidth,
-                y: scaleY(target.value),
-                yOffset: -8,
-                label: target.label2,
-              },
-            ]}
-            style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fill: '#041733',
-              fontSize: 12,
-              opacity: 0.8,
-              maxWidth: '30px',
-              fontWeight: 400,
-            }}
-            labelAnchorX="end"
-            labelAnchorY="text-bottom"
-            allowOffsetToBeReversed={false}
-          />
-        )}
-        {positions && (
-          <MarkSeries
-            data={positions}
-            sizeType="literal"
-            fillType="literal"
-            strokeType="literal"
-            onNearestXY={node => {
-              // console.log(node);
-              if (isMinSize(size, 'small')) {
-                setMouseOver(node.id);
-              }
-            }}
-          />
-        )}
         <LineMarkSeries
           data={axisNodes}
           size={2}

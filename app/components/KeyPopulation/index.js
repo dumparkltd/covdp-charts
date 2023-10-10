@@ -67,7 +67,7 @@ export function KeyPopulation({ scaleSize, minValue, maxValue, intl }) {
           align="center"
         >
           <Circle sizePx={scaleSize(min) * 2} />
-          <KeyLabel>{`${formatNumber(min, intl)} people (and less)`}</KeyLabel>
+          <KeyLabel>{`${formatNumber(min, intl)} people (and under)`}</KeyLabel>
         </Box>
       )}
     </Box>

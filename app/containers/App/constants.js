@@ -253,16 +253,16 @@ export const CATEGORIES = {
     WPR: 'Western Pacific Region',
   },
   INCOME: {
-    HIC: 'High Income Countries',
-    UMIC: 'Upper Middle Income Countries',
-    LMIC: 'Lower Middle Income Countries',
-    LIC: 'Low Income Countries',
+    HIC: 'High-Income Countries',
+    UMIC: 'Upper-Middle-Income Countries',
+    LMIC: 'Lower-Middle-Income Countries',
+    LIC: 'Low-Income Countries',
   },
   INCOME_SHORT: {
-    HIC: 'High Income',
-    UMIC: 'Upper Middle Income',
-    LMIC: 'Lower Middle Income',
-    LIC: 'Low Income',
+    HIC: 'High-Income',
+    UMIC: 'Upper-Middle-Income',
+    LMIC: 'Lower-Middle-Income',
+    LIC: 'Low-Income',
   },
   COVAX: {
     AMC: 'AMC (Advance Market Commitment)',
@@ -276,7 +276,7 @@ export const CATEGORIES = {
 
 export const DATACOLORS = {
   LIC: '#2F739B',
-  LMIC: '#7E9F6E',
+  LMIC: '#8daf7a',
   UMIC: '#D67732',
   HIC: '#9B3436',
 };

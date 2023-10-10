@@ -79,20 +79,15 @@ const SeriesLabel = styled.div`
   padding-left: 4px;
 `;
 // https://github.com/d3/d3-time-format
-const formatXLabels = ({ v, size }) => {
-  if (timeFormat('%m')(v) === '01') {
-    return <tspan>{timeFormat('%Y')(v)}</tspan>;
-  }
-  return (
-    <tspan style={{ opacity: 0.75 }}>
-      {timeFormat(isMinSize(size, 'medium') ? '%B' : '%b')(v)}
-    </tspan>
-  );
-};
+const formatXLabels = ({ v }) => (
+  <tspan style={{ opacity: timeFormat('%m')(v) === '01' ? 1 : 0.4 }}>
+    <tspan>{timeFormat('%b')(v)}</tspan>
+    {timeFormat('%m')(v) === '01' && <tspan>{` ${timeFormat('%y')(v)}`}</tspan>}
+  </tspan>
+);
 
 formatXLabels.propTypes = {
   v: PropTypes.number,
-  size: PropTypes.string,
 };
 
 // ms per px

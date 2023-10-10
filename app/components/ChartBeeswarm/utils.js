@@ -51,7 +51,7 @@ export const mapNodes = (
   data
     .filter((d, i) => i % 1 === 0)
     .map(d => {
-      let opacity = highlight ? 0.3 : 0.7;
+      let opacity = highlight ? 0.3 : 0.85;
       if (highlight === d.id || mouseOver === d.id) {
         opacity = 1;
       }
