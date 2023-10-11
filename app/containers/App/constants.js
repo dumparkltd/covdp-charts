@@ -66,7 +66,7 @@ export const DATA_RESOURCES = [
   {
     key: 'doses-delivered',
     file: 'doses-delivered-20230929.csv',
-    xAxisLabel: 'Time',
+    xAxisLabel: 'Date',
     yAxisLabel: 'Doses received',
     yAxisLabelAdditional: '(per capita)',
     group_fk: 'income_group',
