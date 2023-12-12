@@ -86,7 +86,7 @@ export function ChartTimelinePeaks({
       xColumn: 'date',
       yColumn: metrics.doses,
     });
-  const seriesNodes = data && groupNodes({ nodes, countries }); // .filter(s => s.pop > 1500000);
+  const seriesNodes = data && countries && groupNodes({ nodes, countries }); // .filter(s => s.pop > 1500000);
 
   const xRange = data && d3.extent(nodes, d => d.x);
   const yMax1 = data && d3.max(seriesNodes, s => d3.max(s.data, d => d.y));
